@@ -32,7 +32,7 @@
 \usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
 \pagestyle{fancy} % options: empty , plain , fancy
 \renewcommand{\headrulewidth}{0pt} % customise the layout...
-\lhead{}\chead{Software Requirements Specification for Links}\rhead{}
+\lhead{Software Requirements Specification for Links}\chead{}\rhead{}
 \lfoot{}\cfoot{\thepage}\rfoot{}
 
 %%% SECTION TITLE APPEARANCE
@@ -50,41 +50,50 @@
 \usepackage{titlesec}
 \usepackage{lipsum}
 \titleformat{\chapter}
-{\filcenter\normalfont\Large\bfseries}
+{\filcenter\normalfont\LARGE\bfseries}
 {\chaptertitlename~\thechapter} {0.5em} {}
 
 %%% END Article customizations
 
 %%% The "real" document content comes below...
 
-\title{Software Requirements Specification for 'Links'}
+\title{Software Requirements Specification for 'Links' \\ Version 1.0}
 \author{Abhijith Madhav, Arjun S Bharadwaj}
 %\date{} % Activate to display a given date or no date (if empty),
          % otherwise the current date is printed 
 
 \begin{document}
 \maketitle
+{\center {\LARGE { \bf Revisions} \\ } }
+. \\
+\begin{tabular}{ | c | c | c | c | }
+\hline            
+  Version & Primary Author(s) & Description of Version  & Date Completed\\
+  \hline  
+  \hline  
+  1.0 & Abhijith Madhav(MT2013002) & Initial version sent to Client & \date{\today} \\
+   & Arjun S Bharadwaj(MT2013026) & & \\
+\hline  
+\end{tabular}
+\tableofcontents
 \chapter{Introduction}
-This document provides the Software Requirement Specifications of the project. This document provides the details on the functional and non functional aspects of the project.
+This document provides the Software Requirement Specifications of the project. Specifically it provides the details on the functional and non functional aspects of the project.
 \section{Document Purpose}
 The document describes the software requirements of “Links”, version 1.0. The software requirements encapsulate the whole of the product.
 
-\section{Problem Background }
-Duplication of effort amongst teams implementing OS functionality simulation modules.
-
 \section{Product Scope}
-“Links” is website offering bookmarking services with the specific requirements of being that it should be deployable on a private server within an organization.
+“Links” is website offering bookmarking services with the specific requirement being that it should be deployable on a private server within an organization.
 
-The purpose is to enable an people in the organization to share bookmarks with each other.
+The purpose is to enable people in an organization to share bookmarks with each other.
 
 The specific benefit delivered by “Links” is that sharing/publishing of bookmarks can be controlled at the required level of granularity.
 
 
 \maketitle
 \chapter{Overall description}
-This section provides the provides the overall description of the project. This includes the product perspective and the functionality.
+This section provides the overall description of the project. This includes the product perspective and the functionality.
 \section{Product Perspective}
-A bookmarking service is a centralized online service which enables users to add, annotate, edit and share bookmarks of web documents, the most popular being Delicious. “Scuttle” is one of the other known open source alternative. “Links” is envisioned on similar lines with and specific objective that it is aimed at deployment within an organization.
+A bookmarking service is a centralized online service which enables users to add, annotate, edit and share bookmarks of web documents, the most popular being Delicious. “Scuttle” is one of the other well known open source alternative. “Links” is envisioned on similar lines with the specific objective that it is aimed at deployment within an organization.
 \section{Product Functionality}
 \begin{enumerate}
 \item
@@ -92,7 +101,7 @@ Provide for user accounts/signup.
 \item
 Provide for website bookmark management.
 \item
-Provide for creation of user groups for sharing bookmarks and their management
+Provide for management of user groups for sharing bookmarks.
 \item
 Provide for options to share website bookmarks amongst users and groups.
 \item
@@ -100,16 +109,16 @@ Provide options to push website bookmarks onto popular social media and via emai
 \end{enumerate}
 
 \maketitle
-\chapter{Specific Requirements}
-This section provides the specific requirements of the project. This describes the functional aspects of the project.
+\chapter{Functional Requirements}
+This section specifies the functional requirements of the project.
 \section{Functional Requirements}
-The functional requirements of the project are given in detail below.
+This section provides the functional requirements of the project.
 \begin{enumerate}
 	\item
 		Login
 		\begin{itemize}
 			\item
-				User logs in into the system.
+				User logs into the system.
 			\item
 				\emph{Input:} User enters the login details and clicks on login.
 			\item
@@ -288,7 +297,7 @@ The functional requirements of the project are given in detail below.
 
 
 	\item
-		Add Members
+		Remove Members
 		\begin{itemize}
 			\item
 				Remove members to the group.
@@ -300,7 +309,7 @@ The functional requirements of the project are given in detail below.
 \end{enumerate}
 \maketitle
 \chapter{Non-functional Requirements}
-This section provides the non-functional aspects of the project.
+This section specifies the non-functional aspects of the project.
 \section{Performance Requirements}
 \begin{enumerate}
 \item
@@ -309,24 +318,19 @@ Any interactive transaction with “Links” should not take more than 5 seconds
 \section{Safety and Security Requirements}
 \begin{enumerate}
 \item
-All users must be authenticated before being given modification privileges to “Links”.
+All users must be authenticated before being given modification privileges in “Links”.
 \end{enumerate}
-\section{Software Quality Attributes}
+\section{Others}
 \begin{enumerate}
 \item
-Interoperability
-\begin{itemize}
-\item
+Interoperability\\
 Expose APIs through which the following can be done
 \begin{itemize}
 \item
 Search based on bookmarks, annotations, tags in accordance to the visibility of the user.
 \item
-Add, delete and edit the bookmarks in accordance to the visibility of the user.
-
-\end{itemize}
-\end{itemize}
-As a proof of concept an android application that consumes the data from the provided APIs will be created
+Add, delete and edit the bookmarks in accordance to the visibility of the user.\end{itemize}
+As a proof of concept, an android application that consumes the data from the provided APIs will be created
 \item
 Suggestions
 \begin{itemize}
