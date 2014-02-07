@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.17)  5 FEB 2014 21:33
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.17)  7 FEB 2014 19:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -576,44 +576,57 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 [1
 
 {/usr/local/texlive/2013/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
- 1.
-[1
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 69.
 
-]
- 2.
-[2
+Overfull \hbox (80.27095pt too wide) in paragraph at lines 68--82
+[] 
+ []
 
-]
- 3.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 112.
-
-(/usr/local/texlive/2013/texmf-dist/tex/latex/base/omscmr.fd
-File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 112.
- [3
-
-]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 13.59999pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[4] [5]
+[1] (./SRS.toc)
+\tf@toc=\write3
+\openout3 = `SRS.toc'.
+
+ [2
+
+]
+ 1.
+[3
+
+]
+ 2.
+[4
+
+]
+ 3.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 128.
+
+(/usr/local/texlive/2013/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 128.
+ [5
+
+] [6] [7]
  4.
-[6
+[8
 
 ] (./SRS.aux) ) 
 Here is how much of TeX's memory you used:
- 4635 strings out of 493315
- 68863 string characters out of 6137904
- 233397 words of memory out of 5000000
- 8021 multiletter control sequences out of 15000+600000
- 9092 words of font info for 32 fonts, out of 8000000 for 9000
+ 4641 strings out of 493315
+ 68937 string characters out of 6137904
+ 233415 words of memory out of 5000000
+ 8024 multiletter control sequences out of 15000+600000
+ 9758 words of font info for 34 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 44i,10n,43p,376b,320s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 44i,10n,43p,381b,324s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmbx10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/c
 m/cmbx12.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm
@@ -623,10 +636,10 @@ mr12.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
 2.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10
 .pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.
 pfb>
-Output written on SRS.pdf (7 pages, 99097 bytes).
+Output written on SRS.pdf (9 pages, 107990 bytes).
 PDF statistics:
- 60 PDF objects out of 1000 (max. 8388607)
- 42 compressed objects within 1 object stream
+ 66 PDF objects out of 1000 (max. 8388607)
+ 46 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
