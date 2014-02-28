@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.17)  16 FEB 2014 21:11
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.17)  28 FEB 2014 13:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -611,7 +611,7 @@ fonts/cm/cmr10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfo
 nts/cm/cmr12.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmr17.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmss12.pfb>
-Output written on Usecase.pdf (5 pages, 78247 bytes).
+Output written on Usecase.pdf (5 pages, 78228 bytes).
 PDF statistics:
  37 PDF objects out of 1000 (max. 8388607)
  24 compressed objects within 1 object stream
