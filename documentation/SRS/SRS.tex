@@ -78,6 +78,9 @@
   2.0 & Abhijith Madhav(MT2013002) & Elaboration of product scope. Made & \date{February 7, 2014} \\ 
    & Arjun S Bharadwaj(MT2013026) & interoperability as an FR.& \\
 \hline  
+  3.0 & Abhijith Madhav(MT2013002) & Changes to NFR. & \date{March 10, 2014} \\ 
+   & Arjun S Bharadwaj(MT2013026) & & \\
+\hline
 \end{tabular}
 \tableofcontents
 \chapter{Introduction}
@@ -329,14 +332,22 @@ As a proof of concept, an android application that consumes the data from the pr
 \maketitle
 \chapter{Non-functional Requirements}
 This section specifies the non-functional aspects of the project.
-\section{Performance Requirements}
-\begin{enumerate}
-\item
-Any interactive transaction with “Links” should not take more than 5 seconds
-\end{enumerate}
-\section{Safety and Security Requirements}
+\section{Security Requirements}
 \begin{enumerate}
 \item
 All users must be authenticated before being given modification privileges in “Links”.
+\item
+Third party clients must not have access to passwords of users and must instead use a token based authentication scheme.
+\item
+User passwords must be stored as salted hashes in the "Links" system.
+\item
+HTTPS connections between clients and the "Links" server must be supported.
+\end{enumerate}
+\section{User Experience}
+\begin{enumerate}
+\item
+The browser extension using the "Links" API  must enable saving and/or sharing bookmarks from a third party website without having to navigate away from that site.
+\item
+Where possible, portions of any "Links" webpage must be updated without having to refresh the entire webpage from the server.
 \end{enumerate}
 \end{document}
