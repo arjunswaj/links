@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2013.11.13)  10 MAR 2014 18:33
+=======
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.17)  28 FEB 2014 13:29
+>>>>>>> branch 'master' of https://abhijithmadhav@bitbucket.org/linkiiitb/links.git
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -577,10 +581,15 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <10.95> on input line 69.
+(Font)              <10.95> on input line 70.
 
-Overfull \hbox (80.27095pt too wide) in paragraph at lines 68--82
-[] 
+Overfull \hbox (80.27095pt too wide) in paragraph at lines 70--84
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 70--84
+
  []
 
 
@@ -605,13 +614,13 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 
 ]
  3.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 128.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 130.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 128.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 130.
  [5
 
 ] [6] [7]
@@ -627,6 +636,7 @@ Here is how much of TeX's memory you used:
  9758 words of font info for 34 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  44i,10n,43p,381b,324s stack positions out of 5000i,500n,10000p,200000b,80000s
+<<<<<<< HEAD
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 bx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.p
 fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></us
@@ -636,6 +646,18 @@ e/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist
 /fonts/type1/public/amsfonts/cm/cmti10.pfb>
 Output written on SRS.pdf (9 pages, 107430 bytes).
+=======
+</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmbx10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmbx12.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmr10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr12.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
+17.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmss1
+2.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10
+.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.
+pfb>
+Output written on SRS.pdf (9 pages, 108015 bytes).
+>>>>>>> branch 'master' of https://abhijithmadhav@bitbucket.org/linkiiitb/links.git
 PDF statistics:
  66 PDF objects out of 1000 (max. 8388607)
  46 compressed objects within 1 object stream
