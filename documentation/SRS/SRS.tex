@@ -1,0 +1,353 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+\documentclass[11pt]{report} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. itemize/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{Software Requirements Specification for Links}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+\renewcommand{\chaptername}{}
+
+\usepackage{titlesec}
+\usepackage{lipsum}
+\titleformat{\chapter}
+{\filcenter\normalfont\LARGE\bfseries}
+{\chaptertitlename~\thechapter} {0.5em} {}
+
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+
+\title{Software Requirements Specification for “Links” \\ Version 1.0}
+\author{Abhijith Madhav, Arjun S Bharadwaj}
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\maketitle
+{\center {\LARGE { \bf Revisions} \\ } }
+. \\
+\begin{tabular}{ | c | c | c | c | }
+\hline            
+  Version & Primary Author(s) & Description of Version  & Date Completed\\
+  \hline  
+  \hline  
+  1.0 & Abhijith Madhav(MT2013002) & Initial version sent to Client & \date{February 5, 2014} \\
+   & Arjun S Bharadwaj(MT2013026) & & \\
+\hline  
+\hline  
+  2.0 & Abhijith Madhav(MT2013002) & Elaboration of product scope. Made & \date{February 7, 2014} \\ 
+   & Arjun S Bharadwaj(MT2013026) & interoperability as an FR.& \\
+\hline  
+  3.0 & Abhijith Madhav(MT2013002) & Changes to NFR. & \date{March 10, 2014} \\ 
+   & Arjun S Bharadwaj(MT2013026) & & \\
+\hline
+\end{tabular}
+\tableofcontents
+\chapter{Introduction}
+This document provides the Software Requirement Specifications of the project. Specifically it provides the details on the functional and non functional aspects of the project.
+\section{Document Purpose}
+The document describes the software requirements of “Links”, version 1.0. The software requirements encapsulate the whole of the product.
+
+\section{Product Scope}
+“Links” is website offering bookmarking services with the specific requirement being that it should be deployable on a private server within an organization.
+
+The purpose is to enable people in an organization to share bookmarks with each other.
+
+The specific benefit delivered by “Links” is that sharing/publishing of bookmarks can be controlled at the required level of granularity.
+
+“Links” is intended to be an extensible, modular system with an exposed API. Third parties must be able to write plugins and applications using this API.
+
+It is envisioned to seemlessly fit into the “share” motto of the net community, be it through simple email or through popular social platforms like facebook and twitter. A trigger based action execution like that of ifttt.com augments this motto and is intended to be a part of “Links”.
+
+\maketitle
+\chapter{Overall description}
+This section provides the overall description of the project. This includes the product perspective and the functionality.
+\section{Product Perspective}
+A bookmarking service is a centralized online service which enables users to add, annotate, edit and share bookmarks of web documents, the most popular being Delicious. “Scuttle” is one of the other well known open source alternative. “Links” is envisioned on similar lines with the specific objective that it is aimed at deployment within an organization.
+\section{Product Functionality}
+\begin{enumerate}
+\item
+Provide for user accounts/signup.
+\item
+Provide for website bookmark management.
+\item
+Provide for management of user groups for sharing bookmarks.
+\item
+Provide for options to share website bookmarks amongst users and groups.
+\item
+Provide options to push website bookmarks onto popular social media and via email.
+\end{enumerate}
+
+\maketitle
+\chapter{Functional Requirements}
+This section specifies the functional requirements of the project.
+\section{Functional Requirements}
+This section provides the functional requirements of the project.
+\begin{enumerate}
+	\item
+		Login
+		\begin{itemize}
+			\item
+				User logs into the system.
+			\item
+				\emph{Input:} User enters the login details and clicks on login.
+			\item
+				\emph{Output:} 
+					\begin{itemize}
+						\item
+							If the validation of the user credentials is successful:
+							\begin{itemize}
+								\item
+									The user is redirected to the Homepage.
+							\end{itemize}
+
+
+						\item
+							If the validation of the login details is unsuccessful:
+							\begin{itemize}
+								\item
+									An appropriate error message is shown to the user.
+							\end{itemize}
+					\end{itemize}
+		\end{itemize}
+
+	\item
+		Signup
+		\begin{itemize}
+			\item
+				User clicks on Signup.
+			\item
+				\emph{Input:} Signup details are asked.
+			\item
+				\emph{Output:} 
+					\begin{itemize}
+						\item	
+							If validation of the details is successful:
+							\begin{itemize}
+								\item
+									Account is created.
+							\end{itemize}
+
+						\item
+							If validation of the details is unsuccessful:
+							\begin{itemize}
+								\item
+									An appropriate error message is shown to the user.
+							\end{itemize}
+					\end{itemize}
+		\end{itemize}
+
+	\item
+		Save Links
+		\begin{itemize}
+			\item
+				User bookmarks the links.
+			\item
+				\emph{Input:} A Title, URI, Tags and Annotations are provided.
+			\item
+				\emph{Output:} 
+					\begin{itemize}
+						\item				
+							After the link is saved:
+							\begin{itemize}
+								\item
+									Acknowledgement for the action is provided.
+									\item
+									Suggest tags if same link was shared by others based on the visibility level of the user.
+							\end{itemize}			
+					\end{itemize}					
+		\end{itemize}
+
+	\item
+		Edit  Links
+		\begin{itemize}
+			\item
+				User edits the links.
+			\item
+				\emph{Input:} An existing link, modified data (title, tags, annotations).
+			\item
+				\emph{Output:} 
+					\begin{itemize}
+						\item	
+							After the link is updated:
+						\begin{itemize}
+							\item
+								Acknowledgement for the update is provided.
+						\end{itemize}						
+					\end{itemize}			
+		\end{itemize}
+
+
+	\item
+		Delete   Links
+		\begin{itemize}
+			\item
+				User deletes  the links.
+			\item
+				\emph{Input:} An existing link shared by the user.
+			\item
+				\emph{Output:} 
+					\begin{itemize}
+						\item	
+							After the link is deleted:
+						\begin{itemize}
+							\item
+								Acknowledgement for the deletion is provided.
+						\end{itemize}			
+					\end{itemize}
+			\end{itemize}
+
+	\item
+		Create User Groups
+		\begin{itemize}
+			\item
+				Creation of Groups by the user.
+			\item
+				\emph{Input:} Group name and group description corresponding to the group.
+			\item
+				\emph{Output:} 
+					\begin{itemize}
+						\item
+							If the group name is not already used:
+						\begin{itemize}
+							\item
+								Acknowledgement for the creation is provided.
+						\end{itemize}
+
+						\item
+							If the group name already exists:
+						\begin{itemize}
+							\item
+								Appropriate error message.
+						\end{itemize}
+					\end{itemize}			
+			\end{itemize}
+
+	\item
+		Join Group
+		\begin{itemize}
+			\item
+				User joins the group.
+			\item
+				\emph{Input:} Group name of the group that the user wishes to subscribe to.
+			\item
+				\emph{Output:} Acknowledgement of the subscription is provided.
+		\end{itemize}
+
+	\item
+		Unjoin Group
+		\begin{itemize}
+			\item
+				User unjoins the group.
+			\item
+				\emph{Input:} Group name of the group that the user wishes to unsubscribe to.
+			\item
+				\emph{Output:} Acknowledgement of the un-subscription is provided.
+		\end{itemize}
+
+	\item
+		Share
+		\begin{itemize}
+			\item
+				Sharing of the links.
+			\item
+				\emph{Input:} A set of bookmarks to be shared via email or popular social media
+			\item
+				\emph{Output:} Share bookmarks via the specified media.
+		\end{itemize}
+
+	\item
+		Add Members
+		\begin{itemize}
+			\item
+				Add members to the group.
+			\item
+				\emph{Input:} User names by the group owner.
+			\item
+				\emph{Output:} Acknowledgement of addition to group.
+		\end{itemize}
+
+
+	\item
+		Remove Members
+		\begin{itemize}
+			\item
+				Remove members to the group.
+			\item
+				\emph{Input:} User names by the group owner.
+			\item
+				\emph{Output:} Acknowledgement of deletion to group.
+		\end{itemize}
+\item
+Interoperability\\
+Expose APIs through which the following can be done
+\begin{itemize}
+\item
+Search based on bookmarks, annotations, tags in accordance to the visibility of the user.
+\item
+Add, delete and edit the bookmarks in accordance to the visibility of the user.
+\end{itemize}
+As a proof of concept, an android application that consumes the data from the provided APIs will be created
+\end{enumerate}
+\maketitle
+\chapter{Non-functional Requirements}
+This section specifies the non-functional aspects of the project.
+\section{Security Requirements}
+\begin{enumerate}
+\item
+All users must be authenticated before being given modification privileges in “Links”.
+\item
+Third party clients must not have access to passwords of users and must instead use a token based authentication scheme.
+\item
+User passwords must be stored as salted hashes in the "Links" system.
+\item
+HTTPS connections between clients and the "Links" server must be supported.
+\end{enumerate}
+\section{User Experience}
+\begin{enumerate}
+\item
+The browser extension using the "Links" API  must enable saving and/or sharing bookmarks from a third party website without having to navigate away from that site.
+\item
+Where possible, portions of any "Links" webpage must be updated without having to refresh the entire webpage from the server.
+\end{enumerate}
+\end{document}
