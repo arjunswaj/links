@@ -1,0 +1,35 @@
+curl https://gist.githubusercontent.com/Paulche/9713531/raw/1e57fbb440d36ca5607d1739cc6151f373b234b6/gistfile1.txt | sudo patch /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/ruby/2.0.0/universal-darwin13/rbconfig.rb
+
+rvm install 2.1.1
+rvm use 2.1.1
+rvm gemset use --create my-project-gems
+gem install rails
+
+rvm use @my-project-gems
+
+rails new links
+rails generate model User username:string password:string firstname:string lastname:string email:string
+rails generate model Link user_id:integer url:string title:string description:text
+rake db:migrate
+
+Edit user.rb & link.rb & add associations
+
+rails console 
+user = User.create(:username => 'arjun.s.waj', :password => '123', :firstname => 'Arjun S', :lastname => 'Bharadwaj', :email => 'arjun.s.waj@gmail.com')
+user.links << Link.new(:url => "http://google.com", :title => "Google Search Engine", :description => "The best search engine!")
+
+Scaffold the User
+rails generate scaffold User username:string password:string firstname:string lastname:string email:string --skip-migration
+
+Controller & View for Links.
+rails generate controller Links show index.
+
+Modify the show & index html.erb and add the routes.
+
+Add Session support in the controllers.
+Authenticate in every controller & redirect to home page if logged in.
+
+Add form to create new link.
+
+Welcome page
+rails generate controller welcome index
