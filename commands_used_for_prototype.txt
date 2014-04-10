@@ -33,3 +33,11 @@ Add form to create new link.
 
 Welcome page
 rails generate controller welcome index
+
+Twitter Bootstrap:
+Add the following in Gemfile:
+gem "therubyracer"
+gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
+gem "twitter-bootstrap-rails"
+
+rails generate bootstrap:install

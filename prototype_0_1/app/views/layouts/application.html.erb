@@ -7,8 +7,41 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
-<%= yield %>
-
+	<div class="navbar">
+	  <div class="navbar-inner">
+	    <div class="container">
+	      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+	      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </a>
+	      <!-- Everything in here gets hidden at 940px or less -->
+	      <a class="brand" href="/sessions/login">
+          	Links	
+       	  </a>
+	      <div class="nav-collapse">
+	        <!-- menu items gets rendered here instead -->
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="span9"><%= yield %></div>
+			<div class="span3">
+				<h1>About Us</h1>
+				Traditional bookmarking services do not allow storing information on private servers. The application should allow deploying a local server which is capable of the following for every user/client:
+				<ul>
+					<li>Bookmarking URLs</li>
+					<li>Tagging the URLs</li>
+					<li>Searching among the links</li>
+					<li>Annotations for a given URL</li>
+					<li>Multi-user</li>
+					<li>Expose an API</li>
+				</ul>
+			</div>			
+		</div>		
+	</div>
 </body>
 </html>

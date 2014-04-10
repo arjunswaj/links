@@ -2,15 +2,19 @@
 <head>
 	<title><%= @link.title %></title> </head>
 	<body> 
-		<p>
-			<b>Link:</b><%= @link.url %> 
-		</p>
-		<p>
-			<b>Title:</b><%= @link.title %>
-		</p> 
-		<p>
-			<b>Description:</b><%= @link.description %> 
-		</p>	
-		<%= link_to 'Back', my_links_path %>	
+		<fieldset>
+			<div class="control-group">
+				<b>Link:</b> <a href="<%= @link.url %>" target="_tab"><%= @link.url %></a>
+			</div>
+			<div class="control-group">			
+				<b>Title:</b> <%= @link.title %>
+			</div>
+			<div class="control-group">			
+				<b>Description:</b> <%= @link.description %> 
+			</div>	
+			<div class="form-actions">
+				<%= link_to 'Back', my_links_path %>	
+			</div>
+		</fieldset>
 	</body>
 </html>
