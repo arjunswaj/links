@@ -13,7 +13,18 @@ class LinksController < ApplicationController
   end
 
   def create
-    @link = Link.new(link_params)
+	link = link_params
+	tags = link.delete("tags").split(","); # TODO: fix this
+    @link = Link.new(link)
+	tags.each do |tag|
+			if Tag.where(:tagName => tag.strip.gsub(' ', '-').downcase).size == 0
+				@tag = Tag.new
+				@tag.tagName = tag.strip.gsub(' ','-').downcase 
+				@link.tags << @tag
+			else
+				@link.tags << Tag.where(:tagName => tag.strip.gsub(' ', '-').downcase).first
+			end
+	end
     @current_user.links << @link
     respond_to do |format|
       if @link.save
@@ -25,6 +36,6 @@ class LinksController < ApplicationController
   end
 
   def link_params
-      params.require(:link).permit(:url, :title, :description)
+      params.require(:link).permit(:url, :title, :description, :tags)
     end
 end
