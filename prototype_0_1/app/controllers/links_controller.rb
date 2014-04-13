@@ -17,7 +17,7 @@ class LinksController < ApplicationController
     @current_user.links << @link
     respond_to do |format|
       if @link.save
-        format.html { redirect_to :url=>{:action=>'index'}, notice: 'User was successfully created.' }        
+        format.html { redirect_to :url=>{:action=>'index'}, notice: 'Link was successfully created.' }        
       else
         format.html { render action: 'new' }
       end
