@@ -16,9 +16,9 @@
 				<b>Tags: </b> 
 				<% tags = "" %>
 				<% @link.tags.each do |tag| %> 
-					<% tags << tag.tagName + "," %>
+					<% tags << tag.tagName + ", " %>
 				<%	end	%> 
-				<%= tags.chomp(",") %>
+				<%= tags.chomp(", ") %>
 			</div>	
 			<div class="form-actions">
 				<%= link_to 'Back', my_links_path %>	

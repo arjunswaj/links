@@ -16178,3 +16178,582 @@ Started GET "/sessions/login" for 127.0.0.1 at 2014-04-14 08:57:15 +0530
 Processing by SessionsController#login as HTML
   Rendered sessions/login.html.erb within layouts/application (1.9ms)
 Completed 200 OK in 44ms (Views: 43.5ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Processing by WelcomeController#index as HTML
+  Rendered welcome/index.html.erb within layouts/application (2.0ms)
+Completed 200 OK in 160ms (Views: 143.7ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/sessions.css?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/users.css?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/welcome.css?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/scaffolds.css?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/bootstrap_and_overrides.css?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/links.css?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-transition.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-alert.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-modal.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-dropdown.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-scrollspy.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-tab.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-tooltip.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-popover.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-button.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-collapse.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-carousel.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-typeahead.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-affix.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/twitter/bootstrap.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/turbolinks.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/bootstrap.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/links.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/sessions.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/users.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+
+
+Started GET "/" for 127.0.0.1 at 2014-04-14 09:05:32 +0530
+Processing by WelcomeController#index as HTML
+  Rendered welcome/index.html.erb within layouts/application (0.6ms)
+Completed 200 OK in 13ms (Views: 11.9ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-alert.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-transition.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/bootstrap_and_overrides.css?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-modal.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-dropdown.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-scrollspy.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-tooltip.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-tab.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-popover.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-button.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-collapse.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-carousel.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-typeahead.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-affix.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/twitter/bootstrap.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/links.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/bootstrap.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/users.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/sessions.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:33 +0530
+
+
+Started GET "/sessions/login" for 127.0.0.1 at 2014-04-14 09:05:35 +0530
+Processing by SessionsController#login as HTML
+  Rendered sessions/login.html.erb within layouts/application (1.2ms)
+Completed 200 OK in 14ms (Views: 12.7ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/login_attempt" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+Processing by SessionsController#login_attempt as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"NVPdL9WF34KmKsSL1ztWnTOBgG7ggPp89VuDgSmo6J4=", "username_or_email"=>"abhijith", "login_password"=>"[FILTERED]", "commit"=>"Log In"}
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users" WHERE "users"."username" = 'abhijith' LIMIT 1
+Redirected to http://localhost:3000/links
+Completed 302 Found in 77ms (ActiveRecord: 0.6ms)
+
+
+Started GET "/links" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+Processing by LinksController#index as HTML
+  [1m[36mUser Load (20.3ms)[0m  [1mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1[0m  [["id", 6]]
+  [1m[35mLink Load (0.3ms)[0m  SELECT "links".* FROM "links" WHERE "links"."user_id" = ?  [["user_id", 6]]
+  Rendered links/index.html.erb within layouts/application (8.8ms)
+Completed 200 OK in 123ms (Views: 42.1ms | ActiveRecord: 21.0ms)
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-modal.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-transition.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-alert.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/bootstrap_and_overrides.css?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-dropdown.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-scrollspy.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-tab.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-tooltip.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-popover.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-button.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-collapse.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-carousel.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-typeahead.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-affix.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/bootstrap.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/twitter/bootstrap.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/links.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/sessions.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/assets/users.js?body=1" for 127.0.0.1 at 2014-04-14 09:05:48 +0530
+
+
+Started GET "/links/28" for 127.0.0.1 at 2014-04-14 09:05:52 +0530
+Processing by LinksController#show as HTML
+  Parameters: {"id"=>"28"}
+  [1m[36mUser Load (0.1ms)[0m  [1mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1[0m  [["id", 6]]
+  [1m[35mLink Load (0.2ms)[0m  SELECT "links".* FROM "links" WHERE "links"."id" = ? LIMIT 1  [["id", "28"]]
+  [1m[36mTag Load (0.2ms)[0m  [1mSELECT "tags".* FROM "tags" INNER JOIN "links_tags" ON "tags"."id" = "links_tags"."tag_id" WHERE "links_tags"."link_id" = ?[0m  [["link_id", 28]]
+  Rendered links/show.html.erb within layouts/application (38.2ms)
+Completed 200 OK in 51ms (Views: 48.4ms | ActiveRecord: 1.0ms)
+
+
+Started GET "/links" for 127.0.0.1 at 2014-04-14 09:05:59 +0530
+Processing by LinksController#index as HTML
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1  [["id", 6]]
+  [1m[36mLink Load (0.2ms)[0m  [1mSELECT "links".* FROM "links" WHERE "links"."user_id" = ?[0m  [["user_id", 6]]
+  Rendered links/index.html.erb within layouts/application (2.7ms)
+Completed 200 OK in 16ms (Views: 13.7ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/links/new" for 127.0.0.1 at 2014-04-14 09:06:01 +0530
+Processing by LinksController#new as HTML
+  [1m[35mUser Load (0.1ms)[0m  SELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1  [["id", 6]]
+  Rendered links/new.html.erb within layouts/application (22.2ms)
+Completed 200 OK in 37ms (Views: 35.8ms | ActiveRecord: 0.1ms)
+
+
+Started POST "/links" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+Processing by LinksController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"NVPdL9WF34KmKsSL1ztWnTOBgG7ggPp89VuDgSmo6J4=", "link"=>{"url"=>"http://lms.iiitb.ac.in/moodle/login/index.php", "title"=>"Moodle LMS", "description"=>"LMS of IIIT-B", "tags"=>"lms,moodle,iiitb,content management system"}, "commit"=>"Create Link"}
+  [1m[36mUser Load (0.1ms)[0m  [1mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1[0m  [["id", 6]]
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "tags" WHERE "tags"."tagName" = 'lms'
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(*) FROM "tags" WHERE "tags"."tagName" = 'moodle'[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "tags" WHERE "tags"."tagName" = 'iiitb'
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(*) FROM "tags" WHERE "tags"."tagName" = 'content-management-system'[0m
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36mSQL (46.3ms)[0m  [1mINSERT INTO "links" ("created_at", "description", "title", "updated_at", "url", "user_id") VALUES (?, ?, ?, ?, ?, ?)[0m  [["created_at", Mon, 14 Apr 2014 03:36:52 UTC +00:00], ["description", "LMS of IIIT-B"], ["title", "Moodle LMS"], ["updated_at", Mon, 14 Apr 2014 03:36:52 UTC +00:00], ["url", "http://lms.iiitb.ac.in/moodle/login/index.php"], ["user_id", 6]]
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "tags" ("created_at", "tagName", "updated_at") VALUES (?, ?, ?)  [["created_at", Mon, 14 Apr 2014 03:36:52 UTC +00:00], ["tagName", "lms"], ["updated_at", Mon, 14 Apr 2014 03:36:52 UTC +00:00]]
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "links_tags" ("link_id", "tag_id") VALUES (30, 16)[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "tags" ("created_at", "tagName", "updated_at") VALUES (?, ?, ?)  [["created_at", Mon, 14 Apr 2014 03:36:52 UTC +00:00], ["tagName", "moodle"], ["updated_at", Mon, 14 Apr 2014 03:36:52 UTC +00:00]]
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "links_tags" ("link_id", "tag_id") VALUES (30, 17)[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "tags" ("created_at", "tagName", "updated_at") VALUES (?, ?, ?)  [["created_at", Mon, 14 Apr 2014 03:36:52 UTC +00:00], ["tagName", "iiitb"], ["updated_at", Mon, 14 Apr 2014 03:36:52 UTC +00:00]]
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "links_tags" ("link_id", "tag_id") VALUES (30, 18)[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "tags" ("created_at", "tagName", "updated_at") VALUES (?, ?, ?)  [["created_at", Mon, 14 Apr 2014 03:36:52 UTC +00:00], ["tagName", "content-management-system"], ["updated_at", Mon, 14 Apr 2014 03:36:52 UTC +00:00]]
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "links_tags" ("link_id", "tag_id") VALUES (30, 19)[0m
+  [1m[35m (2.4ms)[0m  commit transaction
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.1ms)[0m  commit transaction
+Redirected to http://localhost:3000/links?notice=Link+was+successfully+created.&url%5Baction%5D=index
+Completed 302 Found in 66ms (ActiveRecord: 50.5ms)
+
+
+Started GET "/links?notice=Link+was+successfully+created.&url%5Baction%5D=index" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+Processing by LinksController#index as HTML
+  Parameters: {"notice"=>"Link was successfully created.", "url"=>{"action"=>"index"}}
+  [1m[36mUser Load (0.1ms)[0m  [1mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1[0m  [["id", 6]]
+  [1m[35mLink Load (0.1ms)[0m  SELECT "links".* FROM "links" WHERE "links"."user_id" = ?  [["user_id", 6]]
+  Rendered links/index.html.erb within layouts/application (2.1ms)
+Completed 200 OK in 14ms (Views: 12.3ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-alert.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/bootstrap_and_overrides.css?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-transition.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-modal.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-dropdown.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-scrollspy.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-tooltip.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-tab.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-popover.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-button.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-collapse.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-typeahead.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-carousel.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-affix.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/twitter/bootstrap.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/bootstrap.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/links.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/sessions.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/users.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2014-04-14 09:06:52 +0530
+
+
+Started GET "/links/30" for 127.0.0.1 at 2014-04-14 09:06:54 +0530
+Processing by LinksController#show as HTML
+  Parameters: {"id"=>"30"}
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1[0m  [["id", 6]]
+  [1m[35mLink Load (0.1ms)[0m  SELECT "links".* FROM "links" WHERE "links"."id" = ? LIMIT 1  [["id", "30"]]
+  [1m[36mTag Load (0.1ms)[0m  [1mSELECT "tags".* FROM "tags" INNER JOIN "links_tags" ON "tags"."id" = "links_tags"."tag_id" WHERE "links_tags"."link_id" = ?[0m  [["link_id", 30]]
+  Rendered links/show.html.erb within layouts/application (1.9ms)
+Completed 200 OK in 15ms (Views: 12.8ms | ActiveRecord: 0.4ms)
+
+
+Started GET "/links/30" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+Processing by LinksController#show as HTML
+  Parameters: {"id"=>"30"}
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1  [["id", 6]]
+  [1m[36mLink Load (1.7ms)[0m  [1mSELECT "links".* FROM "links" WHERE "links"."id" = ? LIMIT 1[0m  [["id", "30"]]
+  [1m[35mTag Load (0.2ms)[0m  SELECT "tags".* FROM "tags" INNER JOIN "links_tags" ON "tags"."id" = "links_tags"."tag_id" WHERE "links_tags"."link_id" = ?  [["link_id", 30]]
+  Rendered links/show.html.erb within layouts/application (3.3ms)
+Completed 200 OK in 24ms (Views: 19.6ms | ActiveRecord: 2.1ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/bootstrap_and_overrides.css?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-modal.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-transition.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-alert.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-dropdown.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-scrollspy.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-tab.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-tooltip.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-popover.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-button.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-collapse.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-carousel.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-typeahead.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-affix.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/twitter/bootstrap.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/bootstrap.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/sessions.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/links.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/assets/users.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:41 +0530
+
+
+Started GET "/links/30" for 127.0.0.1 at 2014-04-14 09:07:59 +0530
+Processing by LinksController#show as HTML
+  Parameters: {"id"=>"30"}
+  [1m[36mUser Load (0.1ms)[0m  [1mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1[0m  [["id", 6]]
+  [1m[35mLink Load (0.1ms)[0m  SELECT "links".* FROM "links" WHERE "links"."id" = ? LIMIT 1  [["id", "30"]]
+  [1m[36mTag Load (0.4ms)[0m  [1mSELECT "tags".* FROM "tags" INNER JOIN "links_tags" ON "tags"."id" = "links_tags"."tag_id" WHERE "links_tags"."link_id" = ?[0m  [["link_id", 30]]
+  Rendered links/show.html.erb within layouts/application (3.6ms)
+Completed 200 OK in 18ms (Views: 15.5ms | ActiveRecord: 0.6ms)
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2014-04-14 09:07:59 +0530
+
+
+Started GET "/assets/bootstrap_and_overrides.css?body=1" for 127.0.0.1 at 2014-04-14 09:07:59 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-transition.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:59 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-alert.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:59 +0530
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:59 +0530
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:59 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-modal.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:59 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-dropdown.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:59 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-scrollspy.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:59 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-tab.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:59 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-tooltip.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:59 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-popover.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:59 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-button.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:59 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-collapse.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:59 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-carousel.js?body=1" for 127.0.0.1 at 2014-04-14 09:07:59 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-typeahead.js?body=1" for 127.0.0.1 at 2014-04-14 09:08:00 +0530
+
+
+Started GET "/assets/twitter/bootstrap/bootstrap-affix.js?body=1" for 127.0.0.1 at 2014-04-14 09:08:00 +0530
+
+
+Started GET "/assets/twitter/bootstrap.js?body=1" for 127.0.0.1 at 2014-04-14 09:08:00 +0530
+
+
+Started GET "/assets/bootstrap.js?body=1" for 127.0.0.1 at 2014-04-14 09:08:00 +0530
+
+
+Started GET "/assets/links.js?body=1" for 127.0.0.1 at 2014-04-14 09:08:00 +0530
+
+
+Started GET "/assets/sessions.js?body=1" for 127.0.0.1 at 2014-04-14 09:08:00 +0530
+
+
+Started GET "/assets/users.js?body=1" for 127.0.0.1 at 2014-04-14 09:08:00 +0530
+
+
+Started GET "/assets/welcome.js?body=1" for 127.0.0.1 at 2014-04-14 09:08:00 +0530
+
+
+Started GET "/links" for 127.0.0.1 at 2014-04-14 09:11:38 +0530
+Processing by LinksController#index as HTML
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1  [["id", 6]]
+  [1m[36mLink Load (0.3ms)[0m  [1mSELECT "links".* FROM "links" WHERE "links"."user_id" = ?[0m  [["user_id", 6]]
+  Rendered links/index.html.erb within layouts/application (4.8ms)
+Completed 200 OK in 107ms (Views: 104.3ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/logout" for 127.0.0.1 at 2014-04-14 09:12:25 +0530
+Processing by SessionsController#logout as HTML
+Redirected to http://localhost:3000/sessions/login
+Completed 302 Found in 1ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/sessions/login" for 127.0.0.1 at 2014-04-14 09:12:25 +0530
+Processing by SessionsController#login as HTML
+  Rendered sessions/login.html.erb within layouts/application (0.6ms)
+Completed 200 OK in 12ms (Views: 11.7ms | ActiveRecord: 0.0ms)
