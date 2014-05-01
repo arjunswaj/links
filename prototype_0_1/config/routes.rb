@@ -10,8 +10,12 @@ Links::Application.routes.draw do
   resources :users
   get '/links/new', to: 'links#new' , :as => 'my_new_link' 
   post '/links/', to: 'links#create', :as => 'create_my_link'
+  get '/links/:id/edit(.:format)', to: 'links#edit', :as => 'edit_link'
   get '/links', to: 'links#index', :as => 'my_links'
   get '/links/:id', to: 'links#show'  
+  patch '/links/:id', to: 'links#update'
+  put '/links/:id', to: 'links#update'
+  delete '/links/:id', to: 'links#destroy', :as => 'delete_link'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -22,6 +22,8 @@
 			</div>	
 			<div class="form-actions">
 				<%= link_to 'Back', my_links_path %>	
+				<%= link_to 'Edit', edit_link_path(@link) %>
+				<%= link_to 'Delete', url_for(:controller => 'links', :action => 'destroy'), method: :delete %>
 			</div>
 		</fieldset>
 	</body>
