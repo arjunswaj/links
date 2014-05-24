@@ -1,4 +1,7 @@
 Links::Application.routes.draw do
+  root to: 'bookmarks#index'
+  resources :bookmarks
+
   mount Share::Engine, :at => "/share"
   mount Ad::Engine, :at => "/ad"
   # The priority is based upon order of creation: first created -> highest priority.
