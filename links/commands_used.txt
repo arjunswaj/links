@@ -1,1 +1,58 @@
 rails new links
+rails plugin new ad --mountable
+rails plugin new share --mountable
+
+
+Add mount points to routes.rb
+In links, do a bundle install
+
+Inside Ad:
+Ads for Pages
+1. rails generate controller pages
+2. Add partials
+3. Add routes
+
+Inside Share: (/title/:title/link/:link)
+1. rails generate controller shares
+2. Add Controller Actions for Email, FB and Twitter
+3. Add routes
+
+Plugin Configuration inside links
+plugin_config.yml in links/config with all configs
+plugin_config.rb in links/config/initializers
+
+
+To display share links use in the view:
+
+			<% for link in @links %>
+				<li>
+					<a href="/links/<%= link.id %>"><%= link.title %></a> 
+					<% for bookmark_plugin_key in @bookmark_plugins.keys %>
+						<%														
+							bookmark_plugin =  @bookmark_plugins[bookmark_plugin_key]	
+							if bookmark_plugin['enabled'] == true			
+								puts bookmark_plugin					
+								mount_point = bookmark_plugin['mount_point']
+								resource_point = bookmark_plugin['resource_point']
+								share_name = bookmark_plugin['share_name']
+								url = mount_point + resource_point + '/title/' + CGI.escape(link.title) + '/link/' + CGI.escape(link.url)
+						%>
+								<%= link_to share_name, url, :target => "_blank" %>						
+							<% end %>
+					<% end %>
+				</li> 
+			<% end %>
+
+To display ads use in the view:
+						<% @page_plugins = PLUGIN_CONFIG['pages'] %>
+						<% for page_plugin_key in @page_plugins.keys %>
+							<%														
+								page_plugin =  @page_plugins[page_plugin_key]														
+								resource_point = page_plugin['resource_point']							
+							%>
+							<div>
+								<% if page_plugin['enabled'] %>
+									<%= render resource_point %>
+								<% end %>
+							</div>
+						<% end %>				
