@@ -46,3 +46,6 @@ gem 'ad', path: "../ad"
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+# Devise for authentication
+gem 'devise'
