@@ -5,21 +5,28 @@
     <tr>
       <th>Title</th>
       <th>Description</th>
+      <th>User</th>
+      <th>Url</th>
       <th></th>
       <th></th>
       <th></th>
     </tr>
   </thead>
 
-  <tbody>
+	<tbody>
+	<% if @bookmarks == nil %>
+	<% else %>
     <% @bookmarks.each do |bookmark| %>
       <tr>
         <td><%= bookmark.title %></td>
         <td><%= bookmark.description %></td>
+        <td><%= bookmark.user_id %></td>
+        <td><%= bookmark.url_id %></td>
         <td><%= link_to 'Show', bookmark %></td>
         <td><%= link_to 'Edit', edit_bookmark_path(bookmark) %></td>
         <td><%= link_to 'Destroy', bookmark, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
+    <% end %>
     <% end %>
   </tbody>
 </table>
