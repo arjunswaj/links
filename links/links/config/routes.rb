@@ -1,5 +1,8 @@
 Links::Application.routes.draw do
+  root to: 'bookmarks#index'
   devise_for :users
+  resources :bookmarks
+
   mount Share::Engine, :at => "/share"
   mount Ad::Engine, :at => "/ad"
 
