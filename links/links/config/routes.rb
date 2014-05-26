@@ -1,4 +1,14 @@
+require 'api_constraints'
+
 Links::Application.routes.draw do
+  use_doorkeeper
+
+	namespace :api,defaults: {format: 'json'} do
+			scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
+					resources :bookmarks
+			end
+	end
+
   root to: 'bookmarks#index'
 
   resources :urls
