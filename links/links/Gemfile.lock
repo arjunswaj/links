@@ -70,8 +70,11 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.25.1)
+    mini_portile (0.6.0)
     minitest (4.7.5)
     multi_json (1.10.1)
+    nokogiri (1.6.2.1)
+      mini_portile (= 0.6.0)
     orm_adapter (0.5.0)
     polyglot (0.3.4)
     rack (1.5.2)
@@ -137,6 +140,7 @@ DEPENDENCIES
   doorkeeper
   jbuilder (~> 1.2)
   jquery-rails
+  nokogiri
   rails (= 4.0.5)
   sass-rails (~> 4.0.2)
   sdoc

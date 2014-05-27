@@ -52,3 +52,6 @@ gem 'devise'
 
 # doorkeeper for oauth
 gem 'doorkeeper'
+
+# nokogiri for automatically retrieving annotations
+gem 'nokogiri'

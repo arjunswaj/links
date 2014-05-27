@@ -14,3 +14,18 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+$(document).ready(function() {
+
+	$("#bookmark_url_attributes_url").val('');
+	$("#bookmark_title").val('');
+	$("#bookmark_description").val('');
+
+	$("#bookmark_url_attributes_url").focus();
+
+	$("#bookmark_url_attributes_url").focusout(function() {
+		$.get('http://localhost:3000/annotations?url=' + $(this).val(), function(data) {
+			$("#bookmark_title").val(data);
+		});
+		$("#bookmark_description").val("Extracted description ");
+	});
+});

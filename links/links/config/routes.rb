@@ -17,6 +17,8 @@ Links::Application.routes.draw do
 
   devise_for :users
 
+	get 'annotations', to: 'scrapper#annotations'
+
   mount Share::Engine, :at => "/share"
   mount Ad::Engine, :at => "/ad"
 
