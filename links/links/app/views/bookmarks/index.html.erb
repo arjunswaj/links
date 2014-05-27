@@ -25,6 +25,21 @@
         <td><%= link_to 'Show', bookmark %></td>
         <td><%= link_to 'Edit', edit_bookmark_path(bookmark) %></td>
         <td><%= link_to 'Destroy', bookmark, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+										<td>
+									<% for bookmark_plugin_key in @bookmark_plugins.keys %>
+												<%														
+													bookmark_plugin =  @bookmark_plugins[bookmark_plugin_key]	
+											if bookmark_plugin['enabled'] == true			
+												puts bookmark_plugin					
+												mount_point = bookmark_plugin['mount_point']
+												resource_point = bookmark_plugin['resource_point']
+												share_name = bookmark_plugin['share_name']
+												url = mount_point + resource_point + '/title/' + CGI.escape(bookmark.title) + '/link/' + CGI.escape(bookmark.url.url)
+										%>
+										<%= link_to share_name, url, :target => "_blank" %>						
+											<% end %>
+									<% end %>
+								</td> 
       </tr>
     <% end %>
     <% end %>

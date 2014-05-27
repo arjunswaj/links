@@ -4,6 +4,7 @@ class BookmarksController < ApplicationController
   # GET /bookmarks
   # GET /bookmarks.json
   def index
+		@bookmark_plugins = PLUGIN_CONFIG['bookmark']
     @bookmarks = Bookmark.where("user_id == ?", current_user.id)
   end
 

@@ -18,10 +18,10 @@ defaults: &defaults
   pages:
     ads_for_page:
       enabled: true
-      resource_point: 'ads/pages/index'
+      resource_point: 'ad/pages/index'
     yet_another_ads_for_page:
       enabled: false
-      resource_point: 'ads/pages/index'
+      resource_point: 'ad/pages/index'
 
 development:
   <<: *defaults

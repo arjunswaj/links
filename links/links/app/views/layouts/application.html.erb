@@ -19,5 +19,19 @@
 	<% end %>
 </div>
 
+<div>
+		<% @page_plugins = PLUGIN_CONFIG['pages'] %>
+		<% for page_plugin_key in @page_plugins.keys %>
+									<%														
+												page_plugin =  @page_plugins[page_plugin_key]														
+										resource_point = page_plugin['resource_point']							
+									%>
+							<div>
+										<% if page_plugin['enabled'] %>
+													<%= render resource_point %>
+										<% end %>
+									</div>
+								<% end %>				
+</div>
 </body>
 </html>
