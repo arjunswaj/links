@@ -13,7 +13,7 @@
 
 <p>
   <strong>Url:</strong>
-  <%= Url.find(@bookmark.url_id).url %>
+  <%= @bookmark.url.url %>
 </p>
 
 <%= link_to 'Edit', edit_bookmark_path(@bookmark) %> |

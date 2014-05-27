@@ -55,3 +55,6 @@ gem 'doorkeeper'
 
 # nokogiri for automatically retrieving annotations
 gem 'nokogiri'
+
+#twitter bootstrap for rails
+gem 'twitter-bootstrap-rails', '~> 2.2.8'

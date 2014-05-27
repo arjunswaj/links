@@ -5,7 +5,7 @@ class BookmarksController < ApplicationController
   # GET /bookmarks.json
   def index
 		@bookmark_plugins = PLUGIN_CONFIG['bookmark']
-    @bookmarks = Bookmark.where("user_id == ?", current_user.id)
+    @bookmarks = current_user.bookmarks
   end
 
   # GET /bookmarks/1
@@ -22,8 +22,7 @@ class BookmarksController < ApplicationController
 
   # GET /bookmarks/1/edit
   def edit
-		set_bookmark
-		@url = Url.find(@bookmark.url_id)
+		set_bookmark		
   end
 
   # POST /bookmarks
@@ -36,7 +35,7 @@ class BookmarksController < ApplicationController
         format.html { redirect_to 'new', notice: 'Trouble saving the url.' } #TODO: What is happening here?
 			end
 		end
-    @bookmark = Bookmark.new({:title => bookmark_params[:title], :description => bookmark_params[:description], :url_id => url.id, :user_id => current_user.id})
+    @bookmark = Bookmark.new({:title => bookmark_params[:title], :description => bookmark_params[:description], :url => url, :user => current_user})
 
     #@bookmark = Bookmark.new(bookmark_params) #TODO: Explore this.. Above is Ugly
     respond_to do |format|
@@ -62,7 +61,7 @@ class BookmarksController < ApplicationController
 			end
 
 			#TODO:Can I make this more ugly?
-			if @bookmark.update_attributes({:title => bookmark_params[:title], :description => bookmark_params[:description], :url_id => new_url.id})
+			if @bookmark.update_attributes({:title => bookmark_params[:title], :description => bookmark_params[:description], :url => new_url})
       #if @bookmark.update(bookmark_params)
         format.html { redirect_to @bookmark, notice: 'Bookmark was successfully updated.' }
         format.json { head :no_content }
