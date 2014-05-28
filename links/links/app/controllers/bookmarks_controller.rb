@@ -1,6 +1,13 @@
 class BookmarksController < ApplicationController
   before_action  :authenticate_user!, only: [:show, :edit, :update, :destroy, :index] #TODO: Can I have a set_bookmark here??
 
+  layout "links"
+
+  def timeline
+    index
+    new
+  end
+  
   # GET /bookmarks
   # GET /bookmarks.json
   def index

@@ -1,3 +1,100 @@
 // Place all the styles related to the bookmarks controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.timeline {
+	width: 100%;
+	padding: 0% 2%;
+}
+.left-pane {
+	float:left;
+	width: 25%;
+}
+
+.right-pane {
+	float:left;
+	width:75%;
+	background-color: white;
+}
+
+.links, .links-form, .links-user-info {
+	width: 90%;
+	padding: 15px 0px 15px 0px;
+	margin:  0px 0px 15px 0px;
+	background-color: whitesmoke;	
+	height: 100%;
+}
+.links a, .links a:visited, .links .link-plugin-options{
+	color: #777777;	
+	text-shadow: 0 1px 0 #ffffff;
+	border-color: transparent;
+	cursor: pointer;
+	padding: 0px 2px;
+	font-family: Arial Narrow, sans-serif;
+}
+
+.left-link {
+	float: left;
+	width: 10%;
+	padding-left: 15px;
+	font-family: Arial Narrow, sans-serif;
+}
+ .left-user-info {
+ 	float: left;
+	width: 20%;
+	padding-left: 15px;
+	font-family: Arial Narrow, sans-serif;
+ }
+
+.right-link {
+	float: left;
+	width: 80%;
+	padding-left: 15px;
+	font-family: Arial Narrow, sans-serif;
+}
+
+.right-user-info {
+ 	float: left;
+	width: 60%;
+	padding-left: 15px;
+	font-size: 20px;
+	font-weight: bold;
+	font-family: Arial Narrow, sans-serif;
+ }
+
+.link-url {
+	font-size: 20px;
+	font-weight: bold;
+	padding-bottom: 5px;
+}
+
+.link-desc {
+	font-size: 14px;
+	padding: 5px 0px;
+	text-align: left;
+}
+.link-tags {
+	font-size: 14px;
+	font-weight: bold;
+	text-align: left;
+}
+
+.link-options {
+	padding: 5px 0px 0px 0px;
+}
+
+.links-form-url {
+	text-align: center;
+}
+
+.links-form-button {
+	text-align: right;
+	padding: 0px 30px;
+}
+.clear {
+	content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}

@@ -7,31 +7,32 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
-<%= yield %>
-<div id="user_nav">
-
-	<% if user_signed_in? %>
-		Signed in as <%= current_user.email %>.Not you?
-		<%= link_to "Sign out", destroy_user_session_path, :method => :delete %>
-	<% else %>
-		<%= link_to "Sign up", new_user_registration_path %> or <%= link_to "Sign in", new_user_session_path %>
+	<% if current_user %>
+		<%= render "layouts/navbar" %>			
 	<% end %>
-</div>
 
-<div>
-		<% @page_plugins = PLUGIN_CONFIG['pages'] %>
-		<% for page_plugin_key in @page_plugins.keys %>
-									<%														
-												page_plugin =  @page_plugins[page_plugin_key]														
-										resource_point = page_plugin['resource_point']							
-									%>
-							<div>
-										<% if page_plugin['enabled'] %>
-													<%= render resource_point %>
-										<% end %>
-									</div>
-								<% end %>				
-</div>
+	<div class="container">
+		<div class="row">
+			<div class="span6">
+			</div>
+			<div class="span6">
+				<%= yield %>
+			</div>			
+		</div>
+		<div class="row">
+			<% @page_plugins = PLUGIN_CONFIG['pages'] %>
+			<% for page_plugin_key in @page_plugins.keys %>
+				<%														
+					page_plugin =  @page_plugins[page_plugin_key]														
+					resource_point = page_plugin['resource_point']							
+				%>
+				<div>
+					<% if page_plugin['enabled'] %>
+						<%= render resource_point %>
+					<% end %>
+				</div>
+			<% end %>
+		</div>
+	</div>
 </body>
 </html>

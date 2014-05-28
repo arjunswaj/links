@@ -1,0 +1,11 @@
+<div>
+	<div class="left-pane">
+		<%= render "timeline_form" %>
+	</div>
+	<div class="right-pane">
+		<% @bookmarks.each do |bookmark| %>
+      		<%= render(:partial => "user_links", :locals => {:bookmark => bookmark}) %>
+    	<% end %>
+	</div>
+	<div class="clear"></div>
+</div>

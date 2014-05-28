@@ -7,17 +7,18 @@ Links::Application.routes.draw do
 			scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
 					resources :bookmarks
 			end
-	end
-
-  root to: 'bookmarks#index'
+	end  
 
   resources :urls
 
   resources :bookmarks
+  get "/timeline" => "bookmarks#timeline", :as => 'timeline' 
 
   devise_for :users
 
 	get 'annotations', to: 'scrapper#annotations'
+
+  root to: 'bookmarks#timeline'
 
   mount Share::Engine, :at => "/share"
   mount Ad::Engine, :at => "/ad"
