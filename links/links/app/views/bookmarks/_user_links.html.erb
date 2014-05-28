@@ -10,9 +10,9 @@
 			<%= bookmark.description %>	
 		</div>
 		<div class="link-tags">			
-			<%= link_to 'tag1', "#" %>
-			<%= link_to 'tag2', "#" %>
-			<%= link_to 'tag3', "#" %>
+			<% bookmark.tags.each do |tag| %> 
+				<%= link_to tag.tagname, "#" %>
+			<%	end	%> 								
 		</div>		
 		<div class="link-options">			
 			<%= link_to 'Edit', edit_bookmark_path(bookmark) %>

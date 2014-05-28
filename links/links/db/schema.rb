@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140525194939) do
+ActiveRecord::Schema.define(version: 20140528161437) do
 
   create_table "bookmarks", force: true do |t|
     t.string   "title"
@@ -20,6 +20,11 @@ ActiveRecord::Schema.define(version: 20140525194939) do
     t.integer  "url_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "bookmarks_tags", force: true do |t|
+    t.integer "bookmark_id"
+    t.integer "tag_id"
   end
 
   create_table "oauth_access_grants", force: true do |t|
@@ -60,6 +65,12 @@ ActiveRecord::Schema.define(version: 20140525194939) do
   end
 
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true
+
+  create_table "tags", force: true do |t|
+    t.string   "tagname"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "urls", force: true do |t|
     t.string   "url"

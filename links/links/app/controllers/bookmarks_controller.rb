@@ -31,6 +31,16 @@ class BookmarksController < ApplicationController
     end
     @bookmark = Bookmark.new({:title => timeline_bookmark_params[:title], :description => timeline_bookmark_params[:description], :url => url, :user => current_user})
 
+    tags = timeline_bookmark_params[:tags].split(",")
+    tags.each do |tag|
+        if Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).size == 0
+          @tag = Tag.new
+          @tag.tagname = tag.strip.gsub(' ','-').downcase 
+          @bookmark.tags << @tag
+        else
+          @bookmark.tags << Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).first
+        end
+    end
     #@bookmark = Bookmark.new(bookmark_params) #TODO: Explore this.. Above is Ugly
     respond_to do |format|
       if @bookmark.save
@@ -77,8 +87,19 @@ class BookmarksController < ApplicationController
         format.html { redirect_to 'new', notice: 'Trouble saving the url.' } #TODO: What is happening here?
 			end
 		end
+    
     @bookmark = Bookmark.new({:title => bookmark_params[:title], :description => bookmark_params[:description], :url => url, :user => current_user})
 
+    tags = bookmark_params[:tags].split(",")
+    tags.each do |tag|
+        if Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).size == 0
+          @tag = Tag.new
+          @tag.tagname = tag.strip.gsub(' ','-').downcase 
+          @bookmark.tags << @tag
+        else
+          @bookmark.tags << Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).first
+        end
+    end
     #@bookmark = Bookmark.new(bookmark_params) #TODO: Explore this.. Above is Ugly
     respond_to do |format|
       if @bookmark.save
@@ -141,6 +162,6 @@ class BookmarksController < ApplicationController
     end
 
     def timeline_bookmark_params
-      params.permit(:url, :url_id, :title, :description)
+      params.permit(:url, :url_id, :title, :description, :tags)
     end
 end
