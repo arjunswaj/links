@@ -12,7 +12,9 @@ Links::Application.routes.draw do
   resources :urls
 
   resources :bookmarks
-  get "/timeline" => "bookmarks#timeline", :as => 'timeline' 
+  get "/timeline" => "bookmarks#timeline", :as => 'timeline'
+  post "/saveurl" => "bookmarks#saveurl", :as => 'saveurl' 
+  post "/savebookmark" => "bookmarks#savebookmark", :as => 'savebookmark'
 
   devise_for :users
 

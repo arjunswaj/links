@@ -8,11 +8,46 @@ class BookmarksController < ApplicationController
     new
   end
   
+  def saveurl
+    url = Url.find_by_url(link_params[:url])
+    if url.nil?
+      url = Url.new({:url => link_params[:url]})
+      if !url.save
+        format.html { redirect_to 'new', notice: 'Trouble saving the url.' }              
+      end
+    end
+    @bookmark = Bookmark.new({:url => url, :user => current_user})
+    respond_to do |format|
+      format.html { render action: 'bookmark_form' }
+      format.js
+    end
+  end
+
+  def savebookmark
+    @bookmark_plugins = PLUGIN_CONFIG['bookmark']
+    url = Url.find_by_id(timeline_bookmark_params[:url_id])
+    if url.nil?
+       format.html { redirect_to 'new', notice: 'Trouble saving the url.' }    
+    end
+    @bookmark = Bookmark.new({:title => timeline_bookmark_params[:title], :description => timeline_bookmark_params[:description], :url => url, :user => current_user})
+
+    #@bookmark = Bookmark.new(bookmark_params) #TODO: Explore this.. Above is Ugly
+    respond_to do |format|
+      if @bookmark.save
+        format.html { redirect_to @bookmark, notice: 'Bookmark was successfully created.' }
+        format.json { render action: 'show', status: :created, location: @bookmark }
+        format.js
+      else
+        format.html { render action: 'new' }
+        format.json { render json: @bookmark.errors, status: :unprocessable_entity }
+      end
+    end
+  end
   # GET /bookmarks
   # GET /bookmarks.json
   def index
 		@bookmark_plugins = PLUGIN_CONFIG['bookmark']
-    @bookmarks = current_user.bookmarks
+    @bookmarks = current_user.bookmarks.order('created_at DESC')
   end
 
   # GET /bookmarks/1
@@ -99,5 +134,13 @@ class BookmarksController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def bookmark_params
       params.require(:bookmark).permit(:title, :description, :url_attributes => :url)
+    end
+
+    def link_params
+      params.permit(:url)
+    end
+
+    def timeline_bookmark_params
+      params.permit(:url, :url_id, :title, :description)
     end
 end

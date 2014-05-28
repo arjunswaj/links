@@ -7,6 +7,8 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+	<div id="overlay" class="overlay-invisible">
+	</div>
 	<% if current_user %>
 		<%= render "layouts/navbar" %>
 	<% end %>

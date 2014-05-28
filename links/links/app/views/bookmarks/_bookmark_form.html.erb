@@ -1,0 +1,18 @@
+<div class="bookmark-form">
+  <h3>Save Bookmark</h3>
+  <%= form_tag("/savebookmark", method: "post", remote: true) do %>  
+      <%= hidden_field_tag(:url_id, @bookmark.url.id) %>
+      <div>    
+        <%= text_area_tag(:url, @bookmark.url.url, {placeholder: "Paste the URL here...", rows:3}) %>
+      </div>
+      <div>    
+        <%= text_field_tag(:title, @bookmark.title, {placeholder: "Title"}) %>
+      </div>
+      <div>    
+        <%= text_area_tag(:description, @bookmark.description, {placeholder: "Description"}) %>
+      </div>
+      <div>
+      <%= submit_tag("Save") %>
+    </div>
+  <% end %>
+</div>
