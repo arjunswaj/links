@@ -1,5 +1,5 @@
 class BookmarksController < ApplicationController
-  before_action  :authenticate_user!, only: [:show, :edit, :update, :destroy, :index] #TODO: Can I have a set_bookmark here??
+  before_action  :authenticate_user!, only: [:show, :edit, :update, :destroy, :index, :timeline] #TODO: Can I have a set_bookmark here??
 
   layout "links"
 
