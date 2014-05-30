@@ -9,7 +9,7 @@ Links::Application.routes.draw do
 			end
 	end  
 
-  resources :urls
+  #resources :urls
 
   resources :bookmarks
   get "/timeline" => "bookmarks#timeline", :as => 'timeline'
