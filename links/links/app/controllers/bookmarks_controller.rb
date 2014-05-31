@@ -1,5 +1,6 @@
 class BookmarksController < ApplicationController
-  before_action  :authenticate_user!, only: [:show, :edit, :update, :destroy, :index, :timeline] #TODO: Can I have a set_bookmark here??
+  before_action  :authenticate_user!, only: [:show, :edit, :update, :destroy, :index, :timeline]
+  before_action  :set_bookmark, only: [:show, :edit, :update, :destroy]
 
   layout "links"
   def timeline
@@ -63,7 +64,6 @@ class BookmarksController < ApplicationController
   # GET /bookmarks/1
   # GET /bookmarks/1.json
   def show
-    set_bookmark
   end
 
   # GET /bookmarks/new
@@ -74,7 +74,6 @@ class BookmarksController < ApplicationController
 
   # GET /bookmarks/1/edit
   def edit
-    set_bookmark
   end
 
   # POST /bookmarks
@@ -107,7 +106,6 @@ class BookmarksController < ApplicationController
   # PATCH/PUT /bookmarks/1
   # PATCH/PUT /bookmarks/1.json
   def update
-    set_bookmark
     respond_to do |format|
       new_url = Url.find_by_url(bookmark_params[:url_attributes][:url])
       if new_url == nil
@@ -130,7 +128,6 @@ class BookmarksController < ApplicationController
   # DELETE /bookmarks/1
   # DELETE /bookmarks/1.json
   def destroy
-    set_bookmark
     @bookmark.destroy
     respond_to do |format|
       format.html { redirect_to bookmarks_url }
