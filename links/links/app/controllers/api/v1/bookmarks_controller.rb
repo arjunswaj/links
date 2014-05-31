@@ -6,7 +6,16 @@ module Api
 			respond_to :json
 
 			def index
-				respond_with Bookmark.where("user_id == ?", doorkeeper_token.resource_owner_id)
+				bookmarks = Bookmark.where("user_id == ?", doorkeeper_token.resource_owner_id)
+				formatted_bookmarks = []
+				bookmarks.each do  |bookmark|
+				  formatted_tags = []
+				  bookmark.tags.each do |tag|
+				    formatted_tags << tag.tagname
+				  end			  
+				  formatted_bookmarks << {:id => bookmark.id, :url => bookmark.url.url, :title => bookmark.title, :description => bookmark.description, :tags => formatted_tags}
+				end
+				respond_with formatted_bookmarks
 			end
 
 			def show
