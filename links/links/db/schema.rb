@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140528161437) do
+ActiveRecord::Schema.define(version: 20140531015328) do
 
   create_table "bookmarks", force: true do |t|
     t.string   "title"
@@ -77,6 +77,8 @@ ActiveRecord::Schema.define(version: 20140528161437) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "urls", ["url"], name: "index_urls_on_url", unique: true
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
