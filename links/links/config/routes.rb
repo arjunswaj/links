@@ -1,6 +1,8 @@
 require 'api_constraints'
 
 Links::Application.routes.draw do
+  resources :groups
+
   use_doorkeeper
 
 	namespace :api,defaults: {format: 'json'} do

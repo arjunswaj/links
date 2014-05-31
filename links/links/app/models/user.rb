@@ -5,5 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
 	has_many :bookmarks
+	has_many :groups # owner relationship
+	has_and_belongs_to_many :groups # membership relationship
 
 end
