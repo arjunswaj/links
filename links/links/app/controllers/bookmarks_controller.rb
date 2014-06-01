@@ -83,7 +83,7 @@ class BookmarksController < ApplicationController
     @bookmark.description = timeline_bookmark_params[:description]
     @bookmark.url = url
     @bookmark.user = current_user
-    
+
     @bookmark.tags.clear
 
     tags = timeline_bookmark_params[:tags].split(",")
@@ -190,7 +190,7 @@ class BookmarksController < ApplicationController
   def destroy
     @bookmark.destroy
     respond_to do |format|
-      format.html { redirect_to bookmarks_url }
+      format.html { redirect_to "/timeline" }
       format.json { head :no_content }
     end
   end
