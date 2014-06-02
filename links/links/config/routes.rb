@@ -1,6 +1,12 @@
 require 'api_constraints'
 
 Links::Application.routes.draw do
+  get "searches/index" => "searches#index", :as => 'search_index'
+  post "searches/search_user" => "searches#search_user", :as => 'search_user'
+
+  #dummy receiver
+  post "searches/receiver" => "searches#receiver", :as => 'receiver'
+
   use_doorkeeper
 
 	namespace :api,defaults: {format: 'json'} do
