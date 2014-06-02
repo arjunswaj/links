@@ -1,0 +1,9 @@
+<div>	
+	<%= form_tag("/searches/receiver", method: "post") do %>
+		<div id="magicsuggest"></div>	
+      	<div>
+      		<input type="text" name="users[]" id="ms" placeholder"Add Users"></input>      		
+  			<%= submit_tag("Add") %>
+		</div>
+  	<% end %>
+</div>

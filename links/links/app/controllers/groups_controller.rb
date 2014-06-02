@@ -20,6 +20,7 @@ class GroupsController < ApplicationController
 
   # GET /groups/1/edit
   def edit
+    @user = User.new
   end
 
   # POST /groups
@@ -43,6 +44,7 @@ class GroupsController < ApplicationController
   # PATCH/PUT /groups/1
   # PATCH/PUT /groups/1.json
   def update
+    
     respond_to do |format|
       if @group.update(group_params)
         format.html { redirect_to @group, notice: 'Group was successfully updated.' }

@@ -3,9 +3,17 @@ class BookmarksController < ApplicationController
   before_action  :set_bookmark, only: [:show, :edit, :update, :destroy]
 
   layout "links"
+
   def timeline
     index
     new
+  end
+
+  def editbookmark
+    set_bookmark 
+    respond_to do |format|      
+      format.js
+    end
   end
 
   def saveurl
@@ -13,7 +21,7 @@ class BookmarksController < ApplicationController
     if url.nil?
       url = Url.new({:url => link_params[:url]})
       if !url.save
-        format.html { redirect_to 'new', notice: 'Trouble saving the url.' }
+        render :status => 404
       end
     end
     @bookmark = Bookmark.new({:url => url, :user => current_user})
@@ -23,11 +31,15 @@ class BookmarksController < ApplicationController
     end
   end
 
+  #TODO: Do a check whether the URL and Bookmark actually belongs to user or not
   def savebookmark
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
-    url = Url.find_by_id(timeline_bookmark_params[:url_id])
+    url = Url.find_by_url(timeline_bookmark_params[:url])
     if url.nil?
-      format.html { redirect_to 'new', notice: 'Trouble saving the url.' }
+      url = Url.new({:url => timeline_bookmark_params[:url]})
+      if !url.save
+        format.html { redirect_to 'new', notice: 'Trouble saving the url.' }
+      end
     end
     @bookmark = Bookmark.new({:title => timeline_bookmark_params[:title], :description => timeline_bookmark_params[:description], :url => url, :user => current_user})
 
@@ -54,11 +66,55 @@ class BookmarksController < ApplicationController
     end
   end
 
+  def updatebookmark
+    @bookmark_plugins = PLUGIN_CONFIG['bookmark']
+    url = Url.find_by_url(timeline_bookmark_params[:url])
+    if url.nil?
+      url = Url.new({:url => timeline_bookmark_params[:url]})
+      if !url.save
+        render :status => 404
+      end
+    end
+    @bookmark = Bookmark.find_by_id(timeline_bookmark_params[:bookmark_id])
+    if @bookmark.nil?
+      render :status => 404
+    end
+    @bookmark.title = timeline_bookmark_params[:title]
+    @bookmark.description = timeline_bookmark_params[:description]
+    @bookmark.url = url
+    @bookmark.user = current_user
+
+    @bookmark.tags.clear
+
+    tags = timeline_bookmark_params[:tags].split(",")
+    tags.each do |tag|
+      if Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).size == 0
+        @tag = Tag.new
+        @tag.tagname = tag.strip.gsub(' ','-').downcase
+      @bookmark.tags << @tag
+      else
+        @bookmark.tags << Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).first
+      end
+    end
+    #@bookmark = Bookmark.new(bookmark_params) #TODO: Explore this.. Above is Ugly
+    respond_to do |format|
+      if @bookmark.save
+        format.html { redirect_to @bookmark, notice: 'Bookmark was successfully created.' }
+        format.json { render action: 'show', status: :created, location: @bookmark }
+        format.js
+      else
+        format.html { render action: 'new' }
+        format.json { render json: @bookmark.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+
   # GET /bookmarks
   # GET /bookmarks.json
   def index
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
-    @bookmarks = current_user.bookmarks.order('created_at DESC')
+    @bookmarks = current_user.bookmarks.order('updated_at DESC')
   end
 
   # GET /bookmarks/1
@@ -73,7 +129,11 @@ class BookmarksController < ApplicationController
   end
 
   # GET /bookmarks/1/edit
-  def edit
+  def edit    
+    respond_to do |format|
+      format.html { render action: 'bookmark_form' }
+      format.js
+    end
   end
 
   # POST /bookmarks
@@ -130,7 +190,7 @@ class BookmarksController < ApplicationController
   def destroy
     @bookmark.destroy
     respond_to do |format|
-      format.html { redirect_to bookmarks_url }
+      format.html { redirect_to "/timeline" }
       format.json { head :no_content }
     end
   end
@@ -152,6 +212,6 @@ class BookmarksController < ApplicationController
   end
 
   def timeline_bookmark_params
-    params.permit(:url, :url_id, :title, :description, :tags)
+    params.permit(:url, :url_id, :title, :description, :tags, :bookmark_id)
   end
 end

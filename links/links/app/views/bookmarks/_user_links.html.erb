@@ -1,4 +1,4 @@
-<div class="links">
+<div class="links", id = "<%=bookmark.id.to_s %>" >
 	<div class="left-link">
 		<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAiIGhlaWdodD0iMTQwIj48cmVjdCB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgZmlsbD0iI2VlZSI+PC9yZWN0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjcwIiB5PSI3MCIgc3R5bGU9ImZpbGw6I2FhYTtmb250LXdlaWdodDpib2xkO2ZvbnQtc2l6ZToxMnB4O2ZvbnQtZmFtaWx5OkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmO2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjE0MHgxNDA8L3RleHQ+PC9zdmc+" alt="..." class="img-rounded"/>
 	</div>
@@ -15,7 +15,7 @@
 			<%	end	%> 								
 		</div>		
 		<div class="link-options">			
-			<%= link_to 'Edit', edit_bookmark_path(bookmark) %>
+			<%= link_to 'Edit', "/" + bookmark.id.to_s + "/editbookmark", remote: true %>
     		<%= link_to 'Delete', bookmark, method: :delete, data: { confirm: 'Are you sure?' } %>
 				
 			<div class="btn-group">

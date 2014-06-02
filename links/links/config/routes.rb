@@ -1,7 +1,14 @@
 require 'api_constraints'
 
 Links::Application.routes.draw do
+
   resources :groups
+
+  get "searches/index" => "searches#index", :as => 'search_index'
+  post "searches/search_user" => "searches#search_user", :as => 'search_user'
+
+  #dummy receiver
+  post "searches/receiver" => "searches#receiver", :as => 'receiver'
 
   use_doorkeeper
 
@@ -15,8 +22,10 @@ Links::Application.routes.draw do
 
   resources :bookmarks
   get "/timeline" => "bookmarks#timeline", :as => 'timeline'
+  get ":id/editbookmark" => "bookmarks#editbookmark", :as => 'editbookmark'
   post "/saveurl" => "bookmarks#saveurl", :as => 'saveurl' 
   post "/savebookmark" => "bookmarks#savebookmark", :as => 'savebookmark'
+  post "/updatebookmark" => "bookmarks#updatebookmark", :as => 'updatebookmark'
 
   devise_for :users
 
