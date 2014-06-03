@@ -1,2 +1,9 @@
 $('#overlay').removeClass("overlay-invisible").addClass("overlay-visible");
 $('#overlay').html('<%= escape_javascript("#{render(:partial => 'edit_bookmark_form')}").html_safe %>');
+var prepopulatedValueHash = <%=  @bookmark.tags.to_json(:only => [ :tagname ]).html_safe %>;
+var prepopulatedValues = [];
+for (var key in prepopulatedValueHash) {
+	prepopulatedValues.push(prepopulatedValueHash[key]['tagname']);
+	console.log(key + ":" + prepopulatedValueHash[key]['tagname'])
+}
+initMagicSuggest(prepopulatedValues);

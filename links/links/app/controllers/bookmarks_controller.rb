@@ -43,7 +43,7 @@ class BookmarksController < ApplicationController
     end
     @bookmark = Bookmark.new({:title => timeline_bookmark_params[:title], :description => timeline_bookmark_params[:description], :url => url, :user => current_user})
 
-    tags = timeline_bookmark_params[:tags].split(",")
+    tags = timeline_bookmark_params[:tags]
     tags.each do |tag|
       if Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).size == 0
         @tag = Tag.new
@@ -86,7 +86,7 @@ class BookmarksController < ApplicationController
 
     @bookmark.tags.clear
 
-    tags = timeline_bookmark_params[:tags].split(",")
+    tags = timeline_bookmark_params[:tags]
     tags.each do |tag|
       if Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).size == 0
         @tag = Tag.new
@@ -212,6 +212,6 @@ class BookmarksController < ApplicationController
   end
 
   def timeline_bookmark_params
-    params.permit(:url, :url_id, :title, :description, :tags, :bookmark_id)
+    params.permit(:url, :url_id, :title, :description, :bookmark_id, :tags => [])
   end
 end

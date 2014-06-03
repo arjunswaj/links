@@ -9,14 +9,8 @@
 <div>    
   <%= text_area_tag(:description, @bookmark.description, {placeholder: "Description"}) %>
 </div>
-<div>    
-  <% 
-    tags = ""
-    comma = ""
-   %>
-  <% @bookmark.tags.each do |tag| %> 
-    <% tags << comma + tag.tagname %>
-    <% comma = ", " %>
-  <%  end %>
-  <%= text_field_tag(:tags, tags, {placeholder: "Tags"}) %>
-</div>
+<div id="magicsuggest"></div> 
+<div>
+    <input type="text" name="tags[]" id="ms_tags" placeholder"Tags"></input>    
+</div>    
+
