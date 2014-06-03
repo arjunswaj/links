@@ -1,8 +1,34 @@
-<p id="notice"><%= notice %></p>
+<p id="notice">
+	<%= notice %>
+</p>
 
 <p>
-  <strong>Name:</strong>
-  <%= @group.name %>
+	<strong>Group Name:</strong>
+	<%= @group.name %>
+<p>
+<p>
+	<strong>Group Owner:</strong>
+	<%= @group.user.email %>
+<p>
+	<strong>Members</strong>
+
+	<div>
+		<%= form_tag("/groups/add_users", method: "post") do %>
+		<div id="magicsuggest"></div>
+		<div>
+			<input type="text" name="users[]" id="ms" placeholder"Add Users">
+			</input>
+			<%= submit_tag("Add new member") %>
+			<%= hidden_field_tag(:id, @group.id) %>
+		</div>
+		<% end %>
+	</div>
+
+	<% @group.users.each do |user| %>
+	<%= user.email %>
+	<br />
+	<% end %>
+</p>
 </p>
 
 <%= link_to 'Edit', edit_group_path(@group) %> |

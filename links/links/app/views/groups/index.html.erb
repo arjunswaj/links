@@ -1,27 +1,49 @@
-<h1>Listing groups</h1>
+<h1>My groups</h1>
 
+<h4>Groups you own</h4>
 <table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th></th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
 
-  <tbody>
-    <% @groups.each do |group| %>
-      <tr>
-        <td><%= group.name %></td>
-        <td><%= link_to 'Show', group %></td>
-        <td><%= link_to 'Edit', edit_group_path(group) %></td>
-        <td><%= link_to 'Destroy', group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
+	<tbody>
+		<% @owner_of_groups.each do |group| %>
+		<tr>
+			<td><%= link_to group.name, group %></td>
+			<td><%= link_to 'Edit', edit_group_path(group) %></td>
+			<td><%= link_to 'Destroy', group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		</tr>
+		<% end %>
+	</tbody>
 </table>
 
+<h4>Groups in which you are only a member</h4>
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th></th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+
+	<tbody>
+		<% @member_in_groups.each do |group| %>
+		<tr>
+			<td><%= link_to group.name, group %></td>
+			<td><%= form_tag unsubscribe_user_from_group_path(group), method: "post", data: { confirm: 'Are you sure?' } do %>
+			<%= submit_tag "Unsubscribe"%>
+			<% end%> </td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
 <br>
 
 <%= link_to 'New Group', new_group_path %>
