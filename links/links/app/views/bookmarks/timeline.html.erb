@@ -3,10 +3,10 @@
 		<%= render "timeline_form" %>
 	</div>
 	<div class="right-pane">
-		<div class="search-form">
-			<%= form_tag("/searches/search_bookmark", method: "post", remote: true) do %>
+		<div>
+			<%= form_tag("/searches/search_bookmark", method: "post", remote: true, class:"search-form", id:"search-form") do %>
 				<div class="search-field">
-					<%= text_field_tag(:keyword, nil, {placeholder: "Search by URL or tags"}) %>
+					<%= text_field_tag(:keyword, nil, {placeholder: "keywords or #tagname"}) %>
 					<%= submit_tag("Search", class:"btn") %>
 				</div>
 			<% end %>

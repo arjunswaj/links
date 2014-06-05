@@ -10,8 +10,8 @@
 			<%= bookmark.description %>	
 		</div>
 		<div class="link-tags">			
-			<% bookmark.tags.each do |tag| %> 
-				<%= link_to tag.tagname, "#" %>
+			<% bookmark.tags.each do |tag| %>
+				<span class="tagname"><%= "#" + tag.tagname %></span> 				
 			<%	end	%> 								
 		</div>		
 		<div class="link-options">			

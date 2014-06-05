@@ -14,8 +14,15 @@ class SearchesController < ApplicationController
   def search_bookmark
     keyword = link_search_params['keyword']  
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
-    @bookmarks = current_user.bookmarks.where("UPPER(title) LIKE UPPER(:prefix) OR UPPER(description) LIKE UPPER(:prefix)", 
-      prefix: "%#{keyword}%").order('updated_at DESC')
+    if keyword.start_with?('#')
+      tagname = keyword[1, keyword.length].strip.gsub(' ', '-').downcase
+      @bookmarks = Bookmark.joins(:tags, :user).where("LOWER(tags.tagname) = LOWER(:tag)", tag: "#{tagname}")
+      .where("users.id = :user_id", user_id: "#{current_user.id}")
+      .order('updated_at DESC')      
+    else
+      @bookmarks = current_user.bookmarks.where("LOWER(title) LIKE LOWER(:query) OR LOWER(description) LIKE LOWER(:query)", 
+      query: "%#{keyword}%").order('updated_at DESC')
+    end            
 
     respond_to do |format|    
       format.js
