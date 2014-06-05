@@ -3,7 +3,7 @@ require 'api_constraints'
 Links::Application.routes.draw do
 
   resources :groups
-  post "groups/add_users" => "groups#add_users", :as => 'add_users_to_group'
+  post "groups/:id/add_users" => "groups#add_users", :as => 'add_users_to_group'
   post "groups/:id/unsubscribe" => "groups#unsubscribe", :as => 'unsubscribe_user_from_group'
 
   get "searches/index" => "searches#index", :as => 'search_index'

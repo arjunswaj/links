@@ -2,14 +2,15 @@ class GroupsController < ApplicationController
   before_action :authenticate_user!
   # GET /groups
   # GET /groups.json
+  # TODO: json response
   def index
-#    @groups = Group.joins(:users).where("groups_users.user_id = ? ", current_user)
     @owner_of_groups = Group.where("user_id = ?", current_user)
     @member_in_groups = Group.joins(:users).where("groups_users.user_id = ? and groups.user_id != ?" , current_user, current_user)
   end
 
   # GET /groups/1
   # GET /groups/1.json
+  # TODO: json response
   def show
     if group_member?
       set_group
@@ -27,6 +28,7 @@ class GroupsController < ApplicationController
   end
 
   # GET /groups/1/edit
+  # TODO: json response
   def edit
     if group_owner?
       set_group
@@ -84,7 +86,7 @@ class GroupsController < ApplicationController
   def destroy
     if group_owner?
       set_group
-      @group.destroy
+    @group.destroy
     end
     respond_to do |format|
       format.html { redirect_to groups_url }
@@ -92,13 +94,19 @@ class GroupsController < ApplicationController
     end
   end
 
+  # PUT /add_users/
+  # TODO: pretty urls instead of sending group.id as a post parameter
+  # TODO: json response
   def add_users
     if group_owner?
       set_group
-      user_receiver_params.each do |email|
-        @group.users << User.find_by_email(email)
-        redirect_to @group
+      params[:users].each do |email| # TODO: Need to use white list
+        user = User.find_by_email(email)
+        if !@group.users.include? user
+          @group.users << user
+        end
       end
+      redirect_to @group
     else
       respond_to do |format|
         format.html { redirect_to groups_path }
@@ -107,11 +115,12 @@ class GroupsController < ApplicationController
     end
   end
 
+  # POST "groups/1/unsubscribe"
+  # TODO: json response
   def unsubscribe
     if !group_owner? && group_member?
       set_group
       current_user.groups.delete(@group)
-      #current_user.update(groups: groups)
     end
     respond_to do |format|
       format.html { redirect_to groups_url }

@@ -13,13 +13,12 @@
 	<strong>Members</strong>
 
 	<div>
-		<%= form_tag("/groups/add_users", method: "post") do %>
+		<%= form_tag(add_users_to_group_path(@group), method: "post", :id => "form") do %>
 		<div id="magicsuggest"></div>
-		<div>
-			<input type="text" name="users[]" id="ms" placeholder"Add Users">
+		<div id="input">
+			<input type="text" name="users[]" id="ms" placeholder="Add Users">
 			</input>
-			<%= submit_tag("Add new member") %>
-			<%= hidden_field_tag(:id, @group.id) %>
+			<%= submit_tag "Invite", :id => "submit" %>
 		</div>
 		<% end %>
 	</div>

@@ -6,6 +6,8 @@ var ms1;
    				displayField: 'email',
    				valueField: 'email',
    				name: 'users',
-   				highlight: false       
+   				highlight: false,
+   				allowFreeEntries: false,
+   				required: true
         });
     });
