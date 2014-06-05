@@ -1,5 +1,5 @@
 $('#overlay').removeClass("overlay-visible").addClass("overlay-invisible");
-$('.right-pane').prepend('<%= escape_javascript("#{render(:partial => 'user_links', :locals => {:bookmark => @bookmark})}").html_safe %>').fadeIn(1500);
+$('.right-pane').prepend('<%= escape_javascript("#{render(:partial => 'user_link', :locals => {:bookmark => @bookmark})}").html_safe %>').fadeIn(1500);
 $("#overlay").remove();
 $('.right-pane').prepend('<%= escape_javascript("<div id=\"overlay\" class=\"overlay-invisible\"></div>").html_safe %>');
 $("#url").val("");

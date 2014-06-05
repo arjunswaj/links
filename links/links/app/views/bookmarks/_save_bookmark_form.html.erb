@@ -3,7 +3,7 @@
   <%= form_tag("/savebookmark", method: "post", remote: true) do %>  
       <%= render(:partial => "bookmark_form", :locals => {:bookmark => @bookmark}) %>
       	<div>
-  			<%= submit_tag("Save") %>
+  			<%= submit_tag("Save", class:"btn") %>
 		</div>
   <% end %>
 </div>

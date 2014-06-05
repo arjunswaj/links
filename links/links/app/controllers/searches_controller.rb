@@ -11,6 +11,17 @@ class SearchesController < ApplicationController
   	end  	
   end
 
+  def search_bookmark
+    keyword = link_search_params['keyword']  
+    @bookmark_plugins = PLUGIN_CONFIG['bookmark']
+    @bookmarks = current_user.bookmarks.where("UPPER(title) LIKE UPPER(:prefix) OR UPPER(description) LIKE UPPER(:prefix)", 
+      prefix: "%#{keyword}%").order('updated_at DESC')
+
+    respond_to do |format|    
+      format.js
+    end   
+  end
+
   def receiver  	
   	@user_email = user_receiver_params['users']  	
   end
@@ -24,5 +35,9 @@ class SearchesController < ApplicationController
 
   def user_search_params
     params.permit(:query)
+  end
+
+  def link_search_params
+    params.permit(:keyword)
   end
 end

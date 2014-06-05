@@ -3,9 +3,17 @@
 		<%= render "timeline_form" %>
 	</div>
 	<div class="right-pane">
-		<% @bookmarks.each do |bookmark| %>
-      		<%= render(:partial => "user_links", :locals => {:bookmark => bookmark}) %>
-    	<% end %>
+		<div class="search-form">
+			<%= form_tag("/searches/search_bookmark", method: "post", remote: true) do %>
+				<div class="search-field">
+					<%= text_field_tag(:keyword, nil, {placeholder: "Search by URL or tags"}) %>
+					<%= submit_tag("Search", class:"btn") %>
+				</div>
+			<% end %>
+		</div>
+		<div class="links">
+			<%= render(:partial => "user_links") %>		
+    	</div>
 	</div>
 	<div class="clear"></div>
 </div>
