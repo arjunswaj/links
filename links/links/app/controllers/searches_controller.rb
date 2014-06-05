@@ -16,12 +16,14 @@ class SearchesController < ApplicationController
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
     if keyword.start_with?('#')
       tagname = keyword[1, keyword.length].strip.gsub(' ', '-').downcase
-      @bookmarks = Bookmark.joins(:tags, :user).where("LOWER(tags.tagname) = LOWER(:tag)", tag: "#{tagname}")
+      @bookmarks = Bookmark.eager_load(:tags, :user, :url).where("LOWER(tags.tagname) = LOWER(:tag)", tag: "#{tagname}")
       .where("users.id = :user_id", user_id: "#{current_user.id}")
-      .order('updated_at DESC')      
+      .order('bookmarks.updated_at DESC')      
     else
-      @bookmarks = current_user.bookmarks.where("LOWER(title) LIKE LOWER(:query) OR LOWER(description) LIKE LOWER(:query)", 
-      query: "%#{keyword}%").order('updated_at DESC')
+      @bookmarks = Bookmark.eager_load(:tags, :user, :url).where("LOWER(title) LIKE LOWER(:query) OR LOWER(description) LIKE LOWER(:query)", 
+      query: "%#{keyword}%")
+      .where("users.id = :user_id", user_id: "#{current_user.id}")
+      .order('bookmarks.updated_at DESC') 
     end            
 
     respond_to do |format|    

@@ -114,7 +114,9 @@ class BookmarksController < ApplicationController
   # GET /bookmarks.json
   def index
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
-    @bookmarks = current_user.bookmarks.order('updated_at DESC')
+    @bookmarks = Bookmark.eager_load(:tags, :user, :url)
+      .where("users.id = :user_id", user_id: "#{current_user.id}")
+      .order('bookmarks.updated_at DESC') 
   end
 
   # GET /bookmarks/1
