@@ -1,0 +1,2 @@
+$(".link").remove().fadeIn(1500);
+$('.links').prepend('<%= escape_javascript("#{render(:partial => 'bookmarks/user_links')}").html_safe %>').fadeIn(1500);

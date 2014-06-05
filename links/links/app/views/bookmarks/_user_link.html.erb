@@ -1,0 +1,46 @@
+<div class="link", id = "<%=bookmark.id.to_s %>" >
+	<div class="left-link">
+		<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAiIGhlaWdodD0iMTQwIj48cmVjdCB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgZmlsbD0iI2VlZSI+PC9yZWN0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjcwIiB5PSI3MCIgc3R5bGU9ImZpbGw6I2FhYTtmb250LXdlaWdodDpib2xkO2ZvbnQtc2l6ZToxMnB4O2ZvbnQtZmFtaWx5OkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmO2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjE0MHgxNDA8L3RleHQ+PC9zdmc+" alt="..." class="img-rounded"/>
+	</div>
+	<div class="right-link">
+		<div class="link-url">			
+			<%= link_to bookmark.title, bookmark.url.url, :target => "_blank" %>			
+		</div>
+		<div class="link-desc">			
+			<%= bookmark.description %>	
+		</div>
+		<div class="link-tags">			
+			<% bookmark.tags.each do |tag| %> 
+				<%= link_to tag.tagname, "#" %>
+			<%	end	%> 								
+		</div>		
+		<div class="link-options">			
+			<%= link_to 'Edit', "/" + bookmark.id.to_s + "/editbookmark", remote: true %>
+    		<%= link_to 'Delete', bookmark, method: :delete, data: { confirm: 'Are you sure?' } %>
+				
+			<div class="btn-group">
+				<button type="button" class="dropdown-toggle status-options-button btn-link link-plugin-options"
+					data-toggle="dropdown">
+					Share...
+				</button>
+				<ul class="dropdown-menu dropdown-menu-right ">
+					<% for bookmark_plugin_key in @bookmark_plugins.keys %>
+						<%														
+							bookmark_plugin =  @bookmark_plugins[bookmark_plugin_key]	
+							if bookmark_plugin['enabled'] == true			
+								mount_point = bookmark_plugin['mount_point']
+								resource_point = bookmark_plugin['resource_point']
+								share_name = bookmark_plugin['share_name']
+								url = mount_point + resource_point + '/title/' + CGI.escape(bookmark.title) + '/link/' + CGI.escape(bookmark.url.url)
+						%>
+							<li>
+								<%= link_to share_name, url, :target => "_blank"%>
+							</li>
+							<% end %>
+					<% end %>										
+				</ul>
+			</div> 
+		</div>		
+	</div>
+	<div class="clear"></div>
+</div>

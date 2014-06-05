@@ -17,13 +17,37 @@
 	background-color: white;
 }
 
-.links, .links-form, .links-user-info {
+.links-form, .links-user-info {
 	width: 90%;
 	padding: 15px 0px 15px 0px;
 	margin:  0px 0px 15px 0px;
 	background-color: whitesmoke;	
 	height: 100%;
 }
+
+.link {
+	width: 100%;
+	padding: 15px 0px 15px 0px;
+	margin:  0px 0px 15px 0px;
+	background-color: whitesmoke;	
+	height: 100%;
+}
+
+.links {
+	width: 90%;
+	padding: 15px 0px 15px 0px;
+	margin:  0px 0px 15px 0px;	
+	height: 100%;
+}
+.search-form {
+	width: 90%;
+	padding: 5px 0px 0px 0px;	
+	background-color: whitesmoke;		
+}
+.search-form #keyword {
+	width: 85%;	
+}
+
 .links a, .links a:visited, .links .link-plugin-options{
 	color: #777777;	
 	text-shadow: 0 1px 0 #ffffff;
@@ -106,4 +130,8 @@
 	margin-top: 10%;	
 	width:50%;
     background-color:rgba(204,204,204,1.0);      
+}
+
+.search-field {
+	padding: 0px 20px 0px 20px;
 }

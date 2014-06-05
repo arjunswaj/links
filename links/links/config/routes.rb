@@ -8,6 +8,7 @@ Links::Application.routes.draw do
 
   get "searches/index" => "searches#index", :as => 'search_index'
   post "searches/search_user" => "searches#search_user", :as => 'search_user'
+  post "searches/search_bookmark" => "searches#search_bookmark", :as => 'search_bookmark'
 
   #dummy receiver
   post "searches/receiver" => "searches#receiver", :as => 'receiver'
