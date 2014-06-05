@@ -12,8 +12,12 @@ class GroupsController < ApplicationController
   # GET /groups/1.json
   # TODO: json response
   def show
+    @group_owner = nil;
     if group_member?
       set_group
+      if group_owner? params[:id]
+        @group_owner = current_user
+      end
     else
       respond_to do |format|
         format.html { redirect_to groups_path }
@@ -30,7 +34,7 @@ class GroupsController < ApplicationController
   # GET /groups/1/edit
   # TODO: json response
   def edit
-    if group_owner?
+    if group_owner? params[:id]
       set_group
     else
       respond_to do |format|
@@ -61,7 +65,7 @@ class GroupsController < ApplicationController
   # PATCH/PUT /groups/1
   # PATCH/PUT /groups/1.json
   def update
-    if group_owner?
+    if group_owner? params[:id]
       set_group
       respond_to do |format|
         if @group.update(group_params)
@@ -84,7 +88,7 @@ class GroupsController < ApplicationController
   # DELETE /groups/1
   # DELETE /groups/1.json
   def destroy
-    if group_owner?
+    if group_owner? params[:id]
       set_group
     @group.destroy
     end
@@ -94,16 +98,15 @@ class GroupsController < ApplicationController
     end
   end
 
-  # PUT /add_users/
-  # TODO: pretty urls instead of sending group.id as a post parameter
+  # PUT "groups/1/add_users"
   # TODO: json response
   def add_users
-    if group_owner?
+    if group_owner? params[:id]
       set_group
       params[:users].each do |email| # TODO: Need to use white list
         user = User.find_by_email(email)
         if !@group.users.include? user
-          @group.users << user
+        @group.users << user
         end
       end
       redirect_to @group
@@ -115,10 +118,25 @@ class GroupsController < ApplicationController
     end
   end
 
+  # DELETE "groups/1/users/2"
+  # TODO: json response
+  def remove_user
+    group = Group.find(params[:group_id])
+    user = User.find(params[:user_id])
+    if (group_owner? group.id) && (user != current_user)
+      group.users.delete user
+    end
+    respond_to do |format|
+      format.html { redirect_to group_path(group)}
+      format.json { head :no_content}
+    end
+
+  end
+
   # POST "groups/1/unsubscribe"
   # TODO: json response
   def unsubscribe
-    if !group_owner? && group_member?
+    if !group_owner? params[:id] && group_member?
       set_group
       current_user.groups.delete(@group)
     end
@@ -138,8 +156,8 @@ class GroupsController < ApplicationController
     return !Group.joins(:users).where("groups_users.user_id = ? and groups_users.group_id = ?", current_user, params[:id]).empty?
   end
 
-  def group_owner?
-    return !Group.where("user_id = ? and id = ?", current_user, params[:id]).empty?
+  def group_owner?(owner_id)
+    return !Group.where("user_id = ? and id = ?", current_user, owner_id).empty?
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
