@@ -6,9 +6,12 @@
 		<div>
 			<%= form_tag("/searches/search_bookmark", method: "post", remote: true, class:"search-form", id:"search-form") do %>
 				<div class="search-field">
-					<%= text_field_tag(:keyword, nil, {placeholder: "keywords or #tagname"}) %>
+					<%= text_field_tag(:keyword, nil, {placeholder: "keywords or #tagname", id:"keyword"}) %>
+				</div>
+				<div class="search-action">
 					<%= submit_tag("Search", class:"btn") %>
 				</div>
+				<div class="clear"></div>
 			<% end %>
 		</div>
 		<div class="links">
