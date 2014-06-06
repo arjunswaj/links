@@ -1,16 +1,22 @@
 <%= hidden_field_tag(:url_id, @bookmark.url.id) %>
 <%= hidden_field_tag(:bookmark_id, @bookmark.id) %>
-<div>    
-  <%= text_area_tag(:url, @bookmark.url.url, {placeholder: "Paste the URL here...", rows:3}) %>
+<div class="form-group">
+	<label for="url">URL</label>
+	<%= text_area_tag(:url, @bookmark.url.url, {placeholder: "Paste the URL here...", rows:3}) %>
 </div>
-<div>    
-  <%= text_field_tag(:title, @bookmark.title, {placeholder: "Title"}) %>
+<div class="form-group">
+	<label for="title">Title</label>
+	<%= text_field_tag(:title, @bookmark.title, {placeholder: "Title"}) %>
 </div>
-<div>    
-  <%= text_area_tag(:description, @bookmark.description, {placeholder: "Description"}) %>
+<div class="form-group">
+	<label for="description">Description</label>
+	<%= text_area_tag(:description, @bookmark.description, {placeholder: "Description"}) %>
 </div>
-<div id="magicsuggest"></div> 
-<div>
-    <input type="text" name="tags[]" id="ms_tags" placeholder"Tags"></input>    
-</div>    
+<div class="form-group">
+	<label for="tags">Tags</label>
+	<div id="magicsuggest"></div> 
+	<div>
+	    <input type="text" name="tags[]" id="ms_tags" placeholder"Tags"></input>    
+	</div>    
+</div>
 
