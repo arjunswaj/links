@@ -2,8 +2,6 @@ class BookmarksController < ApplicationController
   before_action  :authenticate_user!, only: [:show, :edit, :update, :destroy, :index, :timeline]
   before_action  :set_bookmark, only: [:show, :edit, :update, :destroy]
 
-  layout "links"
-
   def timeline
     index
     new
