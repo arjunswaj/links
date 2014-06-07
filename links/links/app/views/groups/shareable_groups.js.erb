@@ -1,0 +1,2 @@
+$('#overlay').removeClass("overlay-invisible").addClass("overlay-visible");
+$('#overlay').html('<%= escape_javascript("#{render(:partial => 'group_select')}").html_safe %>');

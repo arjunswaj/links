@@ -34,6 +34,10 @@ Links::Application.routes.draw do
   post "/savebookmark" => "bookmarks#savebookmark", :as => 'savebookmark'
   post "/updatebookmark" => "bookmarks#updatebookmark", :as => 'updatebookmark'
 
+# share to groups
+  get "/shareable_groups/:bookmark_id" => "groups#shareable_groups", :as => 'shareable_groups'
+  post "/sharebookmark" => "bookmarks#share_bookmark_to_groups", :as => 'share_bookmark_to_groups'
+
   devise_for :users
 
 	get 'annotations', to: 'scrapper#annotations'

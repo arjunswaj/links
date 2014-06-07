@@ -29,6 +29,23 @@ class BookmarksController < ApplicationController
     end
   end
 
+  def share_bookmark_to_groups
+    bookmark_to_share = Bookmark.find(share_to_group_params['bookmark_id'])
+    group_ids = share_to_group_params['group_ids']
+
+    group_ids.each do |group_id|
+        bookmark_to_save = Bookmark.new({:title => bookmark_to_share.title, 
+          :description => bookmark_to_share.description, 
+          :url => bookmark_to_share.url, 
+          :user => current_user,
+          :group_id => group_id,
+          :tags => bookmark_to_share.tags})
+        if !bookmark_to_save.save
+          format.html { redirect_to 'new', notice: 'Trouble saving the url.' }
+        end 
+    end        
+  end
+
   #TODO: Do a check whether the URL and Bookmark actually belongs to user or not
   def savebookmark
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
@@ -113,7 +130,7 @@ class BookmarksController < ApplicationController
   def index
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
     @bookmarks = Bookmark.eager_load(:tags, :user, :url)
-      .where("users.id = :user_id", user_id: "#{current_user.id}")
+      .where("users.id = :user_id AND group_id IS NULL", user_id: "#{current_user.id}")
       .order('bookmarks.updated_at DESC') 
   end
 
@@ -213,5 +230,9 @@ class BookmarksController < ApplicationController
 
   def timeline_bookmark_params
     params.permit(:url, :url_id, :title, :description, :bookmark_id, :tags => [])
+  end
+
+  def share_to_group_params
+    params.permit(:bookmark_id, :group_ids => [])
   end
 end

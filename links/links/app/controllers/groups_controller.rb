@@ -10,6 +10,15 @@ class GroupsController < ApplicationController
     @accepted_invitations = Group.joins(:users).where("memberships.user_id = ? and groups.user_id != ? and memberships.acceptance_status = ?" , current_user, current_user, true)
     
     @pending_invitations = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, false)
+    
+  end
+
+  def shareable_groups
+    index
+    @bookmark_id = share_params['bookmark_id']
+    respond_to do |format|      
+      format.js
+    end
   end
 
   # GET /groups/1
@@ -208,6 +217,10 @@ class GroupsController < ApplicationController
 
   def user_receiver_params
     params.permit(:users => [])
+  end
+
+  def share_params
+    params.permit(:bookmark_id)
   end
 
 end
