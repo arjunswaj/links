@@ -6,6 +6,18 @@
 		<div class="link-url">			
 			<%= link_to bookmark.title, bookmark.url.url, :target => "_blank" %>			
 		</div>
+		<div class="link-poster">						
+			<%
+				if bookmark.group
+			%>
+			<%= bookmark.user.email %>
+			in 
+			<%= bookmark.group.name %>
+			<%
+				end
+			%>
+		</div>
+		<div class="clear"></div>
 		<div class="link-desc">			
 			<%= bookmark.description %>	
 		</div>
