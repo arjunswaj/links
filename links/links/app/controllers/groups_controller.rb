@@ -1,13 +1,16 @@
 class GroupsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, :set_invites
+  
+  # TODO: error messages
+  # TODO: using head to build header-only responses like :bad_request, :created
+  
   # GET /groups
   # GET /groups.json
   # TODO: json response
   def index
     @owner_of_groups = Group.where("user_id = ?", current_user)
 
-    # Groups in which current user is a member only and not a owner
-    @accepted_invitations = Group.joins(:users).where("memberships.user_id = ? and groups.user_id != ? and memberships.acceptance_status = ?" , current_user, current_user, true)
+    @accepted_invitations = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, true)
     
     @pending_invitations = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, false)
     
@@ -196,8 +199,13 @@ class GroupsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
   private
 
+  def set_invites
+    @invites = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, false)
+  end
+  
   def set_group
     @group = Group.find(params[:id])
   end

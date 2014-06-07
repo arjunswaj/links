@@ -1,56 +1,26 @@
-<!-- TODO: DRY out this code -->
-<h1>My groups</h1>
+<% content_for :left do%>
+<div>
+	<h5><%= link_to '+ Create New Group', new_group_path %></h5>
+</div>
+<div>
+	<%= render "invites"%>
+</div>
+<% end%>
 
-<h4>Groups you own</h4>
-<table>
-	<thead>
-		<tr>
-			<th>Name</th>
-			<th></th>
-			<th></th>
-			<th></th>
-		</tr>
-	</thead>
+<% content_for :right do%>
+<div class="left">
+	<h5>Your Groups</h5>
+	<% @accepted_invitations.each do |group| %>
+	<%= link_to group.name, group %>
+	<br />
+	<% end %>
+</div>
 
-	<tbody>
-		<% @owner_of_groups.each do |group| %>
-		<tr>
-			<td><%= link_to group.name, group %></td>
-			<td><%= link_to 'Edit', edit_group_path(group) %></td>
-			<td><%= link_to 'Delete', group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-		</tr>
-		<% end %>
-	</tbody>
-</table>
-
-<h4>Groups in which you are only a member</h4>
-<table>
-	<thead>
-		<tr>
-			<th>Name</th>
-			<th></th>
-			<th></th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		<% @accepted_invitations.each do |group| %>
-		<tr>
-			<td><%= link_to group.name, group %></td>
-			<td><%= form_tag unsubscribe_user_from_group_path(group), method: "post", data: { confirm: 'Are you sure?' } do %>
-			<%= submit_tag "Unsubscribe"%>
-			<% end%> </td>
-		</tr>
-		<% end %>
-	</tbody>
-</table>
-
-<h4><%= link_to 'New Group', new_group_path %></h4>
-<h4>Invites</h4>
-<% @pending_invitations.each do |invitation|%>
-<%= form_tag accept_invite_to_group_path(invitation, current_user), method: "put" do %>
-<%= invitation.name %>
-<%= submit_tag "Accept"%>
-<% end%> </td>
-<br />
+<div class="right">
+	<h5>Groups You Admin</h5>
+	<% @owner_of_groups.each do |group| %>
+	<%= link_to group.name, group %>
+	<br />
+	<% end %>
+</div>
 <% end%>
