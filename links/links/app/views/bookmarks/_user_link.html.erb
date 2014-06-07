@@ -37,7 +37,10 @@
 								<%= link_to share_name, url, :target => "_blank"%>
 							</li>
 							<% end %>
-					<% end %>										
+					<% end %>
+					<li>
+						<%= link_to 'Groups', "/shareable_groups/" + bookmark.id.to_s, remote: true %>
+					</li>									
 				</ul>
 			</div> 
 		</div>		

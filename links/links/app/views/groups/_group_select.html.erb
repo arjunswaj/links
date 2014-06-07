@@ -1,0 +1,30 @@
+<div class="bookmark-share-form">
+  <div class="bookmark-share-form-title">
+  	<h3>Share Bookmark</h3>
+  </div>
+  <%= form_tag("/sharebookmark", method: "post", remote: true) do %>  
+  		<%= hidden_field_tag(:bookmark_id, @bookmark_id) %>
+      	<div>      		
+		  <% @owner_of_groups.each do |group| %>
+		  	<div class="checkbox">
+			  <label>
+			    <%= check_box_tag 'group_ids[]', group.id %>
+		        <%= h group.name %>
+			  </label>
+			</div>
+		  <% end %>
+		  <% @accepted_invitations.each do |group| %>
+		    <div class="checkbox">
+			  <label>
+			    <%= check_box_tag 'group_ids[]', group.id %>
+		        <%= h group.name %>
+			  </label>
+			</div>
+		  <% end %>			
+      	</div>
+      	<div class="bookmark-share-form-actions">
+  			<%= button_tag("Cancel", class:"btn", type:"button", id:"cancel_share_bookmark") %>		
+  			<%= submit_tag("Share", class:"btn") %>
+		</div>		
+  <% end %>
+</div>

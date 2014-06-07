@@ -127,7 +127,7 @@
     visibility: hidden;
 }
 
-.bookmark-form {
+.bookmark-form, .bookmark-share-form {
 	margin-left:auto;
 	margin-right:auto;
 	text-align: left;
@@ -137,11 +137,11 @@
 	padding: 10px;
     background-color:rgba(204,204,204,1.0);      
 }
-.bookmark-form-title {	
+.bookmark-form-title, .bookmark-share-form-title {	
 	text-align: center;	
 	width:100%;	
 }
-.bookmark-form-actions {
+.bookmark-form-actions, .bookmark-share-form-actions {
 	text-align: right;	
 	width:100%;
 	padding: 10px 0px 0px 0px;

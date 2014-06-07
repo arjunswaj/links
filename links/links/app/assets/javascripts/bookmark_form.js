@@ -11,8 +11,14 @@ function initMagicSuggest(prepopulatedValues) {
 
 $(function() {
     $(document).on('click', '#cancel_bookmark', function(event) {
-        $("#overlay").remove();
-		$('.timeline').prepend('<div id="overlay" class="overlay-invisible"></div>');
-		$("#url").val("");
-    })
+      $("#overlay").remove();
+		  $('.timeline').prepend('<div id="overlay" class="overlay-invisible"></div>');
+		  $("#url").val("");
+    });
+
+    $(document).on('click', '#cancel_share_bookmark', function(event) {
+      $("#overlay").remove();
+      $('.timeline').prepend('<div id="overlay" class="overlay-invisible"></div>');
+      $("#url").val("");
+    });
 });

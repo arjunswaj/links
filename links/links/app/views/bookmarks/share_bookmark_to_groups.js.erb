@@ -1,0 +1,3 @@
+$('#overlay').removeClass("overlay-visible").addClass("overlay-invisible");
+$("#overlay").remove();
+$('.timeline').prepend('<%= escape_javascript("<div id=\"overlay\" class=\"overlay-invisible\"></div>").html_safe %>');
