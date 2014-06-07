@@ -1,18 +1,34 @@
 <p id="notice">
 	<%= notice %>
 </p>
+<div>
+	<h5><%= link_to '+ Create New Group', new_group_path %></h5>
+</div>
+<% content_for :left do %>
+<div>
+	<h5><%= link_to '+ Create New Group', new_group_path %></h5>
+</div>
+<%= render "invites"%>
+<% end %>
 
-<p>
-	<strong>Group Name:</strong>
-	<%= @group.name %>
-<p>
-<p>
-	<strong>Group Owner:</strong>
-	<%= @group.user.email %>
-<p>
-	<strong>Members</strong>
+<% content_for :right do %>
+<div class="header">
+	<div class="left">
+		<%= @group.name %> | Members
+	</div>
+	<div class="right">
+		<% if @group_owner %>
+		<%= form_tag @group, method: "delete", data: { confirm: 'Are you sure?' } do %>
+		<%= link_to 'Edit', edit_group_path(@group) %>
+		<%= submit_tag "Delete"%>
+		<% end%>
+		<% else %>
+		<%= form_tag unsubscribe_user_from_group_path(@group), method: "post", data: { confirm: 'Are you sure?' } do %>
+		<%= submit_tag "Unsubscribe"%>
+		<% end%>
+		<%end%>
 
-	<div>
+		<% if @group_owner %>
 		<%= form_tag(invite_users_to_group_path(@group), method: "post", :id => "form") do %>
 		<div id="magicsuggest"></div>
 		<div id="input">
@@ -21,8 +37,18 @@
 			<%= submit_tag "Invite", :id => "submit" %>
 		</div>
 		<% end %>
+		<% end %>
 	</div>
+</div>
 
+<div class="body">
+	<p>
+		<strong>Group Owner:</strong>
+		<%= @group.user.email %>
+	</p>
+	<p>
+		<strong>Members</strong>
+	</p>
 	<% @accepted_members.each do |user| %>
 	<%= user.email %>
 	<% if @group_owner && @group_owner != user %>
@@ -30,18 +56,23 @@
 	<% end %>
 	<br />
 	<% end %>
-</p>
-<p>
-	<strong>Pending invitations</strong><br />
-	<% @pending_members.each do |user| %> <!-- TODO: Dry out this code -->
-	<%= user.email %>
-	<% if @group_owner && @group_owner != user %>
-	<%= link_to 'Cancel', cancel_invite_to_user_from_group_path(@group, user), method: :delete, data: { confirm: 'Are you sure?' } %>
-	<% end %>
-	<br />
-	<% end %>
-</p>
-</p>
+	</p>
+	<p>
+		<% unless @pending_members.empty? %>
+		<strong>Pending invitations</strong>
+		<br />
+		<%end%>
+		<% @pending_members.each do |user| %> <!-- TODO: Dry out this code -->
+		<%= user.email %>
+		<% if @group_owner && @group_owner != user %>
+		<%= link_to 'Cancel', cancel_invite_to_user_from_group_path(@group, user), method: :delete, data: { confirm: 'Are you sure?' } %>
+		<% end %>
+		<br />
+		<% end %>
+	</p>
+	</p>
 
-<%= link_to 'Edit', edit_group_path(@group) %> |
-<%= link_to 'Back', groups_path %>
+	<%= link_to 'Edit', edit_group_path(@group) %> |
+	<%= link_to 'Back', groups_path %>
+	<% end %>
+</div>

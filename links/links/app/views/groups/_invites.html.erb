@@ -1,0 +1,8 @@
+<% unless @invites.empty?  %> <h5>Invites</h5>
+<% end %>
+<% @invites.each do |invite|%>
+<%= form_tag accept_invite_to_group_path(invite, current_user), method: "put" do %>
+<%= invite.name %>
+<%= submit_tag "Accept"%>
+<% end%>
+<% end %>

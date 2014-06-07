@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Links</title>
+		<%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+		<%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+		<%= csrf_meta_tags %>
+	</head>
+	<body>
+		<% if current_user %>
+		<%= render "layouts/navbar" %>
+		<% end %>
+		<div class="left">
+			<%= yield :left %>
+		</div>
+		<div class="right">
+			<%= yield :right %>
+		</div>
+	</body>
+</html>
