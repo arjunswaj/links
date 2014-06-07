@@ -1,9 +1,12 @@
 <div class="bookmark-form">
-  <h3>Save Bookmark</h3>
+  <div class="bookmark-form-title">
+  	<h3>Save Bookmark</h3>
+  </div>
   <%= form_tag("/savebookmark", method: "post", remote: true) do %>  
       <%= render(:partial => "bookmark_form", :locals => {:bookmark => @bookmark}) %>
-      	<div>
+      	<div class="bookmark-form-actions">
+  			<%= button_tag("Cancel", class:"btn", type:"button", id:"cancel_bookmark") %>		
   			<%= submit_tag("Save", class:"btn") %>
-		</div>
+		</div>		
   <% end %>
 </div>
