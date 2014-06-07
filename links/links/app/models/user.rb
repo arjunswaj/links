@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
 
 	has_many :bookmarks
 	has_many :groups # owner relationship
-	has_and_belongs_to_many :groups # membership relationship
+	has_many :memberships
+	has_many :groups, :through => :memberships # membership relationship
 
 end

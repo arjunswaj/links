@@ -17,7 +17,7 @@
 		<tr>
 			<td><%= link_to group.name, group %></td>
 			<td><%= link_to 'Edit', edit_group_path(group) %></td>
-			<td><%= link_to 'Destroy', group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+			<td><%= link_to 'Delete', group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
 		</tr>
 		<% end %>
 	</tbody>
@@ -33,9 +33,8 @@
 			<th></th>
 		</tr>
 	</thead>
-
 	<tbody>
-		<% @member_in_groups.each do |group| %>
+		<% @accepted_invitations.each do |group| %>
 		<tr>
 			<td><%= link_to group.name, group %></td>
 			<td><%= form_tag unsubscribe_user_from_group_path(group), method: "post", data: { confirm: 'Are you sure?' } do %>
@@ -45,6 +44,13 @@
 		<% end %>
 	</tbody>
 </table>
-<br>
 
-<%= link_to 'New Group', new_group_path %>
+<h4><%= link_to 'New Group', new_group_path %></h4>
+<h4>Invites</h4>
+<% @pending_invitations.each do |invitation|%>
+<%= form_tag accept_invite_to_group_path(invitation, current_user), method: "put" do %>
+<%= invitation.name %>
+<%= submit_tag "Accept"%>
+<% end%> </td>
+<br />
+<% end%>

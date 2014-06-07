@@ -13,7 +13,7 @@
 	<strong>Members</strong>
 
 	<div>
-		<%= form_tag(add_users_to_group_path(@group), method: "post", :id => "form") do %>
+		<%= form_tag(invite_users_to_group_path(@group), method: "post", :id => "form") do %>
 		<div id="magicsuggest"></div>
 		<div id="input">
 			<input type="text" name="users[]" id="ms" placeholder="Add Users">
@@ -23,10 +23,20 @@
 		<% end %>
 	</div>
 
-	<% @group.users.each do |user| %>
+	<% @accepted_members.each do |user| %>
 	<%= user.email %>
 	<% if @group_owner && @group_owner != user %>
 	<%= link_to 'Remove', remove_user_from_group_path(@group, user), method: :delete, data: { confirm: 'Are you sure?' } %>
+	<% end %>
+	<br />
+	<% end %>
+</p>
+<p>
+	<strong>Pending invitations</strong><br />
+	<% @pending_members.each do |user| %> <!-- TODO: Dry out this code -->
+	<%= user.email %>
+	<% if @group_owner && @group_owner != user %>
+	<%= link_to 'Cancel', cancel_invite_to_user_from_group_path(@group, user), method: :delete, data: { confirm: 'Are you sure?' } %>
 	<% end %>
 	<br />
 	<% end %>

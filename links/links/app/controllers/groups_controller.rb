@@ -5,7 +5,11 @@ class GroupsController < ApplicationController
   # TODO: json response
   def index
     @owner_of_groups = Group.where("user_id = ?", current_user)
-    @member_in_groups = Group.joins(:users).where("groups_users.user_id = ? and groups.user_id != ?" , current_user, current_user)
+
+    # Groups in which current user is a member only and not a owner
+    @accepted_invitations = Group.joins(:users).where("memberships.user_id = ? and groups.user_id != ? and memberships.acceptance_status = ?" , current_user, current_user, true)
+    
+    @pending_invitations = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, false)
   end
 
   # GET /groups/1
@@ -13,8 +17,10 @@ class GroupsController < ApplicationController
   # TODO: json response
   def show
     @group_owner = nil;
-    if group_member?
+    if group_member?(params[:id])
       set_group
+      @accepted_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], true)
+      @pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], false)
       if group_owner? params[:id]
         @group_owner = current_user
       end
@@ -53,6 +59,10 @@ class GroupsController < ApplicationController
 
     respond_to do |format|
       if @group.save
+
+        membership = Membership.where("group_id = ? and user_id = ?", @group.id, current_user)
+        membership[0].update_attributes :acceptance_status => true #TODO: Can limit be applied to the query
+
         format.html { redirect_to @group, notice: 'Group was successfully created.' }
         format.json { render action: 'show', status: :created, location: @group }
       else
@@ -98,9 +108,9 @@ class GroupsController < ApplicationController
     end
   end
 
-  # PUT "groups/1/add_users"
+  # POST "groups/1/invite_users"
   # TODO: json response
-  def add_users
+  def invite_users
     if group_owner? params[:id]
       set_group
       params[:users].each do |email| # TODO: Need to use white list
@@ -108,8 +118,25 @@ class GroupsController < ApplicationController
         if !@group.users.include? user
         @group.users << user
         end
-      end
+      end unless params[:users].nil?
       redirect_to @group
+    else
+      respond_to do |format|
+        format.html { redirect_to groups_path }
+        format.json { head :no_content}
+      end
+    end
+  end
+
+  # PUT "groups/1/add_user/1"
+  # TODO: json response
+  def accept_invite
+       group = Group.find(params[:group_id])
+      user = User.find(params[:user_id])
+    membership = Membership.where("group_id = ? and user_id = ?", group, user) # TODO: use orm construct which uses limit
+    unless membership.empty?
+      membership[0].update_attributes :acceptance_status => true
+      redirect_to group
     else
       respond_to do |format|
         format.html { redirect_to groups_path }
@@ -124,7 +151,7 @@ class GroupsController < ApplicationController
     group = Group.find(params[:group_id])
     user = User.find(params[:user_id])
     if (group_owner? group.id) && (user != current_user)
-      group.users.delete user
+    group.users.delete user
     end
     respond_to do |format|
       format.html { redirect_to group_path(group)}
@@ -136,7 +163,7 @@ class GroupsController < ApplicationController
   # POST "groups/1/unsubscribe"
   # TODO: json response
   def unsubscribe
-    if !group_owner? params[:id] && group_member?
+    if (!group_owner? params[:id]) && (group_member? params[:id])
       set_group
       current_user.groups.delete(@group)
     end
@@ -146,18 +173,32 @@ class GroupsController < ApplicationController
     end
   end
 
+  # DELETE "groups/1/users/2"
+  # TODO: json response
+  def cancel_invite
+    if (group_owner? params[:group_id])
+      membership = Membership.where("user_id = ? and group_id = ? and acceptance_status = false")
+      unless membership.empty?
+        Membership.delete membership[0]
+      end
+    end
+    respond_to do |format|
+      format.html { redirect_to group_path(Group.find(params[:group_id]))}
+      format.json { head :no_content }
+    end
+  end
   private
 
   def set_group
     @group = Group.find(params[:id])
   end
 
-  def group_member?
-    return !Group.joins(:users).where("groups_users.user_id = ? and groups_users.group_id = ?", current_user, params[:id]).empty?
+  def group_member?(group_id)
+    return !Membership.where("user_id = ? and group_id = ?", current_user, group_id).empty?
   end
 
-  def group_owner?(owner_id)
-    return !Group.where("user_id = ? and id = ?", current_user, owner_id).empty?
+  def group_owner?(group_id)
+    return !Group.where("user_id = ? and id = ?", current_user, group_id).empty?
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

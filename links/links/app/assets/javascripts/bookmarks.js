@@ -3,5 +3,5 @@ $(function() {
         var searchKey = $(event.target).text();
 		$('#keyword').val(searchKey);
 		$('#search-form').submit();
-    })
+ });
 });
