@@ -1,3 +1,5 @@
 $('#overlay').removeClass("overlay-visible").addClass("overlay-invisible");
+$('.links').prepend('<%= escape_javascript("#{render(:partial => 'user_links')}").html_safe %>').fadeIn(1500);
 $("#overlay").remove();
 $('.timeline').prepend('<%= escape_javascript("<div id=\"overlay\" class=\"overlay-invisible\"></div>").html_safe %>');
+$("#url").val("");
