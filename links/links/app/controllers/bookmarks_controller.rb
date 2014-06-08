@@ -32,7 +32,7 @@ class BookmarksController < ApplicationController
   def share_bookmark_to_groups
     bookmark_to_share = Bookmark.find(share_to_group_params['bookmark_id'])
     group_ids = share_to_group_params['group_ids']
-
+    @bookmarks = Array.new
     group_ids.each do |group_id|
         bookmark_to_save = Bookmark.new({:title => bookmark_to_share.title, 
           :description => bookmark_to_share.description, 
@@ -43,7 +43,9 @@ class BookmarksController < ApplicationController
         if !bookmark_to_save.save
           format.html { redirect_to 'new', notice: 'Trouble saving the url.' }
         end 
-    end        
+        @bookmarks << bookmark_to_save
+    end 
+    @bookmark_plugins = PLUGIN_CONFIG['bookmark']       
   end
 
   #TODO: Do a check whether the URL and Bookmark actually belongs to user or not
@@ -130,8 +132,9 @@ class BookmarksController < ApplicationController
   def index
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
     @bookmarks = Bookmark.eager_load(:tags, :user, :url)
-      .where("users.id = :user_id AND group_id IS NULL", user_id: "#{current_user.id}")
-      .order('bookmarks.updated_at DESC') 
+      .eager_load(group: :memberships)
+      .where("(users.id = :user_id AND bookmarks.group_id IS NULL) OR (bookmarks.group_id IS NOT NULL AND memberships.user_id = :user_id AND memberships.acceptance_status = :membership_status)", user_id: "#{current_user.id}", membership_status: "t")    
+      .order('bookmarks.updated_at DESC')
   end
 
   # GET /bookmarks/1
