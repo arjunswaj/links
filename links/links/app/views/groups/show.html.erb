@@ -4,6 +4,7 @@
 <div>
 	<h5><%= link_to '+ Create New Group', new_group_path %></h5>
 </div>
+
 <% content_for :left do %>
 <div>
 	<h5><%= link_to '+ Create New Group', new_group_path %></h5>
@@ -48,14 +49,14 @@
 	</p>
 	<p>
 		<strong>Members</strong>
-	</p>
-	<% @accepted_members.each do |user| %>
-	<%= user.email %>
-	<% if @group_owner && @group_owner != user %>
-	<%= link_to 'Remove', remove_user_from_group_path(@group, user), method: :delete, data: { confirm: 'Are you sure?' } %>
-	<% end %>
-	<br />
-	<% end %>
+		<br />
+		<% @accepted_members.each do |user| %>
+		<%= user.email %>
+		<% if @group_owner && @group_owner != user %>
+		<%= link_to 'Remove', remove_user_from_group_path(@group, user), method: :delete, data: { confirm: 'Are you sure?' } %>
+		<% end %>
+		<br />
+		<% end %>
 	</p>
 	<p>
 		<% unless @pending_members.empty? %>
@@ -70,9 +71,12 @@
 		<br />
 		<% end %>
 	</p>
-	</p>
 
-	<%= link_to 'Edit', edit_group_path(@group) %> |
-	<%= link_to 'Back', groups_path %>
-	<% end %>
+	<div class="timeline">
+		<div class="links">
+			<%= render(:partial => "bookmarks/user_links") %>
+		</div>
+	</div>
+	
 </div>
+<% end %>

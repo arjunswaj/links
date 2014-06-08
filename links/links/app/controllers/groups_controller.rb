@@ -13,7 +13,6 @@ class GroupsController < ApplicationController
     @accepted_invitations = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, true)
     
     @pending_invitations = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, false)
-    
   end
 
   def shareable_groups
@@ -33,6 +32,10 @@ class GroupsController < ApplicationController
       set_group
       @accepted_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], true)
       @pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], false)
+      
+      @bookmark_plugins = PLUGIN_CONFIG['bookmark']
+      @bookmarks = Bookmark.where("group_id = ?", params[:id])
+
       if group_owner? params[:id]
         @group_owner = current_user
       end
@@ -203,7 +206,7 @@ class GroupsController < ApplicationController
   private
 
   def set_invites
-    @invites = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, false)
+    @invites = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, false)    
   end
   
   def set_group
