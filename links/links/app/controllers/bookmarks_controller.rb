@@ -1,15 +1,17 @@
+require 'nokogiri'
+require 'open-uri'
+
 class BookmarksController < ApplicationController
   before_action  :authenticate_user!, only: [:show, :edit, :update, :destroy, :index, :timeline]
   before_action  :set_bookmark, only: [:show, :edit, :update, :destroy]
-
   def timeline
     index
     new
   end
 
   def editbookmark
-    set_bookmark 
-    respond_to do |format|      
+    set_bookmark
+    respond_to do |format|
       format.js
     end
   end
@@ -22,7 +24,20 @@ class BookmarksController < ApplicationController
         render :status => 404
       end
     end
-    @bookmark = Bookmark.new({:url => url, :user => current_user})
+
+    # extract annotations from url
+    # TODO: handle exceptions from openuri(network related)
+    doc = Nokogiri::HTML(open(url.url))
+    title = ''
+    desc = ''
+    title = doc.at_css("title").text if doc.at_css('title').text 
+    doc.css("meta").each do |meta|
+      if meta['name'] && (meta['name'].match 'description')
+        desc = meta['content']
+      end
+    end
+
+    @bookmark = Bookmark.new({:url => url, :title => title, :description => desc, :user => current_user})
     respond_to do |format|
       format.html { render action: 'bookmark_form' }
       format.js
@@ -34,18 +49,18 @@ class BookmarksController < ApplicationController
     group_ids = share_to_group_params['group_ids']
     @bookmarks = Array.new
     group_ids.each do |group_id|
-        bookmark_to_save = Bookmark.new({:title => bookmark_to_share.title, 
-          :description => bookmark_to_share.description, 
-          :url => bookmark_to_share.url, 
-          :user => current_user,
-          :group_id => group_id,
-          :tags => bookmark_to_share.tags})
-        if !bookmark_to_save.save
-          format.html { redirect_to 'new', notice: 'Trouble saving the url.' }
-        end 
-        @bookmarks << bookmark_to_save
-    end 
-    @bookmark_plugins = PLUGIN_CONFIG['bookmark']       
+      bookmark_to_save = Bookmark.new({:title => bookmark_to_share.title,
+        :description => bookmark_to_share.description,
+        :url => bookmark_to_share.url,
+        :user => current_user,
+        :group_id => group_id,
+        :tags => bookmark_to_share.tags})
+      if !bookmark_to_save.save
+        format.html { redirect_to 'new', notice: 'Trouble saving the url.' }
+      end
+      @bookmarks << bookmark_to_save
+    end
+    @bookmark_plugins = PLUGIN_CONFIG['bookmark']
   end
 
   #TODO: Do a check whether the URL and Bookmark actually belongs to user or not
@@ -118,7 +133,7 @@ class BookmarksController < ApplicationController
       if @bookmark.save
         format.html { redirect_to @bookmark, notice: 'Bookmark was successfully created.' }
         format.json { render action: 'show', status: :created, location: @bookmark }
-        format.js
+      format.js
       else
         format.html { render action: 'new' }
         format.json { render json: @bookmark.errors, status: :unprocessable_entity }
@@ -126,14 +141,13 @@ class BookmarksController < ApplicationController
     end
   end
 
-
   # GET /bookmarks
   # GET /bookmarks.json
   def index
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
     @bookmarks = Bookmark.eager_load(:tags, :user, :url)
       .eager_load(group: :memberships)
-      .where("(users.id = :user_id AND bookmarks.group_id IS NULL) OR (bookmarks.group_id IS NOT NULL AND memberships.user_id = :user_id AND memberships.acceptance_status = :membership_status)", user_id: "#{current_user.id}", membership_status: "t")    
+      .where("(users.id = :user_id AND bookmarks.group_id IS NULL) OR (bookmarks.group_id IS NOT NULL AND memberships.user_id = :user_id AND memberships.acceptance_status = :membership_status)", user_id: "#{current_user.id}", membership_status: "t")
       .order('bookmarks.updated_at DESC')
   end
 
@@ -149,7 +163,7 @@ class BookmarksController < ApplicationController
   end
 
   # GET /bookmarks/1/edit
-  def edit    
+  def edit
     respond_to do |format|
       format.html { render action: 'bookmark_form' }
       format.js
