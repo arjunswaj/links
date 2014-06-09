@@ -7,25 +7,20 @@ Links::Application.routes.draw do
   put "groups/:group_id/accept_invite/:user_id" => "groups#accept_invite", :as => 'accept_invite_to_group'
   delete "groups/:group_id/user/:user_id" => "groups#remove_user", :as => 'remove_user_from_group'
   post "groups/:id/unsubscribe" => "groups#unsubscribe", :as => 'unsubscribe_user_from_group'
-  delete "groups/:group_id/user/:user_id" => "groups#cancel_invite", :as => 'cancel_invite_to_user_from_group'
+  delete "groups/:group_id/user/:user_id/cancel" => "groups#cancel_invite", :as => 'cancel_invite_to_user_from_group'
   
-
   get "searches/index" => "searches#index", :as => 'search_index'
   post "searches/search_user" => "searches#search_user", :as => 'search_user'
   post "searches/search_bookmark" => "searches#search_bookmark", :as => 'search_bookmark'
 
-  #dummy receiver
-  post "searches/receiver" => "searches#receiver", :as => 'receiver'
-
+  # For oauth
   use_doorkeeper
 
 	namespace :api,defaults: {format: 'json'} do
 			scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
 					resources :bookmarks
 			end
-	end  
-
-  #resources :urls
+	end
 
   resources :bookmarks
   get "/timeline" => "bookmarks#timeline", :as => 'timeline'
@@ -39,8 +34,6 @@ Links::Application.routes.draw do
   post "/sharebookmark" => "bookmarks#share_bookmark_to_groups", :as => 'share_bookmark_to_groups'
 
   devise_for :users
-
-	get 'annotations', to: 'scrapper#annotations'
 
   root to: 'bookmarks#timeline'
 

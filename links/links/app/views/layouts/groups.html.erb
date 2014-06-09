@@ -10,9 +10,15 @@
 		<% if current_user %>
 		<%= render "layouts/navbar" %>
 		<% end %>
+		
+		<% flash.each do |name, msg| -%>
+		<%= content_tag :div, msg, class: name %>
+		<% end -%>
+		
 		<div class="left">
 			<%= yield :left %>
 		</div>
+		
 		<div class="right">
 			<%= yield :right %>
 		</div>

@@ -22,14 +22,7 @@
 		<%= form_tag @group, method: "delete", data: { confirm: 'Are you sure?' } do %>
 		<%= link_to 'Edit', edit_group_path(@group) %>
 		<%= submit_tag "Delete"%>
-		<% end%>
-		<% else %>
-		<%= form_tag unsubscribe_user_from_group_path(@group), method: "post", data: { confirm: 'Are you sure?' } do %>
-		<%= submit_tag "Unsubscribe"%>
-		<% end%>
-		<%end%>
-
-		<% if @group_owner %>
+		<% end %>
 		<%= form_tag(invite_users_to_group_path(@group), method: "post", :id => "form") do %>
 		<div id="magicsuggest"></div>
 		<div id="input">
@@ -38,6 +31,14 @@
 			<%= submit_tag "Invite", :id => "submit" %>
 		</div>
 		<% end %>
+		<% elsif @group_member %>
+		<%= form_tag unsubscribe_user_from_group_path(@group), method: "post", data: { confirm: 'Are you sure?' } do %>
+		<%= submit_tag "Unsubscribe"%>
+		<% end %>
+		<% elsif @invite %>
+		<%= form_tag accept_invite_to_group_path(@group, current_user), method: "put" do %>
+		<%= submit_tag "Accept"%>
+		<% end%>
 		<% end %>
 	</div>
 </div>
@@ -77,6 +78,6 @@
 			<%= render(:partial => "bookmarks/user_links") %>
 		</div>
 	</div>
-	
+
 </div>
 <% end %>
