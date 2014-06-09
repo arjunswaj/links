@@ -10,7 +10,7 @@
 <% content_for :right do%>
 <div class="left">
 	<h5>Your Groups</h5>
-	<% @accepted_invitations.each do |group| %>
+	<% @member_of_groups.each do |group| %>
 	<%= link_to group.name, group %>
 	<br />
 	<% end %>

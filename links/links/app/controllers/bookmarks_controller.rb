@@ -34,6 +34,7 @@ class BookmarksController < ApplicationController
     doc.css("meta").each do |meta|
       if meta['name'] && (meta['name'].match 'description')
         desc = meta['content']
+        break
       end
     end
 
