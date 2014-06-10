@@ -26,6 +26,11 @@ $(function() {
     {
         if($(window).scrollTop() == $(document).height() - $(window).height())
         {
+          // Infinite Timeline for Homepage
+          if ($(location).attr('pathname') == "" 
+            || $(location).attr('pathname') == "/timeline" 
+            || $(location).attr('pathname') == "/" ) {            
+
             var resourceURL = "/loadmore"
             if ($('#keyword').val()) {
               resourceURL = "/searches/searchmore"  
@@ -41,6 +46,7 @@ $(function() {
               
             }
             });
+          }
         }
     });
 });
