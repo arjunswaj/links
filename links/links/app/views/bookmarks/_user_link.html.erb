@@ -10,9 +10,9 @@
 			<%
 				if bookmark.group_id
 			%>
-			<%= bookmark.user.name %>
-			in 
-			<%= bookmark.group.name %>
+				<%= bookmark.user.name %>
+				in
+				<%= link_to bookmark.group.name, "/groups/" + bookmark.group_id.to_s %> 			
 			<%
 				end
 			%>
@@ -26,9 +26,15 @@
 				<span class="tagname"><%= "#" + tag.tagname %></span> 				
 			<%	end	%> 								
 		</div>		
-		<div class="link-options">			
-			<%= link_to 'Edit', "/" + bookmark.id.to_s + "/editbookmark", remote: true %>
-    		<%= link_to 'Delete', bookmark, method: :delete, data: { confirm: 'Are you sure?' } %>
+		<div class="link-options">
+			<%
+				if bookmark.user.id == current_user.id
+			%>
+				<%= link_to 'Edit', "/" + bookmark.id.to_s + "/editbookmark", remote: true %>
+    			<%= link_to 'Delete', bookmark, method: :delete, data: { confirm: 'Are you sure?' } %>
+			<%
+				end
+			%>						
 				
 			<div class="btn-group">
 				<button type="button" class="dropdown-toggle status-options-button btn-link link-plugin-options"
