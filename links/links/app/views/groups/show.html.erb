@@ -52,7 +52,7 @@
 		<strong>Members</strong>
 		<br />
 		<% @accepted_members.each do |user| %>
-		<%= user.email %>
+		<%= user.name %>
 		<% if @group_owner && @group_owner != user %>
 		<%= link_to 'Remove', remove_user_from_group_path(@group, user), method: :delete, data: { confirm: 'Are you sure?' } %>
 		<% end %>
