@@ -46,7 +46,7 @@
 <div class="body">
 	<p>
 		<strong>Group Owner:</strong>
-		<%= @group.user.email %>
+		<%= @group.user.name %>
 	</p>
 	<p>
 		<strong>Members</strong>
@@ -72,12 +72,23 @@
 		<br />
 		<% end %>
 	</p>
+</div>
 
+	<div>
+		<%= form_tag("/saveurl", method: "post", remote: true) do %>	
+			<div>
+				<input id="url" type="text" placeholder="Paste the URL here" />
+		  	</div>
+		  	<div class="links-form-button">
+				<%= submit_tag("Save", class:"btn") %>
+			</div>
+		<% end %>
+	</div>
 	<div class="timeline">
 		<div class="links">
 			<%= render(:partial => "bookmarks/user_links") %>
 		</div>
 	</div>
 
-</div>
+
 <% end %>
