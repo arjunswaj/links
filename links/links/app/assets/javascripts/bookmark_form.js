@@ -21,4 +21,26 @@ $(function() {
       $('.timeline').prepend('<div id="overlay" class="overlay-invisible"></div>');
       $("#url").val("");
     });
+
+    $(window).scroll(function()
+    {
+        if($(window).scrollTop() == $(document).height() - $(window).height())
+        {
+            var resourceURL = "/loadmore"
+            if ($('#keyword').val()) {
+              resourceURL = "/searches/searchmore"  
+            }
+            $('#loadmoreajaxloader').show();
+            $.ajax({
+            url: resourceURL,
+            success: function(html)
+            {                
+                $('#loadmoreajaxloader').hide();
+            },
+            error: function(html) {
+              
+            }
+            });
+        }
+    });
 });

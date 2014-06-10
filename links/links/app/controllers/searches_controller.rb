@@ -12,26 +12,68 @@ class SearchesController < ApplicationController
   end
 
   def search_bookmark
-    keyword = link_search_params['keyword']  
+    keyword = link_search_params['keyword']      
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
     if keyword.start_with?('#')
       tagname = keyword[1, keyword.length].strip.gsub(' ', '-').downcase
       @bookmarks = Bookmark.eager_load(:tags, :user, :url)
       .eager_load(group: :memberships)
       .where("(users.id = :user_id AND bookmarks.group_id IS NULL) OR (bookmarks.group_id IS NOT NULL AND memberships.user_id = :user_id AND memberships.acceptance_status = :membership_status)", user_id: "#{current_user.id}", membership_status: "t")    
+      .where("bookmarks.updated_at < :now", now: Time.now)
       .where("LOWER(tags.tagname) = LOWER(:tag)", tag: "#{tagname}")
-      .order('bookmarks.updated_at DESC')      
+      .order('bookmarks.updated_at DESC')    
+      .limit(5)  
     else
       @bookmarks = Bookmark.eager_load(:tags, :user, :url)
       .eager_load(group: :memberships)
       .where("(users.id = :user_id AND bookmarks.group_id IS NULL) OR (bookmarks.group_id IS NOT NULL AND memberships.user_id = :user_id AND memberships.acceptance_status = :membership_status)", user_id: "#{current_user.id}", membership_status: "t")
+      .where("bookmarks.updated_at < :now", now: Time.now)
       .where("LOWER(title) LIKE LOWER(:query) OR LOWER(description) LIKE LOWER(:query)", query: "%#{keyword}%")      
       .order('bookmarks.updated_at DESC') 
+      .limit(5)
     end            
+
+    bookmark = @bookmarks.last
+    session[:last_link_time] = bookmark.updated_at
+    session[:search_criteria] = keyword
 
     respond_to do |format|    
       format.js
     end   
+  end
+
+  def searchmore
+    keyword = session[:search_criteria]
+
+    @bookmark_plugins = PLUGIN_CONFIG['bookmark']
+    if keyword.start_with?('#')
+      tagname = keyword[1, keyword.length].strip.gsub(' ', '-').downcase
+      @bookmarks = Bookmark.eager_load(:tags, :user, :url)
+      .eager_load(group: :memberships)
+      .where("(users.id = :user_id AND bookmarks.group_id IS NULL) OR (bookmarks.group_id IS NOT NULL AND memberships.user_id = :user_id AND memberships.acceptance_status = :membership_status)", user_id: "#{current_user.id}", membership_status: "t")    
+      .where("bookmarks.updated_at < :now", now: session[:last_link_time])
+      .where("LOWER(tags.tagname) = LOWER(:tag)", tag: "#{tagname}")
+      .order('bookmarks.updated_at DESC')  
+      .limit(5)    
+    else
+      @bookmarks = Bookmark.eager_load(:tags, :user, :url)
+      .eager_load(group: :memberships)
+      .where("(users.id = :user_id AND bookmarks.group_id IS NULL) OR (bookmarks.group_id IS NOT NULL AND memberships.user_id = :user_id AND memberships.acceptance_status = :membership_status)", user_id: "#{current_user.id}", membership_status: "t")
+      .where("bookmarks.updated_at < :now", now: session[:last_link_time])
+      .where("LOWER(title) LIKE LOWER(:query) OR LOWER(description) LIKE LOWER(:query)", query: "%#{keyword}%")      
+      .order('bookmarks.updated_at DESC') 
+      .limit(5)
+    end            
+
+    bookmark = @bookmarks.last
+    if bookmark
+      session[:last_link_time] = bookmark.updated_at    
+      session[:search_criteria] = keyword
+    end          
+
+    respond_to do |format|    
+      format.js
+    end 
   end
 
   def receiver  	

@@ -149,7 +149,29 @@ class BookmarksController < ApplicationController
     @bookmarks = Bookmark.eager_load(:tags, :user, :url)
       .eager_load(group: :memberships)
       .where("(users.id = :user_id AND bookmarks.group_id IS NULL) OR (bookmarks.group_id IS NOT NULL AND memberships.user_id = :user_id AND memberships.acceptance_status = :membership_status)", user_id: "#{current_user.id}", membership_status: "t")
+      .where("bookmarks.updated_at < :now", now: Time.now)
       .order('bookmarks.updated_at DESC')
+      .limit(5)
+
+    bookmark = @bookmarks.first
+    session[:first_link_time] = bookmark.updated_at
+    bookmark = @bookmarks.last
+    session[:last_link_time] = bookmark.updated_at
+  end
+
+  def loadmore
+    @bookmark_plugins = PLUGIN_CONFIG['bookmark']
+    @bookmarks = Bookmark.eager_load(:tags, :user, :url)
+      .eager_load(group: :memberships)
+      .where("(users.id = :user_id AND bookmarks.group_id IS NULL) OR (bookmarks.group_id IS NOT NULL AND memberships.user_id = :user_id AND memberships.acceptance_status = :membership_status)", user_id: "#{current_user.id}", membership_status: "t")
+      .where("bookmarks.updated_at < :now", now: session[:last_link_time])
+      .order('bookmarks.updated_at DESC')
+      .limit(5)
+
+    bookmark = @bookmarks.last
+    if bookmark
+      session[:last_link_time] = bookmark.updated_at    
+    end    
   end
 
   # GET /bookmarks/1

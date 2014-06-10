@@ -10,6 +10,8 @@ Links::Application.routes.draw do
   delete "groups/:group_id/user/:user_id/cancel" => "groups#cancel_invite", :as => 'cancel_invite_to_user_from_group'
   
   get "searches/index" => "searches#index", :as => 'search_index'
+  get "searches/searchmore" => "searches#searchmore", :as => 'search_more'
+  
   post "searches/search_user" => "searches#search_user", :as => 'search_user'
   post "searches/search_bookmark" => "searches#search_bookmark", :as => 'search_bookmark'
 
@@ -24,6 +26,8 @@ Links::Application.routes.draw do
 
   resources :bookmarks
   get "/timeline" => "bookmarks#timeline", :as => 'timeline'
+  get "/loadmore" => "bookmarks#loadmore", :as => 'loadmore'
+  
   get ":id/editbookmark" => "bookmarks#editbookmark", :as => 'editbookmark'
   post "/saveurl" => "bookmarks#saveurl", :as => 'saveurl' 
   post "/savebookmark" => "bookmarks#savebookmark", :as => 'savebookmark'
