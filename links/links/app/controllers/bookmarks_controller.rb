@@ -27,18 +27,31 @@ class BookmarksController < ApplicationController
 
     # extract annotations from url
     # TODO: handle exceptions from openuri(network related)
-    doc = Nokogiri::HTML(open(url.url))
+    doc = Nokogiri::HTML(open(url.url, :proxy => "http://192.16.3.254:8080"))
     title = ''
     desc = ''
+    keywords = []
     title = doc.at_css("title").text if doc.at_css('title').text 
     doc.css("meta").each do |meta|
       if meta['name'] && (meta['name'].match 'description')
         desc = meta['content']
-        break
+      end
+      if meta['name'] && (meta['name'].match 'keywords')         
+        keywords = meta['content'].split(",");
       end
     end
 
     @bookmark = Bookmark.new({:url => url, :title => title, :description => desc, :user => current_user})
+    
+    keywords.each do |tag|
+      if Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).size == 0
+        @tag = Tag.new
+        @tag.tagname = tag.strip.gsub(' ','-').downcase
+      @bookmark.tags << @tag
+      else
+        @bookmark.tags << Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).first
+      end
+    end
     respond_to do |format|
       format.html { render action: 'bookmark_form' }
       format.js

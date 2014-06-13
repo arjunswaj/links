@@ -140,11 +140,13 @@
 	margin-left:auto;
 	margin-right:auto;
 	text-align: left;
-	margin-top: 5%;	
+	margin-top: 2%;	
 	width: 30%;
 	min-width: 300px;
 	padding: 10px;
     background-color:rgba(204,204,204,1.0);      
+    height: 90%;
+	overflow: scroll;
 }
 .bookmark-form-title, .bookmark-share-form-title {	
 	text-align: center;	
