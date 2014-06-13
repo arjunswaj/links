@@ -10,6 +10,7 @@ function initMagicSuggest(prepopulatedValues) {
 }
 
 $(function() {
+  var infiniteScrollRequestMade = false;
     $(document).on('click', '#cancel_bookmark', function(event) {
       $("#overlay").remove();
 		  $('.timeline').prepend('<div id="overlay" class="overlay-invisible"></div>');
@@ -23,10 +24,10 @@ $(function() {
     });
 
     $(window).scroll(function()
-    {
-        if($(window).scrollTop() == $(document).height() - $(window).height())
-        {
+    {      
+        if(($(window).scrollTop() == $(document).height() - $(window).height()) && !infiniteScrollRequestMade) {
           // Infinite Timeline for Homepage
+          infiniteScrollRequestMade = true;
           if ($(location).attr('pathname') == "" 
             || $(location).attr('pathname') == "/timeline" 
             || $(location).attr('pathname') == "/" ) {            
@@ -41,6 +42,7 @@ $(function() {
             success: function(html)
             {                
                 $('#loadmoreajaxloader').hide();
+                infiniteScrollRequestMade = false;
             },
             error: function(html) {
               

@@ -27,7 +27,7 @@ class BookmarksController < ApplicationController
 
     # extract annotations from url
     # TODO: handle exceptions from openuri(network related)
-    doc = Nokogiri::HTML(open(url.url, :proxy => "http://192.16.3.254:8080"))
+    doc = Nokogiri::HTML(open(process_uri(url.url)))
     title = ''
     desc = ''
     keywords = []
