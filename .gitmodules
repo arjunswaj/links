@@ -1,0 +1,3 @@
+[submodule "mobile_app/android/lib/scribe"]
+	path = mobile_app/android/lib/scribe
+	url = https://github.com/arjunswaj/scribe-java.git
