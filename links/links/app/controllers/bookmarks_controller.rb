@@ -42,6 +42,7 @@ class BookmarksController < ApplicationController
     end
 
     @bookmark = Bookmark.new({:url => url, :title => title, :description => desc, :user => current_user})
+    @share_with_group = Group.find(params[:id]) if params[:id]
     respond_to do |format|
       format.html { render action: 'bookmark_form' }
       format.js
@@ -51,6 +52,7 @@ class BookmarksController < ApplicationController
   def share_bookmark_to_groups
     bookmark_to_share = Bookmark.find(share_to_group_params['bookmark_id'])
     group_ids = share_to_group_params['group_ids']
+
     @bookmarks = Array.new
     group_ids.each do |group_id|
       bookmark_to_save = Bookmark.new({:title => bookmark_to_share.title,
@@ -77,7 +79,11 @@ class BookmarksController < ApplicationController
         format.html { redirect_to 'new', notice: 'Trouble saving the url.' }
       end
     end
-    @bookmark = Bookmark.new({:title => timeline_bookmark_params[:title], :description => timeline_bookmark_params[:description], :url => url, :user => current_user})
+    if params[:id].nil?
+      @bookmark = Bookmark.new({:title => timeline_bookmark_params[:title], :description => timeline_bookmark_params[:description], :url => url, :user => current_user})
+    else
+      @bookmark = Bookmark.new({:title => timeline_bookmark_params[:title], :description => timeline_bookmark_params[:description], :url => url, :user => current_user, :group => Group.find(params[:id])})
+    end
 
     tags = timeline_bookmark_params[:tags]
     tags.each do |tag|
@@ -88,13 +94,14 @@ class BookmarksController < ApplicationController
       else
         @bookmark.tags << Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).first
       end
-    end
+    end unless tags.nil?
     #@bookmark = Bookmark.new(bookmark_params) #TODO: Explore this.. Above is Ugly
+
     respond_to do |format|
       if @bookmark.save
         format.html { redirect_to @bookmark, notice: 'Bookmark was successfully created.' }
         format.json { render action: 'show', status: :created, location: @bookmark }
-      format.js
+        format.js
       else
         format.html { render action: 'new' }
         format.json { render json: @bookmark.errors, status: :unprocessable_entity }
@@ -232,6 +239,7 @@ class BookmarksController < ApplicationController
       format.json { head :no_content }
     end
   end
+
 
   private
 

@@ -2,11 +2,21 @@
   <div class="bookmark-form-title">
   	<h3>Save Bookmark</h3>
   </div>
-  <%= form_tag("/savebookmark", method: "post", remote: true) do %>  
-      <%= render(:partial => "bookmark_form", :locals => {:bookmark => @bookmark}) %>
-      	<div class="bookmark-form-actions">
+  <% if !share_with_group.nil? %>
+  	<%= form_tag('/savebookmark/' + share_with_group.id.to_s , method: "post", remote: true) do %>
+    	<%= render(:partial => "bookmark_form", :locals => {:bookmark => @bookmark}) %>
+    	<div class="bookmark-form-actions">
   			<%= button_tag("Cancel", class:"btn", type:"button", id:"cancel_bookmark") %>		
   			<%= submit_tag("Save", class:"btn") %>
 		</div>		
+  	<% end %>
+  <% else %>
+    <%= form_tag('/savebookmark', method: "post", remote: true) do %>
+          <%= render(:partial => "bookmark_form", :locals => {:bookmark => @bookmark}) %>
+      	<div class="bookmark-form-actions">
+  			<%= button_tag("Cancel", class:"btn", type:"button", id:"cancel_bookmark") %>		
+  			<%= submit_tag("Save", class:"btn") %>
+		</div>
+		<% end %>
   <% end %>
 </div>

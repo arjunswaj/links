@@ -2,47 +2,109 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.left {
-  float: left;
-  width: 25%;
-  height: 100%;
+#left {
+  float:left;
 }
 
-.right {
+#right {
   float: right;
-  width: 75%;
-  height: 100%;
 }
 
-// start - index
-
-.right .left {
-  float: left;
-  width: 50%;
-  height: 100%;
+#head {
+  float:left;
 }
 
-.right .right {
-  float: right;
-  width: 50%;
-  height: 100%;
+#body {
+  float:left;
+}
+#groups-nav {
+  position:relative;
+  float:left;
+  width:100%;
+  //padding:0 0 1.75em 1em;
+  margin:0;
+  list-style:none;
+  line-height:1em;
 }
 
-// end - index
-
-
-// start - show
-
-.right .left {
-  float: left;
-  width: 50%;
-  height: 100%;
+#groups-nav>li {
+  float:left;
+  margin:0;
+  padding:0;
 }
 
-.right .right {
-  float: right;
-  width: 50%;
-  height: 100%;
+#groups-nav>li>a {
+  display:block;
+  color:#444;
+  text-decoration:none;
+  font-weight:bold;
+  background:#ddd;
+  margin:0;
+  padding:0.25em 1em;
+  border-left:1px solid #fff;
+  border-top:1px solid #fff;
+  border-right:1px solid #aaa;
 }
 
-// end - index
+#groups-nav>li>A:hover,
+#groups-nav>li>A:active,
+#groups-nav>li>A.here:link,
+#groups-nav>li>A.here:visited {
+  background:#bbb;
+}
+
+#groups-nav>li>a.here:link,
+#groups-nav>li>a.here:visited {
+  position:relative;
+  z-index:102;
+}
+
+#groups-nav>li>a.selected {
+background-color: #afc0a4;
+border: 1px solid;
+border-color: #afc0a4;
+color: #2f3c4c;
+font-weight: bold; }
+
+#subgroups-nav {
+  list-style:none;
+}
+
+
+/*subnav*/
+/*
+#groups-nav ul {
+  position:absolute;
+  left:0;
+  top:1.5em;
+  float:left;
+  background:#bbb;
+  width:100%;
+  margin:0;
+  padding:0.25em 0.25em 0.25em 1em;
+  list-style:none;
+  border-top:1px solid #fff;
+}
+
+#groups-nav ul li {
+  float:left;
+  display:block;
+  margin-top:1px;
+}
+
+#groups-nav ul a {
+  background:#bbb;
+  color:#fff;
+  display:inline;
+  margin:0;
+  padding:0 1em;
+  border:0
+}
+
+#groups-nav ul a:hover,
+#groups-nav ul a:active,
+#groups-nav ul a.here:link,
+#groups-nav ul a.here:visited {
+  color:#444;
+}
+*/

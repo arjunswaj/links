@@ -6,13 +6,27 @@ class GroupsController < ApplicationController
   #TODO: json response
   
   # GET /groups
+  # TODO: Remove this
   def index
-    @owner_of_groups = Group.where("user_id = ?", current_user)
-    @member_of_groups = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, true)
+    @all_groups = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, true)
+    @owned_groups = Group.where("user_id = ?", current_user)
+  end
+  
+  def all_groups
+    @all_groups = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, true)
+  end
+  
+  def owned_groups
+    @owned_groups = Group.where("user_id = ?", current_user)
+  end
+
+  def group_invites
+    @invites = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, false) 
   end
 
   def shareable_groups
-    index
+    all_groups
+    owned_groups
     @bookmark_id = share_params['bookmark_id']
     respond_to do |format|      
       format.js
@@ -32,13 +46,63 @@ class GroupsController < ApplicationController
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
     @bookmarks = Bookmark.where("group_id = ?", params[:id])
 
+
     if group_owner? params[:id]
       @group_owner = current_user
     elsif group_member? params[:id]
-        @group_member = current_user
-    else
-      @invite = Membership.find_by_user_id_and_group_id_and_acceptance_status(current_user, @group, false) 
-    end  
+      @group_member = current_user
+    end
+  end
+  
+  def about
+    set_group
+
+if group_owner? params[:id]
+      @pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], false)
+    end
+
+    
+    if group_owner? params[:id]
+      @group_owner = current_user
+    elsif group_member? params[:id]
+      @group_member = current_user
+    end
+
+
+    # For groups timeline
+    @bookmark_plugins = PLUGIN_CONFIG['bookmark']
+    @bookmarks = Bookmark.where("group_id = ?", params[:id])    
+  end
+  
+  def members
+    set_group
+
+        if group_owner? params[:id]
+      @group_owner = current_user
+    elsif group_member? params[:id]
+      @group_member = current_user
+    end
+    
+    if group_member? params[:id]
+      @members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], true)
+    end
+    if group_owner? params[:id]
+      @pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], false)
+    end
+  end
+  
+  def pending_members
+    set_group
+    
+    if group_owner? params[:id]
+      @group_owner = current_user
+    elsif group_member? params[:id]
+      @group_member = current_user
+    end
+
+    if group_owner? params[:id]
+      @pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], false)
+    end
   end
 
   # GET /groups/new
@@ -52,7 +116,7 @@ class GroupsController < ApplicationController
       set_group
     else
       respond_to do |format|
-        format.html { redirect_to groups_path, alert: "Can't Edit. You are not the group owner" }
+        format.html { redirect_to all_groups_path, alert: "Can't Edit. You are not the group owner" }
         format.json { render json: "Only owners can edit the respective group page", status: :unauthorized }
       end
     end
@@ -95,7 +159,7 @@ class GroupsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { redirect_to groups_path, alert: "Not updated. You are not the group owner" }
+        format.html { redirect_to all_groups_path, alert: "Not updated. You are not the group owner" }
         format.json { render json: "Only owners can edit the respective group page", status: :unauthorized }
       end
     end
@@ -108,12 +172,12 @@ class GroupsController < ApplicationController
       set_group
       @group.destroy
       respond_to do |format|
-        format.html { redirect_to groups_path, notice: 'Delete group successfully.' }
+        format.html { redirect_to all_groups_path, notice: 'Delete group successfully.' }
         format.json { head :no_content }
       end
     else
       respond_to do |format|
-        format.html { redirect_to groups_path, alert: "Not deleted. You are not the group owner" }
+        format.html { redirect_to all_groups_path, alert: "Not deleted. You are not the group owner" }
         format.json { render json: "Only owners can delete the respective group", status: :unauthorized }
       end
     end
@@ -134,7 +198,7 @@ class GroupsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { redirect_to groups_path, alert: "Not invited. You are not the group owner" }
+        format.html { redirect_to all_groups_path, alert: "Not invited. You are not the group owner" }
         format.json { render json: "Only owners can add users to the respective group", status: :unauthorized}
       end
     end
@@ -154,7 +218,7 @@ class GroupsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { redirect_to groups_path, alert: "Not accepted. You have not been invited to the group" }
+        format.html { redirect_to all_groups_path, alert: "Not accepted. You have not been invited to the group" }
         format.json { render json: "You have not been invited to the group", status: :forbidden}
       end
     end
@@ -191,7 +255,7 @@ class GroupsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { redirect_to groups_path, alert: "Not Unsubscribed. You are not a member of the group or you are the owner of the group" }
+        format.html { redirect_to all_groups_path, alert: "Not Unsubscribed. You are not a member of the group or you are the owner of the group" }
         format.json { render json: "Only members of a group can unsubscribe from the group. The group owner cannot subscribe from the group", status: :method_not_allowed }
       end
     end
@@ -226,7 +290,7 @@ class GroupsController < ApplicationController
       @group = Group.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       #render :file => "public/404.html", :status => :unauthorized, :layout => false
-      redirect_to groups_path, alert: "Specified group, #{params[:id]}, does not exist"
+      redirect_to all_groups_path, alert: "Specified group, #{params[:id]}, does not exist"
     end
   end
 

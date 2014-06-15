@@ -1,0 +1,17 @@
+<div id='head'>
+	<div id='left'>
+		<%= render_navigation :context => :group_menu%>
+	</div>
+	<div id='right'>
+		<%= yield :actions %>
+	</div>
+</div>
+<div id='body'>
+		<% @members.each do |user| %>
+		<%= user.name %>
+		<% if @group_owner && @group_owner != user %>
+			<%= link_to 'Remove', remove_user_from_group_path(@group, user), method: :delete, data: { confirm: 'Are you sure?' } %>
+		<% end %>
+		<br />
+	<% end %>
+</div>

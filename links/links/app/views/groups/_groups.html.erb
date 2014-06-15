@@ -2,10 +2,11 @@
 	<%= notice %>
 </p>
 <div id='groups-menu'>
-	<div id='tabs'>
-		<%= render_navigation%>
+	<div id='left'>
+		<%= render_navigation(:level => 1) %>
+		<%= render_navigation(:level => 2) %>
 	</div>
-	<div id='common'>
+	<div id='right'>
 		<h5> <%= link_to '+ Create New Group', new_group_path %> </h5>
 	</div>
 </div>

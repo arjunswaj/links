@@ -2,16 +2,11 @@
 	<%= notice %>
 </p>
 
-<div>
-	<h5><%= link_to '+ Create New Group', new_group_path %></h5>
-</div>
-<%= render "invites"%>
-
 <div class="header">
-	<div class="left">
+	<div>
 		<%= @group.name %> | Members
 	</div>
-	<div class="right">
+	<div>
 		<% if @group_owner %>
 		<%= form_tag @group, method: "delete", data: { confirm: 'Are you sure?' } do %>
 		<%= link_to 'Edit', edit_group_path(@group) %>
@@ -29,10 +24,6 @@
 		<%= form_tag unsubscribe_user_from_group_path(@group), method: "post", data: { confirm: 'Are you sure?' } do %>
 		<%= submit_tag "Unsubscribe"%>
 		<% end %>
-		<% elsif @invite %>
-		<%= form_tag accept_invite_to_group_path(@group, current_user), method: "put" do %>
-		<%= submit_tag "Accept"%>
-		<% end%>
 		<% end %>
 	</div>
 </div>
@@ -66,11 +57,17 @@
 		<br />
 		<% end %>
 	</p>
-
+</div>
+<div>
+	<div>
+		<%= form_tag("/saveurl", method: "post", remote: true) do %>
+		  		<%= text_field_tag(:url, nil, {placeholder: "Paste the URL here...", size: 100}) %>
+				<%= submit_tag("Share", class:"btn") %>
+		<% end %>
+	</div>
 	<div class="timeline">
 		<div class="links">
 			<%= render(:partial => "bookmarks/user_links") %>
 		</div>
 	</div>
-
 </div>

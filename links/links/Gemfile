@@ -56,6 +56,9 @@ gem 'doorkeeper'
 # nokogiri for automatically retrieving annotations
 gem 'nokogiri'
 
+# for tabbed navigation in groups
+gem 'simple-navigation'
+
 #twitter bootstrap for rails
 gem "therubyracer"
 gem "less-rails" 
