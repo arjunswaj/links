@@ -172,9 +172,13 @@ class BookmarksController < ApplicationController
   def index
     bookmarks_loader(Time.now)    
     bookmark = @bookmarks.first
-    session[:first_link_time] = bookmark.updated_at
+    if bookmark
+      session[:first_link_time] = bookmark.updated_at    
+    end    
     bookmark = @bookmarks.last
-    session[:last_link_time] = bookmark.updated_at
+    if bookmark
+      session[:last_link_time] = bookmark.updated_at
+    end    
   end
 
   def loadmore
