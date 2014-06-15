@@ -17,11 +17,7 @@ public class MainActivity extends ActionBarActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    OAuthService service = new ServiceBuilder()
-    .provider(TwitterApi.SSL.class)
-    .apiKey("your_api_key")
-    .apiSecret("your_api_secret")
-    .build();
+    
     if (savedInstanceState == null) {
       getSupportFragmentManager().beginTransaction()
           .add(R.id.container, new PlaceholderFragment()).commit();
