@@ -2,6 +2,7 @@ class GroupsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_invites # The invites is planned to be shown in the left pane of every group page
   
+  layout 'base'
   #TODO: json response
   
   # GET /groups

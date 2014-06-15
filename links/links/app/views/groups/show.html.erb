@@ -1,18 +1,12 @@
 <p id="notice">
 	<%= notice %>
 </p>
-<div>
-	<h5><%= link_to '+ Create New Group', new_group_path %></h5>
-</div>
 
-<% content_for :left do %>
 <div>
 	<h5><%= link_to '+ Create New Group', new_group_path %></h5>
 </div>
 <%= render "invites"%>
-<% end %>
 
-<% content_for :right do %>
 <div class="header">
 	<div class="left">
 		<%= @group.name %> | Members
@@ -80,4 +74,3 @@
 	</div>
 
 </div>
-<% end %>

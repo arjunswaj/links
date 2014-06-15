@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Links</title>
+  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+	<div id="overlay" class="overlay-invisible">
+	</div>
+	<% if current_user %>
+		<%= render "layouts/navbar" %>
+	<% end %>
+
+	<div class="timeline">
+		<div>
+	<div class="left-pane">
+		<%= render "bookmarks/timeline_form" %>
+	</div>
+	<div class="right-pane">
+		<div>
+			<%= form_tag("/searches/search_bookmark", method: "post", remote: true, class:"search-form", id:"search-form") do %>
+				<div class="search-field">
+					<%= text_field_tag(:keyword, nil, {placeholder: "keywords or #tagname", id:"keyword"}) %>
+				</div>
+				<div class="search-action">
+					<%= submit_tag("Search", class:"btn") %>
+				</div>
+				<div class="clear"></div>
+			<% end %>
+		</div>
+		<%= yield %>		
+	</div>
+	<div class="clear"></div>
+</div>				
+	</div>
+</body>
+</html>
