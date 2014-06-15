@@ -153,7 +153,7 @@ class BookmarksController < ApplicationController
       else
         @bookmark.tags << Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).first
       end
-    end
+    end unless tags.nil?
     #@bookmark = Bookmark.new(bookmark_params) #TODO: Explore this.. Above is Ugly
     respond_to do |format|
       if @bookmark.save
