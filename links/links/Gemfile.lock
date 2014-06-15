@@ -82,6 +82,7 @@ GEM
     multi_json (1.10.1)
     nokogiri (1.6.2.1)
       mini_portile (= 0.6.0)
+    open_uri_redirections (0.1.4)
     orm_adapter (0.5.0)
     polyglot (0.3.4)
     rack (1.5.2)
@@ -160,6 +161,7 @@ DEPENDENCIES
   jquery-rails
   less-rails
   nokogiri
+  open_uri_redirections
   rails (= 4.0.5)
   sass-rails (~> 4.0.2)
   sdoc

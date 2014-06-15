@@ -30,19 +30,34 @@ class BookmarksController < ApplicationController
 
     # extract annotations from url
     # TODO: handle exceptions from openuri(network related)
-    doc = Nokogiri::HTML(open(url.url))
+    doc = Nokogiri::HTML(open(process_uri(url.url)))
     title = ''
     desc = ''
+    keywords = []
     title = doc.at_css("title").text if doc.at_css('title').text 
     doc.css("meta").each do |meta|
       if meta['name'] && (meta['name'].match 'description')
         desc = meta['content']
-        break
+      end
+      if meta['name'] && (meta['name'].match 'keywords')         
+        keywords = meta['content'].split(",");
       end
     end
 
     @bookmark = Bookmark.new({:url => url, :title => title, :description => desc, :user => current_user})
+
     @share_with_group = Group.find(params[:id]) if params[:id]
+
+    keywords.each do |tag|
+      if Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).size == 0
+        @tag = Tag.new
+        @tag.tagname = tag.strip.gsub(' ','-').downcase
+      @bookmark.tags << @tag
+      else
+        @bookmark.tags << Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).first
+      end
+    end
+
     respond_to do |format|
       format.html { render action: 'bookmark_form' }
       format.js
@@ -155,12 +170,20 @@ class BookmarksController < ApplicationController
   # GET /bookmarks
   # GET /bookmarks.json
   def index
-    @bookmark_plugins = PLUGIN_CONFIG['bookmark']
-    @bookmarks = Bookmark.eager_load(:tags, :user, :url)
-      .eager_load(group: :memberships)
-      .where("(users.id = :user_id AND bookmarks.group_id IS NULL) OR (bookmarks.group_id IS NOT NULL AND memberships.user_id = :user_id AND memberships.acceptance_status = :membership_status)", user_id: "#{current_user.id}", membership_status: "t")
-      .order('bookmarks.updated_at DESC')
+    bookmarks_loader(Time.now)    
+    bookmark = @bookmarks.first
+    session[:first_link_time] = bookmark.updated_at
+    bookmark = @bookmarks.last
+    session[:last_link_time] = bookmark.updated_at
   end
+
+  def loadmore
+    bookmarks_loader(session[:last_link_time])
+    bookmark = @bookmarks.last
+    if bookmark
+      session[:last_link_time] = bookmark.updated_at    
+    end    
+  end  
 
   # GET /bookmarks/1
   # GET /bookmarks/1.json
@@ -263,5 +286,15 @@ class BookmarksController < ApplicationController
 
   def share_to_group_params
     params.permit(:bookmark_id, :group_ids => [])
+  end
+
+  def bookmarks_loader(time)
+    @bookmark_plugins = PLUGIN_CONFIG['bookmark']
+    @bookmarks = Bookmark.eager_load(:tags, :user, :url)
+      .eager_load(group: :memberships)
+      .where("(users.id = :user_id AND bookmarks.group_id IS NULL) OR (bookmarks.group_id IS NOT NULL AND memberships.user_id = :user_id AND memberships.acceptance_status = :membership_status)", user_id: "#{current_user.id}", membership_status: "t")
+      .where("bookmarks.updated_at < :now", now: time)
+      .order('bookmarks.updated_at DESC')
+      .limit(5)
   end
 end

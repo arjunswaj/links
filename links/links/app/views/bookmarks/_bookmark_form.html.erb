@@ -2,7 +2,7 @@
 <%= hidden_field_tag(:bookmark_id, @bookmark.id) %>
 <div class="form-group">
 	<label for="url">URL</label>
-	<%= text_area_tag(:url, @bookmark.url.url, {placeholder: "Paste the URL here...", rows:3}) %>
+	<%= text_field_tag(:url, @bookmark.url.url, {placeholder: "Paste the URL here..."}) %>
 </div>
 <div class="form-group">
 	<label for="title">Title</label>

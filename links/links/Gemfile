@@ -55,6 +55,8 @@ gem 'doorkeeper'
 
 # nokogiri for automatically retrieving annotations
 gem 'nokogiri'
+# for redirections
+gem 'open_uri_redirections'
 
 # for tabbed navigation in groups
 gem 'simple-navigation'
