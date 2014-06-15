@@ -1,6 +1,3 @@
-[submodule "mobile_app/android/lib/scribe"]
-	path = mobile_app/android/lib/scribe
-	url = https://github.com/arjunswaj/scribe-java.git
 [submodule "mobile_app/android/lib/mango_orm"]
 	path = mobile_app/android/lib/mango_orm
 	url = https://arjunswaj@bitbucket.org/ormlibraryteam/orm-library.git
