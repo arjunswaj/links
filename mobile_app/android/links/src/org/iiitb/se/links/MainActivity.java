@@ -23,7 +23,7 @@ public class MainActivity extends Activity {
   String apiKey = "8801f72043f447d0d0dc70bedee0c169d408591c9fab600ca02b4f93b667e8fc";
   String apiSecret = "fb6e2fe2b55f9d41fe57fbf7b515332ab42a44a7ebdc49f5952aa57fc6b86f70";
 
-  private static final String CALLBACK_URL = "http://www.google.co.in";
+  private static final String CALLBACK_URL = "urn:ietf:wg:oauth:2.0:oob";
   private static final String PROTECTED_RESOURCE_URL = "http://links.t.proxylocal.com/api/bookmarks";
 
   private WebView mWebView;

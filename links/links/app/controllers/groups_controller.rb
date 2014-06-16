@@ -56,7 +56,7 @@ class GroupsController < ApplicationController
   def about
     set_group
 
-if group_owner? params[:id]
+    if group_owner? params[:id]
       @pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], false)
     end
 
