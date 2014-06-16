@@ -2,7 +2,6 @@ class GroupsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_invites # The invites is planned to be shown in the left pane of every group page
   
-  layout 'base'
   #TODO: json response
   
   # GET /groups
@@ -134,7 +133,7 @@ if group_owner? params[:id]
         membership = Membership.find_by_group_id_and_user_id(@group.id, current_user)
         membership.update_attributes :acceptance_status => true
 
-        format.html { redirect_to @group, notice: 'Group was successfully created.' }
+        format.html { redirect_to group_about_path(@group), notice: 'Group was successfully created.' }
         format.json { render action: 'show', status: :created, location: @group }
       else
         format.html { render action: 'new' }
@@ -150,7 +149,7 @@ if group_owner? params[:id]
       set_group
       respond_to do |format|
         if @group.update(group_params)
-          format.html { redirect_to @group, notice: 'Group was successfully updated.' }
+          format.html { redirect_to group_about_path(@group), notice: 'Group was successfully updated.' }
           format.json { head :no_content }
         else
           format.html { render action: 'edit' }
@@ -193,7 +192,7 @@ if group_owner? params[:id]
         @group.users << user unless @group.users.include? user or user.nil?
       end unless params[:users].nil?
       respond_to do |format|
-        format.html { redirect_to @group, notice: 'Invited users successfully.' }
+        format.html { redirect_to group_about_path(@group), notice: 'Invited users successfully.' }
         format.json { head :no_content }
       end
     else
@@ -213,7 +212,7 @@ if group_owner? params[:id]
     unless membership.nil?
       membership.update_attributes :acceptance_status => true
       respond_to do |format|
-        format.html { redirect_to group, notice: "Now member of #{group.name}" }
+        format.html { redirect_to group_about_path(group), notice: "Now member of #{group.name}" }
         format.json { head :no_content }
       end
     else
@@ -232,12 +231,12 @@ if group_owner? params[:id]
     if (group_owner? group.id) && (user != current_user)
       group.users.delete user
       respond_to do |format|
-        format.html { redirect_to group, notice: 'Removed user successfully.' }
+        format.html { redirect_to group_about_path(group), notice: 'Removed user successfully.' }
         format.json { head :no_content }
       end
     else
       respond_to do |format|
-        format.html { redirect_to group_path(group), alert: "Not removed. You are not the owner of the group or you are attempting to remove the owner from the group"}
+        format.html { redirect_to group_about_path(group), alert: "Not removed. You are not the owner of the group or you are attempting to remove the owner from the group"}
         format.json { render json: "Only owners can remove users from the group and owners themselves cannot be removed from the group", status: :unauthorized}
       end
     end
@@ -250,7 +249,7 @@ if group_owner? params[:id]
       set_group
       current_user.groups.delete(@group)
       respond_to do |format|
-        format.html { redirect_to group_path(@group), notice: 'Unsubscribed successfully.' }
+        format.html { redirect_to group_about_path(@group), notice: 'Unsubscribed successfully.' }
         format.json { head :no_content }
       end
     else
@@ -268,17 +267,21 @@ if group_owner? params[:id]
       membership = Membership.find_by_user_id_and_group_id_and_acceptance_status(params[:user_id], params[:group_id], false)
       Membership.delete membership unless membership.nil?
       respond_to do |format|
-        format.html { redirect_to group_path(Group.find(params[:group_id])), notice: 'Cancelled invitation successfully.' }
+        format.html { redirect_to group_about_path(Group.find(params[:group_id])), notice: 'Cancelled invitation successfully.' }
         format.json { head :no_content }
       end
     else
       respond_to do |format|
-        format.html { redirect_to group_path(Group.find(params[:group_id])), alert: "Nothing to cancel. The user has not at all been invited."}
+        format.html { redirect_to group_about_path(Group.find(params[:group_id])), alert: "Nothing to cancel. The user has not at all been invited."}
         format.json { render json: "Only invited members may be cancelled.", status: :method_not_allowed }
       end
     end
   end
   
+  def self.group_owner?(user_id, group_id)
+    return !Group.where("user_id = ? and id = ?", user_id, group_id).empty?
+  end
+
   private
 
   def set_invites

@@ -1,4 +1,10 @@
-<h1>Editing group</h1>
+<%= content_for :center do%>
+<%= render_navigation :level => 1%>
+<div id='filler'>
+	&nbsp;
+</div>
+
+<h4>Editing group</h4>
 
 <%= form_for(@group) do |f| %>
   <% if @group.errors.any? %>
@@ -14,11 +20,12 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :name %><br>
+    <%= f.label :name %>
     <%= f.text_field :name %>
   </div>
   
   <div class="actions">
     <%= f.submit %>
   </div>
+<% end %>
 <% end %>

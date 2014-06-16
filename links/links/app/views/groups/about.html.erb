@@ -1,46 +1,40 @@
-<div id='notice'>
-	<%= notice %>
-</div>
-<div id='head'>
-	<div id='left'>
-		<%= render_navigation :context => :group_menu%>
-	</div>
-	<div id='right'>
-		<% if @group_owner %>
-			<%= form_tag @group, method: "delete", data: { confirm: 'Are you sure?' } do %>
-				<%= link_to 'Edit', edit_group_path(@group) %>
-				<%= submit_tag "Delete"%>
-			<% end %>
-		<%end%>
-	</div>
-</div>
+<%= content_for :center do%>
+<div id='groups-content'>
+	<%= render_navigation :context => :group_menu%>
+	<div id='filler'>
+		&nbsp;
 
-<div id='body'>
+
 	<div>
-		<strong>Group Owner:</strong>
-		<%= @group.user.name %>
-	</div>
-
-	<%= form_tag(invite_users_to_group_path(@group), method: "post", :id => "form") do %>
-		<div id="magicsuggest"></div>
-		<div id="input">
-			<input type="text" name="users[]" id="ms" placeholder="Add Users">
-			</input>
-			<%= submit_tag "Invite", :id => "submit" %>
+		<div>
+			<strong>Group Owner:</strong>
+			<%= @group.user.name %>
 		</div>
-	<%end%>
-	
-	<div>
-		<%= form_tag(saveurl_for_group_share_path(@group), method: "post", remote: true) do %>
-			<%= text_field_tag(:url, nil, {placeholder: "Paste the URL here...", size: 100}) %>
+
+		<div class='textbox'>
+			<%= form_tag(invite_users_to_group_path(@group), method: "post", :id => "form") do %>
+			<div id="magicsuggest"></div>
+				<input type="text" name="users[]" id="ms" placeholder="Add Users">
+				</input>
+				<%= submit_tag "Invite", :id => "submit" %>
+			<%end%>
+		</div>
+
+		<div class="timeline">
+			<div class='textbox'>
+				<h4>Shares</h4>
+			<%= form_tag(saveurl_for_group_share_path(@group), method: "post", remote: true) do %>
+			<%= text_field_tag(:url, nil, {placeholder: "Paste the URL here..."}) %>
 			<%= submit_tag("Share", class:"btn") %>
-		<% end %>
-	</div>
-	
-	<div class="timeline">
-		<div class="links">
-			<%= render(:partial => "bookmarks/user_links") %>
-		</div>
-	</div>
+			<% end %>
+			</div>
 
+			<div class="links">
+				<%= render(:partial => "bookmarks/user_links") %>
+			</div>
+
+		</div>
+
+	</div>
 </div>
+<% end %>
