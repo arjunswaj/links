@@ -1,17 +1,24 @@
-<div id='head'>
-	<div id='left'>
-		<%= render_navigation :context => :group_menu%>
+<%= content_for :center do %>
+<div id='groups-content'>
+	<%= render_navigation :context => :group_menu%>
+
+	<div id='filler'>
+		&nbsp;
 	</div>
-	<div id='right'>
-		<%= yield :actions %>
-	</div>
-</div>
-<div id='body'>
+
+	<ul class='subgroups-nav'>
 		<% @members.each do |user| %>
-		<%= user.name %>
-		<% if @group_owner && @group_owner != user %>
-			<%= link_to 'Remove', remove_user_from_group_path(@group, user), method: :delete, data: { confirm: 'Are you sure?' } %>
+		<li>
+			<span> 
+				<%= user.name %>
+				<% if @group_owner && @group_owner != user %>
+				<div class='right'>
+					<%= link_to 'Remove', remove_user_from_group_path(@group, user), method: :delete, data: { confirm: 'Are you sure?' } %>
+				</div> 
+				<% end %>
+			</span>
+		</li>
 		<% end %>
-		<br />
-	<% end %>
+	</ul>
 </div>
+<% end %>

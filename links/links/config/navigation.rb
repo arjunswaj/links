@@ -53,24 +53,30 @@ SimpleNavigation::Configuration.run do |navigation|
     #                            when the item should be highlighted, you can set a regexp which is matched
     #                            against the current URI.  You may also use a proc, or the symbol <tt>:subpath</tt>.
     #
-    primary.item :all_groups, 'Your Groups', all_groups_path do |subnav|
-      @all_groups.each_with_index do |group, index|
-        subnav.item 'group-' + index.to_s, group.name, group_about_path(group)
-      end unless @all_groups.nil?
-      subnav.dom_attributes = {id: 'subgroups-nav'}
-    end
-    primary.item :owned_groups, 'Groups You Admin', owned_groups_path do |subnav|
-      @owned_groups.each_with_index do |group, index|
-        subnav.item 'owned_group-' + index.to_s, group.name, group_path(group)
-      end unless @owned_groups.nil?
-      subnav.dom_attributes = {id: 'subgroups-nav'}
-    end
-    primary.item :group_invites, 'Invites', group_invites_path do |subnav|
-      @invites.each_with_index do |group, index|
-        subnav.item 'invite-' + index.to_s, group.name + ' - Accept invite', accept_invite_to_group_path(group, current_user), {:method => :put}
-      end unless @invites.nil?
-      subnav.dom_attributes = {id: 'subgroups-nav'}
-    end
+    
+    #TODO: add action button(edit, delete, unsubscribe) as necessary
+    primary.item :all_groups, 'Your Groups', all_groups_path #do |subnav|
+      #@all_groups.each_with_index do |group, index|
+       # subnav.item 'group-' + index.to_s, group.name, group_about_path(group)
+      #end unless @all_groups.nil?
+      #subnav.dom_attributes = {:class => 'subgroups-nav'}
+    #end
+    
+    primary.item :owned_groups, 'Groups You Admin', owned_groups_path #do |subnav|
+      #@owned_groups.each_with_index do |group, index|
+       # subnav.item 'owned_group-' + index.to_s, group.name, group_about_path(group)
+      #end unless @owned_groups.nil?
+      #subnav.dom_attributes = {:class => 'subgroups-nav'}
+    #end
+    
+    primary.item :group_invites, 'Invites', group_invites_path if !@invites.nil? && !@invites.empty? #do |subnav|
+      #@invites.each_with_index do |group, index|
+       # subnav.item 'invite-' + index.to_s, group.name + ' - Accept invite', accept_invite_to_group_path(group, current_user), {:method => :put}
+      #end unless @invites.nil?
+      #subnav.dom_attributes = {:class => 'subgroups-nav'}
+    #end
+    
+    primary.item :create_group, '+ Create group', new_group_path
 
     # Add an item which has a sub navigation (same params, but with block)
     #primary.item :key_2, 'name', url, options do |sub_nav|
@@ -90,6 +96,6 @@ SimpleNavigation::Configuration.run do |navigation|
 
     # You can turn off auto highlighting for a specific level
     # primary.auto_highlight = false
-    primary.dom_attributes = {id: 'groups-nav'}
+    primary.dom_attributes = {:class => 'groups-nav'}
   end
 end

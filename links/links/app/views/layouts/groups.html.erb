@@ -10,17 +10,21 @@
 		<% if current_user %>
 		<%= render "layouts/navbar" %>
 		<% end %>
-		
-		<% flash.each do |name, msg| -%>
-		<%= content_tag :div, msg, class: name %>
-		<% end -%>
-		
-		<div class="left">
-			<%= yield :left %>
-		</div>
-		
-		<div class="right">
-			<%= yield :right %>
+
+		<div id='groups-layout'>
+			<div id="groups-layout-left">
+				&nbsp;
+			</div>
+			<div id='groups-layout-center'>
+				<% flash.each do |name, msg| -%>
+				<%= content_tag :div, msg, class: name %>
+				<% end -%>
+
+				<%= yield :center %>
+			</div>
+			<div id="groups-layout-right">
+				&nbsp;
+			</div>
 		</div>
 	</body>
 </html>

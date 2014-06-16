@@ -1,12 +1,7 @@
-<p id="notice">
-	<%= notice %>
-</p>
-<div id='groups-menu'>
-	<div id='left'>
-		<%= render_navigation(:level => 1) %>
-		<%= render_navigation(:level => 2) %>
-	</div>
-	<div id='right'>
-		<h5> <%= link_to '+ Create New Group', new_group_path %> </h5>
-	</div>
+<%= content_for :center do %>
+<div id='groups-content'>
+	<%= render_navigation(:level => 1) %>
+	<div id='filler'>&nbsp;</div>
+	<%= render_navigation(:level => 2) %>
 </div>
+<% end %>

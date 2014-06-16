@@ -1,17 +1,24 @@
-<div id='head'>
-	<div id='left'>
-		<%= render_navigation :context => :group_menu%>
+<%= content_for :center do%>
+<div id='groups-content'>
+	<%= render_navigation :context => :group_menu%>
+
+	<div id='filler'>
+		&nbsp;
 	</div>
-	<div id='right'>
-		<%= yield :actions %>
-	</div>
+
+	<ul class='subgroups-nav'>
+		<% @pending_members.each do |user| %>
+		<li>
+			<span>
+			<%= user.name %>
+			<% if @group_owner && @group_owner != user %>
+			<div class='right'>
+				<%= link_to 'Cancel', cancel_invite_to_user_from_group_path(@group, user), method: :delete, data: { confirm: 'Are you sure?' } %>
+			</div>
+			<% end %>
+			</span>
+		</li>
+		<% end unless @pending_members.nil?%>
+	</ul>
 </div>
-<div id='body'>
-	<% @pending_members.each do |user| %>
-		<%= user.email %>
-		<% if @group_owner && @group_owner != user %>
-			<%= link_to 'Cancel', cancel_invite_to_user_from_group_path(@group, user), method: :delete, data: { confirm: 'Are you sure?' } %>
-		<% end %>
-		<br />
-	<% end unless @pending_members.nil?%>
-</div>
+<% end %>

@@ -1,1 +1,29 @@
-<%= render :partial => 'groups'%>
+<%= content_for :center do %>
+<div id='groups-content'>
+	<%= render_navigation(:level => 1) %>
+	<div id='filler'>&nbsp;</div>
+
+	<div id='filler'>
+		&nbsp;
+	</div>
+
+	<ul class='subgroups-nav'>
+		<% @all_groups.each do |group| %>
+		<li>
+			<%= link_to group.name, group_about_path(group) %>
+			<% if GroupsController.group_owner? current_user.id, group.id %>
+			<div class='action'>
+			<%= link_to 'Edit', edit_group_path(group) %>
+			<%= link_to 'Delete', group_path(group), :method => :delete %>
+			</div>
+			<% else %>
+			<div class='action'>
+			<%= link_to 'Unsubscribe', unsubscribe_user_from_group_path(group) %>
+			</div>
+			<% end %>
+			
+		</li>
+		<% end unless @all_groups.nil?%>
+	</ul>
+</div>
+<% end %>
