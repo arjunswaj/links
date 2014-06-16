@@ -9,118 +9,100 @@ import org.scribe.model.Verb;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
-import android.content.SharedPreferences;
+import android.app.Activity;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.TextView;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
   String apiKey = "8801f72043f447d0d0dc70bedee0c169d408591c9fab600ca02b4f93b667e8fc";
   String apiSecret = "fb6e2fe2b55f9d41fe57fbf7b515332ab42a44a7ebdc49f5952aa57fc6b86f70";
 
-  WebView webView;
-  Button auth;
-  SharedPreferences pref;
-  TextView access;
-
-  private Token EMPTY_TOKEN = null;
+  private static final String CALLBACK_URL = "http://www.google.co.in";
   private static final String PROTECTED_RESOURCE_URL = "http://links.t.proxylocal.com/api/bookmarks";
-  private static final String RESPONSE_TYPE_VALUE = "code";
+
+  private WebView mWebView;
+  private OAuthService mOauthService;
+  private Token mRequestToken;
+  private static final Token EMPTY_TOKEN = null;
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    mOauthService = new ServiceBuilder().provider(LinksApi.class)
+        .apiKey(apiKey).apiSecret(apiSecret).callback(CALLBACK_URL).build();
     setContentView(R.layout.activity_main);
-    pref = getSharedPreferences("AppPref", MODE_PRIVATE);
-    access = (TextView) findViewById(R.id.Access);
-    auth = (Button) findViewById(R.id.auth);
+    mWebView = (WebView) findViewById(R.id.webv);
+    mWebView.clearCache(true);
+    mWebView.getSettings().setJavaScriptEnabled(true);
+    mWebView.getSettings().setBuiltInZoomControls(true);
+    mWebView.setWebViewClient(mWebViewClient);
+    // mWebView.setWebChromeClient(mWebChromeClient);
 
-    final OAuthService service = new ServiceBuilder().provider(LinksApi.class)
-        .apiKey(apiKey).apiSecret(apiSecret)
-        .callback("urn:ietf:wg:oauth:2.0:oob").build();
-    String authUrl = service.getAuthorizationUrl(EMPTY_TOKEN);
-
-    webView = (WebView) findViewById(R.id.webv);
-    webView.setWebViewClient(new WebViewClient() {
-      @Override
-      public void onPageFinished(WebView view, String url) {
-        // This method will be executed each time a page finished loading.
-        // The only we do is dismiss the progressDialog, in case we are
-        // showing any.
-
-      }
-
-      @Override
-      public boolean shouldOverrideUrlLoading(WebView view,
-          String authorizationUrl) {
-        // This method will be called when the Auth proccess redirect to our
-        // RedirectUri.
-        // We will check the url looking for our RedirectUri.
-
-        Log.i("Authorize", "");
-        Uri uri = Uri.parse(authorizationUrl);
-
-        // If the user doesn't allow authorization to our application, the
-        // authorizationToken Will be null.
-        String authorizationToken = uri.getQueryParameter(RESPONSE_TYPE_VALUE);
-        if (authorizationToken == null) {
-          Log.i("Authorize", "The user doesn't allow authorization.");
-          return true;
-        }
-        Log.i("Authorize", "Auth token received: " + authorizationToken);
-
-        // Generate URL for requesting Access Token
-        Verifier verifier = new Verifier(authorizationToken);
-        Token accessToken = service.getAccessToken(EMPTY_TOKEN, verifier);
-        // We make the request in a AsyncTask
-        OAuthRequest request = new OAuthRequest(Verb.GET,
-            PROTECTED_RESOURCE_URL);
-        service.signRequest(accessToken, request);
-        Response response = request.send();
-
-        return true;
-      }
-    });
-
-    Log.i("Authorize", "Loading Auth Url: " + authUrl);
-    // Load the authorization URL into the webView
-    webView.loadUrl(authUrl);
-    auth.setOnClickListener(new View.OnClickListener() {
-
-      @Override
-      public void onClick(View arg0) {
-
-      }
-    });
+    startAuthorize();
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
+  private void startAuthorize() {
+    (new AsyncTask<Void, Void, String>() {
+      @Override
+      protected String doInBackground(Void... params) {
+        return mOauthService.getAuthorizationUrl(EMPTY_TOKEN);
+      }
 
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.main, menu);
-    return true;
+      @Override
+      protected void onPostExecute(String url) {
+        mWebView.loadUrl(url);
+      }
+    }).execute();
   }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    int id = item.getItemId();
-    if (id == R.id.action_settings) {
-      return true;
+  private WebViewClient mWebViewClient = new WebViewClient() {
+    @Override
+    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+      if ((url != null) && (url.startsWith(CALLBACK_URL))) {
+        // Override webview when user came back to CALLBACK_URL
+        mWebView.stopLoading();
+        mWebView.setVisibility(View.INVISIBLE); // Hide webview if necessary
+        Uri uri = Uri.parse(url);
+        final Verifier verifier = new Verifier(
+            uri.getQueryParameter("oauth_verifier"));
+        (new AsyncTask<Void, Void, Token>() {
+          @Override
+          protected Token doInBackground(Void... params) {
+            return mOauthService.getAccessToken(mRequestToken, verifier);
+          }
+
+          @Override
+          protected void onPostExecute(final Token accessToken) {
+            (new AsyncTask<Void, Void, String>() {
+
+              @Override
+              protected String doInBackground(Void... params) {
+                OAuthRequest request = new OAuthRequest(Verb.GET,
+                    PROTECTED_RESOURCE_URL);
+                mOauthService.signRequest(accessToken, request);
+                Response response = request.send();
+                return response.getBody();
+              }
+
+              @Override
+              protected void onPostExecute(String result) {
+
+              }
+
+            }).execute();
+          }
+        }).execute();
+      } else {
+        super.onPageStarted(view, url, favicon);
+      }
     }
-    return super.onOptionsItemSelected(item);
-  }
+  };
 
 }
