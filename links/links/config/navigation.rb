@@ -55,7 +55,7 @@ SimpleNavigation::Configuration.run do |navigation|
     #
     
     #TODO: add action button(edit, delete, unsubscribe) as necessary
-    primary.item :all_groups, 'Your Groups', all_groups_path #do |subnav|
+    primary.item :all_groups, 'Your Groups', groups_path #do |subnav|
       #@all_groups.each_with_index do |group, index|
        # subnav.item 'group-' + index.to_s, group.name, group_about_path(group)
       #end unless @all_groups.nil?

@@ -3,10 +3,8 @@ require 'api_constraints'
 Links::Application.routes.draw do
 
   resources :groups # TODO: Clean this up.
-  get 'groups/about/:id' => 'groups#about', :as => 'group_about'
   get 'groups/members/:id' => 'groups#members', :as => 'group_members'
   get 'groups/pending_members/:id' => 'groups#pending_members', :as => 'group_pending_members'
-  get "groups_all" => 'groups#all_groups', :as => 'all_groups'
   get "groups_owned" => 'groups#owned_groups', :as => 'owned_groups'
   get "groups_invites" => 'groups#group_invites', :as => 'group_invites'
   post "groups/:id/invite_users" => 'groups#invite_users', :as => 'invite_users_to_group'

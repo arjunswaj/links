@@ -1,20 +1,13 @@
 class GroupsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_invites # The invites is planned to be shown in the left pane of every group page
   
   #TODO: json response
   
   # GET /groups
-  # TODO: Remove this
   def index
     @all_groups = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, true)
-    @owned_groups = Group.where("user_id = ?", current_user)
   end
-  
-  def all_groups
-    @all_groups = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, true)
-  end
-  
+    
   def owned_groups
     @owned_groups = Group.where("user_id = ?", current_user)
   end
@@ -24,7 +17,7 @@ class GroupsController < ApplicationController
   end
 
   def shareable_groups
-    all_groups
+    index
     owned_groups
     @bookmark_id = share_params['bookmark_id']
     respond_to do |format|      
@@ -34,74 +27,30 @@ class GroupsController < ApplicationController
 
   # GET /groups/1
   # GET /groups/1.json
-  # if an invite comes, a user must be able to visit the group and check it out in general
+  # if an invite comes, a user must be able to visit the group and check it out in general  
   def show
     set_group
-    
-    @accepted_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], true)
-    @pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], false)
-    
-    # For groups timeline
-    @bookmark_plugins = PLUGIN_CONFIG['bookmark']
-    @bookmarks = Bookmark.where("group_id = ?", params[:id])
 
-
-    if group_owner? params[:id]
-      @group_owner = current_user
-    elsif group_member? params[:id]
-      @group_member = current_user
-    end
-  end
-  
-  def about
-    set_group
-
-if group_owner? params[:id]
+    if GroupsController.group_owner? current_user.id, params[:id]
       @pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], false)
     end
-
-    
-    if group_owner? params[:id]
-      @group_owner = current_user
-    elsif group_member? params[:id]
-      @group_member = current_user
-    end
-
-
+  
     # For groups timeline
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
     @bookmarks = Bookmark.where("group_id = ?", params[:id])    
   end
   
   def members
-    set_group
-
-        if group_owner? params[:id]
-      @group_owner = current_user
-    elsif group_member? params[:id]
-      @group_member = current_user
-    end
-    
-    if group_member? params[:id]
-      @members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], true)
-    end
-    if group_owner? params[:id]
-      @pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], false)
-    end
+    set_group    
+    @members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], true) if GroupsController.group_member? current_user.id, params[:id]
+    @pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], false) if GroupsController.group_owner? current_user.id, params[:id]
+    @group_owner = current_user if GroupsController.group_owner? current_user.id, params[:id] # TODO: Can this be shifted to the erb?
   end
   
   def pending_members
-    set_group
-    
-    if group_owner? params[:id]
-      @group_owner = current_user
-    elsif group_member? params[:id]
-      @group_member = current_user
-    end
-
-    if group_owner? params[:id]
-      @pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], false)
-    end
+    set_group    
+    @pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], false) if GroupsController.group_owner? current_user.id, params[:id]
+    @group_owner = current_user if GroupsController.group_owner? current_user.id, params[:id]
   end
 
   # GET /groups/new
@@ -111,7 +60,7 @@ if group_owner? params[:id]
 
   # GET /groups/1/edit
   def edit
-    if group_owner? params[:id]
+    if GroupsController.group_owner? current_user.id, params[:id]
       set_group
     else
       respond_to do |format|
@@ -145,7 +94,7 @@ if group_owner? params[:id]
   # PATCH/PUT /groups/1
   # PATCH/PUT /groups/1.json
   def update
-    if group_owner? params[:id]
+    if GroupsController.group_owner? current_user.id, params[:id]
       set_group
       respond_to do |format|
         if @group.update(group_params)
@@ -167,7 +116,7 @@ if group_owner? params[:id]
   # DELETE /groups/1
   # DELETE /groups/1.json
   def destroy
-    if group_owner? params[:id]
+    if GroupsController.group_owner? current_user.id, params[:id]
       set_group
       @group.destroy
       respond_to do |format|
@@ -185,7 +134,7 @@ if group_owner? params[:id]
   # POST /groups/1/invite_users
   # POST /groups/1/invite_users.json
   def invite_users
-    if group_owner? params[:id]
+    if GroupsController.group_owner? current_user.id, params[:id]
       set_group
       params[:users].each do |email|
         user = User.find_by_email(email) # TODO: only possible because email is unique. Should make magic assist to return user id's
@@ -228,7 +177,7 @@ if group_owner? params[:id]
   def remove_user
     group = Group.find(params[:group_id])
     user = User.find(params[:user_id])
-    if (group_owner? group.id) && (user != current_user)
+    if (group_owner? current_user.id, group.id) && (user != current_user)
       group.users.delete user
       respond_to do |format|
         format.html { redirect_to group_about_path(group), notice: 'Removed user successfully.' }
@@ -245,7 +194,7 @@ if group_owner? params[:id]
   # POST /groups/1/unsubscribe
   # POST /groups/1/unsubscribe.json
   def unsubscribe
-    if (!group_owner? params[:id]) && (group_member? params[:id])
+    if (!group_owner? current_user.id, params[:id]) && (group_member? current_user.id, params[:id])
       set_group
       current_user.groups.delete(@group)
       respond_to do |format|
@@ -263,7 +212,7 @@ if group_owner? params[:id]
   # DELETE /groups/1/users/2/cancel
   # DELETE /groups/1/users/2/cancel.json
   def cancel_invite
-    if (group_owner? params[:group_id])
+    if (group_owner? current_user.id, params[:group_id])
       membership = Membership.find_by_user_id_and_group_id_and_acceptance_status(params[:user_id], params[:group_id], false)
       Membership.delete membership unless membership.nil?
       respond_to do |format|
@@ -281,13 +230,13 @@ if group_owner? params[:id]
   def self.group_owner?(user_id, group_id)
     return !Group.where("user_id = ? and id = ?", user_id, group_id).empty?
   end
+  
+  def self.group_member?(user_id, group_id)
+    return !Membership.where("user_id = ? and group_id = ? and acceptance_status = ?", user_id, group_id, true).empty?
+  end
 
   private
 
-  def set_invites
-    @invites = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, false)    
-  end
-  
   def set_group
     begin
       @group = Group.find(params[:id])
@@ -295,14 +244,6 @@ if group_owner? params[:id]
       #render :file => "public/404.html", :status => :unauthorized, :layout => false
       redirect_to all_groups_path, alert: "Specified group, #{params[:id]}, does not exist"
     end
-  end
-
-  def group_member?(group_id)
-    return !Membership.where("user_id = ? and group_id = ? and acceptance_status = ?", current_user, group_id, true).empty?
-  end
-
-  def group_owner?(group_id)
-    return !Group.where("user_id = ? and id = ?", current_user, group_id).empty?
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

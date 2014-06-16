@@ -1,69 +1,39 @@
-<div class="header">
-	<div>
-		<%= @group.name %> | Members
+<%= content_for :center do%>
+<div id='groups-content'>
+	<%= render_navigation :context => :group_menu%>
+	<div id='filler'>
+		&nbsp;
 	</div>
-	<div>
-		<% if @group_owner %>
-		<%= form_tag @group, method: "delete", data: { confirm: 'Are you sure?' } do %>
-		<%= link_to 'Edit', edit_group_path(@group) %>
-		<%= submit_tag "Delete"%>
-		<% end %>
-		<%= form_tag(invite_users_to_group_path(@group), method: "post", :id => "form") do %>
-		<div id="magicsuggest"></div>
-		<div id="input">
-			<input type="text" name="users[]" id="ms" placeholder="Add Users">
-			</input>
-			<%= submit_tag "Invite", :id => "submit" %>
-		</div>
-		<% end %>
-		<% elsif @group_member %>
-		<%= form_tag unsubscribe_user_from_group_path(@group), method: "post", data: { confirm: 'Are you sure?' } do %>
-		<%= submit_tag "Unsubscribe"%>
-		<% end %>
-		<% end %>
-	</div>
-</div>
 
-<div class="body">
-	<p>
+	<div>
 		<strong>Group Owner:</strong>
 		<%= @group.user.name %>
-	</p>
-	<p>
-		<strong>Members</strong>
-		<br />
-		<% @accepted_members.each do |user| %>
-		<%= user.name %>
-		<% if @group_owner && @group_owner != user %>
-		<%= link_to 'Remove', remove_user_from_group_path(@group, user), method: :delete, data: { confirm: 'Are you sure?' } %>
-		<% end %>
-		<br />
-		<% end %>
-	</p>
-	<p>
-		<% unless @pending_members.empty? %>
-		<strong>Pending invitations</strong>
-		<br />
-		<%end%>
-		<% @pending_members.each do |user| %> <!-- TODO: Dry out this code -->
-		<%= user.email %>
-		<% if @group_owner && @group_owner != user %>
-		<%= link_to 'Cancel', cancel_invite_to_user_from_group_path(@group, user), method: :delete, data: { confirm: 'Are you sure?' } %>
-		<% end %>
-		<br />
-		<% end %>
-	</p>
-</div>
-<div>
-	<div>
-		<%= form_tag("/saveurl", method: "post", remote: true) do %>
-		  		<%= text_field_tag(:url, nil, {placeholder: "Paste the URL here...", size: 100}) %>
-				<%= submit_tag("Share", class:"btn") %>
-		<% end %>
 	</div>
+
+	<div class='textbox'>
+		<%= form_tag(invite_users_to_group_path(@group), method: "post", :id => "form") do %>
+		<div id="magicsuggest"></div>
+		<input type="text" name="users[]" id="ms" placeholder="Add Users">
+		</input>
+		<%= submit_tag "Invite", :id => "submit" %>
+		<%end%>
+	</div>
+
 	<div class="timeline">
+		<div class='textbox'>
+			<h4>Shares</h4>
+			<%= form_tag(saveurl_for_group_share_path(@group), method: "post", remote: true) do %>
+			<%= text_field_tag(:url, nil, {placeholder: "Paste the URL here..."}) %>
+			<%= submit_tag("Share", class:"btn") %>
+			<% end %>
+		</div>
+
 		<div class="links">
 			<%= render(:partial => "bookmarks/user_links") %>
 		</div>
+
 	</div>
+
 </div>
+</div>
+<% end %>

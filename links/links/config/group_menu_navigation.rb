@@ -54,16 +54,16 @@ SimpleNavigation::Configuration.run do |navigation|
     #                            against the current URI.  You may also use a proc, or the symbol <tt>:subpath</tt>.
     #
     
-    primary.item :about, @group.name, group_about_path(@group)
+    primary.item :about, @group.name, group_path(@group)
     
     primary.item :members, 'Members', group_members_path(@group)
       #subnav.dom_attributes = {:class => 'subgroups-nav'}
     
     primary.item :pending, 'Pending invitations', group_pending_members_path(@group) if !@pending_members.nil? && !@pending_members.empty?
     
-    primary.item :delete, 'Delete', group_path(@group), {:method => :delete} if @group_owner
+    primary.item :delete, 'Delete', group_path(@group), {:method => :delete} if GroupsController.group_owner? current_user.id, @group.id
     
-    primary.item :edit, 'Edit', edit_group_path(@group) if @group_owner
+    primary.item :edit, 'Edit', edit_group_path(@group) if GroupsController.group_owner? current_user.id, @group.id
 
     # Add an item which has a sub navigation (same params, but with block)
     #primary.item :key_2, 'name', url, options do |sub_nav|
