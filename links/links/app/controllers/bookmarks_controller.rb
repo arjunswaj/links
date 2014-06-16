@@ -153,7 +153,7 @@ class BookmarksController < ApplicationController
       else
         @bookmark.tags << Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).first
       end
-    end
+    end unless tags.nil?
     #@bookmark = Bookmark.new(bookmark_params) #TODO: Explore this.. Above is Ugly
     respond_to do |format|
       if @bookmark.save
@@ -172,9 +172,13 @@ class BookmarksController < ApplicationController
   def index
     bookmarks_loader(Time.now)    
     bookmark = @bookmarks.first
-    session[:first_link_time] = bookmark.updated_at
+    if bookmark
+      session[:first_link_time] = bookmark.updated_at    
+    end    
     bookmark = @bookmarks.last
-    session[:last_link_time] = bookmark.updated_at
+    if bookmark
+      session[:last_link_time] = bookmark.updated_at
+    end    
   end
 
   def loadmore
