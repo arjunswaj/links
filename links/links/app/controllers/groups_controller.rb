@@ -20,7 +20,7 @@ class GroupsController < ApplicationController
     index
     owned_groups
     @bookmark_id = share_params['bookmark_id']
-    respond_to do |format|      
+    respond_to do |format|
       format.js
     end
   end
@@ -37,13 +37,16 @@ class GroupsController < ApplicationController
   
     # For groups timeline
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
-    @bookmarks = Bookmark.where("group_id = ?", params[:id])    
+    #@bookmarks = Bookmark.where("group_id = ?", params[:id])    
+    @bookmarks = Bookmark.eager_load(:tags, :user, :url)
+      .eager_load(group: :memberships)
+      .where("(users.id = :user_id AND bookmarks.group_id IS NULL) OR (bookmarks.group_id IS NOT NULL AND memberships.user_id = :user_id AND memberships.acceptance_status = :membership_status)", user_id: "#{current_user.id}", membership_status: "t")
+      .order('bookmarks.updated_at DESC')
   end
   
   def members
     set_group    
     @members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], true) if GroupsController.group_member? current_user.id, params[:id]
-    @pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], false) if GroupsController.group_owner? current_user.id, params[:id]
     @group_owner = current_user if GroupsController.group_owner? current_user.id, params[:id] # TODO: Can this be shifted to the erb?
   end
   
