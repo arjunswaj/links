@@ -40,7 +40,8 @@ class GroupsController < ApplicationController
     #@bookmarks = Bookmark.where("group_id = ?", params[:id])    
     @bookmarks = Bookmark.eager_load(:tags, :user, :url)
       .eager_load(group: :memberships)
-      .where("(users.id = :user_id AND bookmarks.group_id IS NULL) OR (bookmarks.group_id IS NOT NULL AND memberships.user_id = :user_id AND memberships.acceptance_status = :membership_status)", user_id: "#{current_user.id}", membership_status: "t")
+      .where("bookmarks.group_id IS NOT NULL")
+      .where("bookmarks.group_id = ?", params[:id])
       .order('bookmarks.updated_at DESC')
   end
   
@@ -85,7 +86,7 @@ class GroupsController < ApplicationController
         membership = Membership.find_by_group_id_and_user_id(@group.id, current_user)
         membership.update_attributes :acceptance_status => true
 
-        format.html { redirect_to group_about_path(@group), notice: 'Group was successfully created.' }
+        format.html { redirect_to group_path(@group), notice: 'Group was successfully created.' }
         format.json { render action: 'show', status: :created, location: @group }
       else
         format.html { render action: 'new' }
@@ -101,7 +102,7 @@ class GroupsController < ApplicationController
       set_group
       respond_to do |format|
         if @group.update(group_params)
-          format.html { redirect_to group_about_path(@group), notice: 'Group was successfully updated.' }
+          format.html { redirect_to group_path(@group), notice: 'Group was successfully updated.' }
           format.json { head :no_content }
         else
           format.html { render action: 'edit' }
@@ -144,7 +145,7 @@ class GroupsController < ApplicationController
         @group.users << user unless @group.users.include? user or user.nil?
       end unless params[:users].nil?
       respond_to do |format|
-        format.html { redirect_to group_about_path(@group), notice: 'Invited users successfully.' }
+        format.html { redirect_to group_path(@group), notice: 'Invited users successfully.' }
         format.json { head :no_content }
       end
     else
@@ -164,7 +165,7 @@ class GroupsController < ApplicationController
     unless membership.nil?
       membership.update_attributes :acceptance_status => true
       respond_to do |format|
-        format.html { redirect_to group_about_path(group), notice: "Now member of #{group.name}" }
+        format.html { redirect_to group_path(group), notice: "Now member of #{group.name}" }
         format.json { head :no_content }
       end
     else
@@ -183,12 +184,12 @@ class GroupsController < ApplicationController
     if (group_owner? current_user.id, group.id) && (user != current_user)
       group.users.delete user
       respond_to do |format|
-        format.html { redirect_to group_about_path(group), notice: 'Removed user successfully.' }
+        format.html { redirect_to group_path(group), notice: 'Removed user successfully.' }
         format.json { head :no_content }
       end
     else
       respond_to do |format|
-        format.html { redirect_to group_about_path(group), alert: "Not removed. You are not the owner of the group or you are attempting to remove the owner from the group"}
+        format.html { redirect_to group_path(group), alert: "Not removed. You are not the owner of the group or you are attempting to remove the owner from the group"}
         format.json { render json: "Only owners can remove users from the group and owners themselves cannot be removed from the group", status: :unauthorized}
       end
     end
@@ -201,7 +202,7 @@ class GroupsController < ApplicationController
       set_group
       current_user.groups.delete(@group)
       respond_to do |format|
-        format.html { redirect_to group_about_path(@group), notice: 'Unsubscribed successfully.' }
+        format.html { redirect_to group_path(@group), notice: 'Unsubscribed successfully.' }
         format.json { head :no_content }
       end
     else
@@ -219,12 +220,12 @@ class GroupsController < ApplicationController
       membership = Membership.find_by_user_id_and_group_id_and_acceptance_status(params[:user_id], params[:group_id], false)
       Membership.delete membership unless membership.nil?
       respond_to do |format|
-        format.html { redirect_to group_about_path(Group.find(params[:group_id])), notice: 'Cancelled invitation successfully.' }
+        format.html { redirect_to group_path(Group.find(params[:group_id])), notice: 'Cancelled invitation successfully.' }
         format.json { head :no_content }
       end
     else
       respond_to do |format|
-        format.html { redirect_to group_about_path(Group.find(params[:group_id])), alert: "Nothing to cancel. The user has not at all been invited."}
+        format.html { redirect_to group_path(Group.find(params[:group_id])), alert: "Nothing to cancel. The user has not at all been invited."}
         format.json { render json: "Only invited members may be cancelled.", status: :method_not_allowed }
       end
     end
