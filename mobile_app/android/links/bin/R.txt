@@ -235,7 +235,6 @@ int drawable abc_textfield_searchview_holo_light 0x7f020054
 int drawable abc_textfield_searchview_right_holo_dark 0x7f020055
 int drawable abc_textfield_searchview_right_holo_light 0x7f020056
 int drawable ic_launcher 0x7f020057
-int id Access 0x7f07003d
 int id action_bar 0x7f07001c
 int id action_bar_activity_content 0x7f070015
 int id action_bar_container 0x7f07001b
@@ -247,10 +246,9 @@ int id action_context_bar 0x7f07001d
 int id action_menu_divider 0x7f070016
 int id action_menu_presenter 0x7f070017
 int id action_mode_close_button 0x7f070024
-int id action_settings 0x7f07003f
+int id action_settings 0x7f07003e
 int id activity_chooser_view_content 0x7f070025
 int id always 0x7f07000b
-int id auth 0x7f07003c
 int id beginning 0x7f070011
 int id checkbox 0x7f07002d
 int id collapseActionView 0x7f07000d
@@ -276,6 +274,7 @@ int id normal 0x7f070000
 int id progress_circular 0x7f070018
 int id progress_horizontal 0x7f070019
 int id radio 0x7f07002f
+int id result 0x7f07003c
 int id search_badge 0x7f070032
 int id search_bar 0x7f070031
 int id search_button 0x7f070033
@@ -297,7 +296,7 @@ int id title 0x7f07002b
 int id top_action_bar 0x7f070020
 int id up 0x7f070021
 int id useLogo 0x7f070003
-int id webv 0x7f07003e
+int id webv 0x7f07003d
 int id withText 0x7f07000c
 int integer abc_max_action_buttons 0x7f0b0000
 int layout abc_action_bar_decor 0x7f030000

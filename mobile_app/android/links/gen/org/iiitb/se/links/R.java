@@ -1080,7 +1080,6 @@ containing a value of this type.
         public static final int ic_launcher=0x7f020057;
     }
     public static final class id {
-        public static final int Access=0x7f07003d;
         public static final int action_bar=0x7f07001c;
         public static final int action_bar_activity_content=0x7f070015;
         public static final int action_bar_container=0x7f07001b;
@@ -1092,10 +1091,9 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f070016;
         public static final int action_menu_presenter=0x7f070017;
         public static final int action_mode_close_button=0x7f070024;
-        public static final int action_settings=0x7f07003f;
+        public static final int action_settings=0x7f07003e;
         public static final int activity_chooser_view_content=0x7f070025;
         public static final int always=0x7f07000b;
-        public static final int auth=0x7f07003c;
         public static final int beginning=0x7f070011;
         public static final int checkbox=0x7f07002d;
         public static final int collapseActionView=0x7f07000d;
@@ -1121,6 +1119,7 @@ containing a value of this type.
         public static final int progress_circular=0x7f070018;
         public static final int progress_horizontal=0x7f070019;
         public static final int radio=0x7f07002f;
+        public static final int result=0x7f07003c;
         public static final int search_badge=0x7f070032;
         public static final int search_bar=0x7f070031;
         public static final int search_button=0x7f070033;
@@ -1142,7 +1141,7 @@ containing a value of this type.
         public static final int top_action_bar=0x7f070020;
         public static final int up=0x7f070021;
         public static final int useLogo=0x7f070003;
-        public static final int webv=0x7f07003e;
+        public static final int webv=0x7f07003d;
         public static final int withText=0x7f07000c;
     }
     public static final class integer {

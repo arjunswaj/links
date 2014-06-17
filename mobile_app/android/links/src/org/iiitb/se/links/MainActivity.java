@@ -1,5 +1,6 @@
 package org.iiitb.se.links;
 
+import org.iiitb.se.links.utils.URLConstants;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.LinksApi;
 import org.scribe.model.OAuthRequest;
@@ -10,21 +11,17 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 public class MainActivity extends Activity {
-
-  String apiKey = "8801f72043f447d0d0dc70bedee0c169d408591c9fab600ca02b4f93b667e8fc";
-  String apiSecret = "fb6e2fe2b55f9d41fe57fbf7b515332ab42a44a7ebdc49f5952aa57fc6b86f70";
-
-  private static final String CALLBACK_URL = "urn:ietf:wg:oauth:2.0:oob";
-  private static final String PROTECTED_RESOURCE_URL = "http://links.t.proxylocal.com/api/bookmarks";
 
   private WebView mWebView;
   private OAuthService mOauthService;
@@ -36,8 +33,12 @@ public class MainActivity extends Activity {
     super.onCreate(savedInstanceState);
 
     mOauthService = new ServiceBuilder().provider(LinksApi.class)
-        .apiKey(apiKey).apiSecret(apiSecret).callback(CALLBACK_URL).build();
+        .apiKey(URLConstants.API_KEY).apiSecret(URLConstants.API_SECRET)
+        .callback(URLConstants.URN_IETF_WG_OAUTH_2_0_OOB).build();
     setContentView(R.layout.activity_main);
+    
+    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+    String name = preferences.getString("Name","");
     mWebView = (WebView) findViewById(R.id.webv);
     mWebView.clearCache(true);
     mWebView.getSettings().setJavaScriptEnabled(true);
@@ -65,13 +66,13 @@ public class MainActivity extends Activity {
   private WebViewClient mWebViewClient = new WebViewClient() {
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
-      if ((url != null) && (url.startsWith(CALLBACK_URL))) {
+      if ((url != null) && (url.startsWith(URLConstants.CALLBACK_URL))) {
         // Override webview when user came back to CALLBACK_URL
         mWebView.stopLoading();
         mWebView.setVisibility(View.INVISIBLE); // Hide webview if necessary
-        Uri uri = Uri.parse(url);
-        final Verifier verifier = new Verifier(
-            uri.getQueryParameter("oauth_verifier"));
+        String authorizationCode = url.substring(URLConstants.CALLBACK_URL
+            .length());
+        final Verifier verifier = new Verifier(authorizationCode);
         (new AsyncTask<Void, Void, Token>() {
           @Override
           protected Token doInBackground(Void... params) {
@@ -85,15 +86,16 @@ public class MainActivity extends Activity {
               @Override
               protected String doInBackground(Void... params) {
                 OAuthRequest request = new OAuthRequest(Verb.GET,
-                    PROTECTED_RESOURCE_URL);
+                    URLConstants.PROTECTED_RESOURCE_URL);
                 mOauthService.signRequest(accessToken, request);
                 Response response = request.send();
+
                 return response.getBody();
               }
 
               @Override
               protected void onPostExecute(String result) {
-
+                Log.i("Resource", result);
               }
 
             }).execute();

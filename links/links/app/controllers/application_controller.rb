@@ -33,7 +33,11 @@ class ApplicationController < ActionController::Base
 
   # If your model is called User
   def after_sign_in_path_for(resource)
-    session["user_return_to"] || root_path
+    if request.env['omniauth.origin']
+      request.env['omniauth.origin']
+    else
+      session["user_return_to"] || root_path
+    end    
   end
 
 end
