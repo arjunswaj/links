@@ -292,13 +292,7 @@ public class MainActivity extends Activity {
     }
 
     private WebViewClient mWebViewClient = new WebViewClient() {
-      
-      @Override
-      public boolean shouldOverrideUrlLoading(WebView view, String url) {       
-          view.loadUrl(url);
-          return true;
-      }
-
+         
       @Override
       public void onPageStarted(WebView view, String url, Bitmap favicon) {
         if ((url != null) && (url.startsWith(URLConstants.CALLBACK_URL))) {
