@@ -130,33 +130,40 @@ public class LinkFragment extends Fragment {
 
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
-      if ((url != null) && (url.startsWith(URLConstants.CALLBACK_URL))) {
-        // Override webview when user came back to CALLBACK_URL
-        mWebView.stopLoading();
-        mWebView.setVisibility(View.INVISIBLE); // Hide webview if necessary
-        String authorizationCode = url.substring(URLConstants.CALLBACK_URL
-            .length());
-        final Verifier verifier = new Verifier(authorizationCode);
-        (new AsyncTask<Void, Void, Token>() {
-          @Override
-          protected Token doInBackground(Void... params) {
-            Token token = mOauthService.getAccessToken(mRequestToken, verifier);
-            SharedPreferences.Editor editor = getActivity().getPreferences(
-                getActivity().MODE_PRIVATE).edit();
-            editor.putString(AppConstants.ACCESS_TOKEN_KEY, token.getToken());
-            editor.putString(AppConstants.ACCESS_TOKEN_SECRET,
-                token.getSecret());
-            editor.commit();
-            Log.i(TAG, "Saving the token key.");
-            return token;
-          }
+      if (null != url) {
+        if (url.equals(URLConstants.BASE_URL)
+            || url.equals(URLConstants.BASE_URL + "/")) {
+          auth_dialog.dismiss();
+          startAuthorize();
+        } else if (url.startsWith(URLConstants.CALLBACK_URL)) {
+          // Override webview when user came back to CALLBACK_URL
+          mWebView.stopLoading();
+          mWebView.setVisibility(View.INVISIBLE); // Hide webview if necessary
+          String authorizationCode = url.substring(URLConstants.CALLBACK_URL
+              .length());
+          final Verifier verifier = new Verifier(authorizationCode);
+          (new AsyncTask<Void, Void, Token>() {
+            @Override
+            protected Token doInBackground(Void... params) {
+              Token token = mOauthService.getAccessToken(mRequestToken,
+                  verifier);
+              SharedPreferences.Editor editor = getActivity().getPreferences(
+                  getActivity().MODE_PRIVATE).edit();
+              editor.putString(AppConstants.ACCESS_TOKEN_KEY, token.getToken());
+              editor.putString(AppConstants.ACCESS_TOKEN_SECRET,
+                  token.getSecret());
+              editor.commit();
+              Log.i(TAG, "Saving the token key.");
+              return token;
+            }
 
-          @Override
-          protected void onPostExecute(final Token accessToken) {
-            auth_dialog.dismiss();
-            fetchBookmarks(accessToken);
-          }
-        }).execute();
+            @Override
+            protected void onPostExecute(final Token accessToken) {
+              auth_dialog.dismiss();
+              fetchBookmarks(accessToken);
+            }
+          }).execute();
+        }
       } else {
         super.onPageStarted(view, url, favicon);
       }
