@@ -7,3 +7,6 @@
 [submodule "mobile_app/android/lib/cardslib"]
 	path = mobile_app/android/lib/cardslib
 	url = https://github.com/gabrielemariotti/cardslib.git
+[submodule "mobile_app/android/lib/staggered_grid"]
+	path = mobile_app/android/lib/staggered_grid
+	url = https://github.com/etsy/AndroidStaggeredGrid.git
