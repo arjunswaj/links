@@ -7,7 +7,11 @@ import it.gmariotti.cardslib.library.view.CardView;
 
 import org.iiitb.se.links.R;
 import org.iiitb.se.links.utils.AppConstants;
+import org.iiitb.se.links.utils.StringConstants;
 import org.iiitb.se.links.utils.URLConstants;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.LinksApi;
 import org.scribe.model.OAuthRequest;
@@ -20,16 +24,19 @@ import org.scribe.oauth.OAuthService;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -103,14 +110,8 @@ public class LinkFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 
 		mScrollView = (ScrollView) getActivity().findViewById(
-				R.id.card_scrollview);
-
-		initCards();
-	}
-
-	private void initCards() {
-		init_standard_header_with_overflow_button_dynamic_menu_without_xml();
-	}
+				R.id.card_scrollview);		
+	}	
 
 	private void fetchBookmarks(final Token accessToken) {
 		(new AsyncTask<Void, Void, String>() {
@@ -131,8 +132,16 @@ public class LinkFragment extends Fragment {
 			protected void onPostExecute(String responseBody) {
 				if (null == responseBody || 401 == status) {
 					startAuthorize();
-				} else {
-					tv.setText(responseBody);
+				} else {										
+					try {
+						JSONArray jsonResponse = new JSONArray(responseBody);
+						for(int index = 0; index < jsonResponse.length(); index += 1) {
+							JSONObject linkObj = jsonResponse.getJSONObject(index);
+							addLinkAsACard(linkObj);							
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}					
 				}
 			}
 
@@ -201,16 +210,22 @@ public class LinkFragment extends Fragment {
 		}
 	};
 
-	private void init_standard_header_with_overflow_button_dynamic_menu_without_xml() {
+	private void addLinkAsACard(JSONObject linkObj) throws JSONException {
 
+		String id = linkObj.getString(StringConstants.ID);
+		String url = linkObj.getString(StringConstants.URL);
+		String title = linkObj.getString(StringConstants.TITLE);
+		String description = linkObj.getString(StringConstants.DESCRIPTION);
+		
 		// Create a Card
 		Card card = new Card(getActivity());
-
+		card.setTitle(description);
+		
 		// Create a CardHeader
 		CardHeader header = new CardHeader(getActivity());
 
 		// Set the header title
-		header.setTitle("LOL");
+		header.setTitle(title);
 
 		// Add a popup menu. This method set OverFlow button to visible
 		header.setButtonOverflowVisible(true);
@@ -230,7 +245,7 @@ public class LinkFragment extends Fragment {
 		header.setPopupMenuPrepareListener(new CardHeader.OnPrepareCardHeaderPopupMenuListener() {
 			@Override
 			public boolean onPreparePopupMenu(BaseCard card, PopupMenu popupMenu) {
-				popupMenu.getMenu().add("Dynamic item");
+				popupMenu.getMenu().add("Share");
 
 				// You can remove an item with this code
 				// popupMenu.getMenu().removeItem(R.id.action_settings);
@@ -244,8 +259,13 @@ public class LinkFragment extends Fragment {
 		card.addCardHeader(header);
 
 		// Set card in the cardView
-		CardView cardView = (CardView) getActivity().findViewById(
-				R.id.carddemo_header_overflow_dynamic2);
-		cardView.setCard(card);
+		LinearLayout links = (LinearLayout) getActivity().findViewById(R.id.links);
+		CardView cardView = new CardView(getActivity());
+		cardView.setCard(card);		
+		int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics());
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+			     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+		layoutParams.setMargins(margin, margin, margin, 0);		
+		links.addView(cardView, layoutParams);
 	}
 }
