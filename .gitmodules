@@ -4,3 +4,6 @@
 [submodule "mobile_app/android/lib/scribe"]
 	path = mobile_app/android/lib/scribe
 	url = https://github.com/arjunswaj/scribe-java.git
+[submodule "mobile_app/android/lib/cardslib"]
+	path = mobile_app/android/lib/cardslib
+	url = https://github.com/gabrielemariotti/cardslib.git
