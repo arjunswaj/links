@@ -4,26 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ScrollView
-        android:id="@+id/card_scrollview"
+    <ListView
+        android:id="@+id/card_listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <LinearLayout
-            android:id="@+id/links"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-
-            <!-- Standard Header with overflow button with dynamic menu -->
-
-            <TextView
-                android:id="@+id/result"
-                style="@style/AppTheme.TitleText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Links" />
-        </LinearLayout>
-    </ScrollView>
+        android:layout_height="match_parent"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp" >
+    </ListView>
 
 </LinearLayout>

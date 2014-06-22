@@ -1,12 +1,9 @@
 package org.iiitb.se.links.home.fragments;
 
-import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.CardHeader;
-import it.gmariotti.cardslib.library.internal.base.BaseCard;
-import it.gmariotti.cardslib.library.view.CardView;
-
 import org.iiitb.se.links.R;
+import org.iiitb.se.links.home.fragments.adapter.BookmarksAdapter;
 import org.iiitb.se.links.utils.AppConstants;
+import org.iiitb.se.links.utils.BookmarkLoadType;
 import org.iiitb.se.links.utils.StringConstants;
 import org.iiitb.se.links.utils.URLConstants;
 import org.json.JSONArray;
@@ -24,38 +21,39 @@ import org.scribe.oauth.OAuthService;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
-import android.widget.PopupMenu;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.AbsListView;
+import android.widget.ListView;
+import android.widget.AbsListView.OnScrollListener;
 
 /**
  * Fragment that appears in the "content_frame", shows Links
  */
 public class LinkFragment extends Fragment {
+	int lastFirstVisible = 0;
+	int lastVisibleItemCount = 0;
+	int lastTotalItemCount = 0;		
+
 	public static final String LINK_OPTION_NUMBER = "link_option_number";
 	private WebView mWebView;
-	private TextView tv;
 	private Dialog auth_dialog;
 	private OAuthService mOauthService;
 	private Token mRequestToken;
-	protected ScrollView mScrollView;
-
+	protected ListView mListView;
+	BookmarksAdapter bookmarksAdapter;
+	JSONArray bookmarks = new JSONArray();
 	private static final Token EMPTY_TOKEN = null;
 	private static final String TAG = "LinkFragment";
+	SharedPreferences sharedPreferences;
+	SharedPreferences.Editor sharedPreferencesEditor;
 
 	public LinkFragment() {
 		// Empty constructor required for fragment subclasses
@@ -64,6 +62,10 @@ public class LinkFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		sharedPreferences = getActivity().getPreferences(
+				getActivity().MODE_PRIVATE);
+		sharedPreferencesEditor = getActivity().getPreferences(
+				getActivity().MODE_PRIVATE).edit();
 		View rootView = inflater.inflate(R.layout.fragment_links, container,
 				false);
 		auth_dialog = new Dialog(getActivity());
@@ -78,14 +80,11 @@ public class LinkFragment extends Fragment {
 				.getStringArray(R.array.links_options)[i];
 		getActivity().setTitle(linkOption);
 
-		tv = (TextView) rootView.findViewById(R.id.result);
 		mOauthService = new ServiceBuilder().provider(LinksApi.class)
 				.apiKey(AppConstants.API_KEY)
 				.apiSecret(AppConstants.API_SECRET)
 				.callback(AppConstants.URN_IETF_WG_OAUTH_2_0_OOB).build();
 
-		SharedPreferences sharedPreferences = getActivity().getPreferences(
-				getActivity().MODE_PRIVATE);
 		String accessTokenKey = sharedPreferences.getString(
 				AppConstants.ACCESS_TOKEN_KEY, null);
 		String accessTokenSecret = sharedPreferences.getString(
@@ -100,7 +99,7 @@ public class LinkFragment extends Fragment {
 			Log.i(TAG,
 					"Token Key found. Will access protected resource - bookmarks.");
 			Token accessToken = new Token(accessTokenKey, accessTokenSecret);
-			fetchBookmarks(accessToken);
+			fetchBookmarks(accessToken, BookmarkLoadType.TIMELINE);
 		}
 		return rootView;
 	}
@@ -109,19 +108,84 @@ public class LinkFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		mScrollView = (ScrollView) getActivity().findViewById(
-				R.id.card_scrollview);		
-	}	
+		mListView = (ListView) getActivity().findViewById(R.id.card_listview);
+		bookmarksAdapter = new BookmarksAdapter(getActivity(), bookmarks);
+		mListView.setAdapter(bookmarksAdapter);
 
-	private void fetchBookmarks(final Token accessToken) {
+		mListView.setOnScrollListener(new OnScrollListener() {
+
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+			}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				boolean loadMore = /* maybe add a padding */
+				(firstVisibleItem + visibleItemCount >= totalItemCount)
+						&& (totalItemCount != 0)
+						&& !isLastRequestSame(firstVisibleItem,
+								visibleItemCount, totalItemCount);
+
+				if (loadMore) {					
+					lastFirstVisible = firstVisibleItem;
+					lastVisibleItemCount = visibleItemCount;
+					lastTotalItemCount = totalItemCount;
+					String accessTokenKey = sharedPreferences.getString(
+							AppConstants.ACCESS_TOKEN_KEY, null);
+					String accessTokenSecret = sharedPreferences.getString(
+							AppConstants.ACCESS_TOKEN_SECRET, null);
+					Token accessToken = new Token(accessTokenKey,
+							accessTokenSecret);
+					fetchBookmarks(accessToken, BookmarkLoadType.MORE_BOOKMARKS);
+					Log.i("Scroll Scrolling: ", "firstVisibleItem: "
+							+ firstVisibleItem + ", visibleItemCount"
+							+ visibleItemCount + ", totalItemCount"
+							+ totalItemCount);					
+				}
+			}
+
+			private boolean isLastRequestSame(int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				if (lastFirstVisible == firstVisibleItem
+						&& lastVisibleItemCount == visibleItemCount
+						&& lastTotalItemCount == totalItemCount) {
+					return true;
+				}
+				return false;
+			}
+
+		});
+	}
+
+	private void fetchBookmarks(final Token accessToken,
+			final BookmarkLoadType bookmarkLoadType) {
 		(new AsyncTask<Void, Void, String>() {
 			Response response;
 			int status;
 
 			@Override
 			protected String doInBackground(Void... params) {
-				OAuthRequest request = new OAuthRequest(Verb.GET,
-						URLConstants.PROTECTED_RESOURCE_URL_BOOKMARKS);
+				String resourceURL = null;
+				String lastBookmarkUpdatedAt = sharedPreferences.getString(
+						AppConstants.LAST_BOOKMARK_UPDATED_AT, null);
+
+				switch (bookmarkLoadType) {
+				case MORE_BOOKMARKS:
+					resourceURL = URLConstants.LOAD_MORE_BOOKMARKS + "/"
+							+ lastBookmarkUpdatedAt;
+					break;
+				case REFRESH_BOOKMARKS:
+					break;
+				case TIMELINE:
+					resourceURL = URLConstants.TIMELINE;
+					break;
+				default:
+					break;
+
+				}
+				OAuthRequest request = new OAuthRequest(Verb.GET, resourceURL);
 				mOauthService.signRequest(accessToken, request);
 				response = request.send();
 				status = response.getCode();
@@ -132,16 +196,39 @@ public class LinkFragment extends Fragment {
 			protected void onPostExecute(String responseBody) {
 				if (null == responseBody || 401 == status) {
 					startAuthorize();
-				} else {										
+				} else {
 					try {
-						JSONArray jsonResponse = new JSONArray(responseBody);
-						for(int index = 0; index < jsonResponse.length(); index += 1) {
-							JSONObject linkObj = jsonResponse.getJSONObject(index);
-							addLinkAsACard(linkObj);							
+						// System.out.println(responseBody);
+						JSONArray resp = new JSONArray(responseBody);
+						for (int index = 0; index < resp.length(); index += 1) {
+							bookmarks.put(resp.get(index));
 						}
+
+						if (0 < bookmarks.length()) {
+
+							JSONObject linkObj = bookmarks.getJSONObject(0);
+							String updatedAt = linkObj
+									.getString(StringConstants.UPDATED_AT);
+							sharedPreferencesEditor.putString(
+									AppConstants.FIRST_BOOKMARK_UPDATED_AT,
+									updatedAt);
+
+							linkObj = bookmarks.getJSONObject(bookmarks
+									.length() - 1);
+							updatedAt = linkObj
+									.getString(StringConstants.UPDATED_AT);
+							sharedPreferencesEditor.putString(
+									AppConstants.LAST_BOOKMARK_UPDATED_AT,
+									updatedAt);
+
+							sharedPreferencesEditor.commit();
+							bookmarksAdapter.notifyDataSetChanged();
+							Log.i(TAG,
+									"Saving the updated time of first and last received bookmark");
+						}						
 					} catch (JSONException e) {
 						e.printStackTrace();
-					}					
+					}
 				}
 			}
 
@@ -200,7 +287,8 @@ public class LinkFragment extends Fragment {
 						@Override
 						protected void onPostExecute(final Token accessToken) {
 							auth_dialog.dismiss();
-							fetchBookmarks(accessToken);
+							fetchBookmarks(accessToken,
+									BookmarkLoadType.TIMELINE);
 						}
 					}).execute();
 				}
@@ -210,62 +298,4 @@ public class LinkFragment extends Fragment {
 		}
 	};
 
-	private void addLinkAsACard(JSONObject linkObj) throws JSONException {
-
-		String id = linkObj.getString(StringConstants.ID);
-		String url = linkObj.getString(StringConstants.URL);
-		String title = linkObj.getString(StringConstants.TITLE);
-		String description = linkObj.getString(StringConstants.DESCRIPTION);
-		
-		// Create a Card
-		Card card = new Card(getActivity());
-		card.setTitle(description);
-		
-		// Create a CardHeader
-		CardHeader header = new CardHeader(getActivity());
-
-		// Set the header title
-		header.setTitle(title);
-
-		// Add a popup menu. This method set OverFlow button to visible
-		header.setButtonOverflowVisible(true);
-		header.setPopupMenuListener(new CardHeader.OnClickCardHeaderPopupMenuListener() {
-			@Override
-			public void onMenuItemClick(BaseCard card, MenuItem item) {
-				Toast.makeText(
-						getActivity(),
-						"Click on " + item.getTitle() + "-"
-								+ ((Card) card).getCardHeader().getTitle(),
-						Toast.LENGTH_SHORT).show();
-			}
-		});
-
-		// Add a PopupMenuPrepareListener to add dynamically a menu entry
-		// it is optional.
-		header.setPopupMenuPrepareListener(new CardHeader.OnPrepareCardHeaderPopupMenuListener() {
-			@Override
-			public boolean onPreparePopupMenu(BaseCard card, PopupMenu popupMenu) {
-				popupMenu.getMenu().add("Share");
-
-				// You can remove an item with this code
-				// popupMenu.getMenu().removeItem(R.id.action_settings);
-
-				// return false; You can use return false to hidden the button
-				// and the popup
-
-				return true;
-			}
-		});
-		card.addCardHeader(header);
-
-		// Set card in the cardView
-		LinearLayout links = (LinearLayout) getActivity().findViewById(R.id.links);
-		CardView cardView = new CardView(getActivity());
-		cardView.setCard(card);		
-		int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics());
-		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-			     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-		layoutParams.setMargins(margin, margin, margin, 0);		
-		links.addView(cardView, layoutParams);
-	}
 }

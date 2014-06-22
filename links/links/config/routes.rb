@@ -26,6 +26,8 @@ Links::Application.routes.draw do
 	namespace :api,defaults: {format: 'json'} do
 			scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
 					resources :bookmarks
+          get "/timeline" => "bookmarks#timeline", :as => 'api_timeline'
+          get "/loadmore/:time" => "bookmarks#loadmore", :as => 'api_loadmore'
 			end
 	end
 
