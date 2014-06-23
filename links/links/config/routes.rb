@@ -17,7 +17,7 @@ Links::Application.routes.draw do
   get "searches/searchmore" => "searches#searchmore", :as => 'search_more'
   
   post "searches/search_user" => "searches#search_user", :as => 'search_user'
-  post "searches/search_bookmark" => "searches#search_bookmark", :as => 'search_bookmark'
+  get "searches/search_bookmark" => "searches#search_bookmark", :as => 'search_bookmark'
 
   # For oauth
   use_doorkeeper
@@ -29,6 +29,11 @@ Links::Application.routes.draw do
           get "/timeline" => "bookmarks#timeline", :as => 'api_timeline'
           get "/loadmore/:time" => "bookmarks#loadmore", :as => 'api_loadmore'
 			end
+
+      scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do          
+          get "searches/search_bookmark/:keyword" => "searches#search_bookmark", :as => 'api_search_bookmark'
+          get "searches/searchmore/:keyword/:time" => "searches#searchmore", :as => 'api_search_more'
+      end
 	end
 
   resources :bookmarks
