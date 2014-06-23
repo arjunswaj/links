@@ -7,5 +7,9 @@ public class URLConstants {
       + "/api/timeline";
   public static final String LOAD_MORE_BOOKMARKS = BASE_URL
 	      + "/api/loadmore";
-
+  
+  public static final String SEARCH = BASE_URL
+      + "/api/searches/search_bookmark";
+  public static final String SEARCH_MORE_BOOKMARKS = BASE_URL
+      + "/api/searches/searchmore";
 }

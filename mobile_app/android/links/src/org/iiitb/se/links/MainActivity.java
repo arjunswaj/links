@@ -2,44 +2,25 @@ package org.iiitb.se.links;
 
 
 import org.iiitb.se.links.home.fragments.LinkFragment;
-import org.iiitb.se.links.utils.AppConstants;
-import org.iiitb.se.links.utils.URLConstants;
-import org.scribe.builder.ServiceBuilder;
-import org.scribe.builder.api.LinksApi;
-import org.scribe.model.OAuthRequest;
-import org.scribe.model.Response;
-import org.scribe.model.Token;
-import org.scribe.model.Verb;
-import org.scribe.model.Verifier;
-import org.scribe.oauth.OAuthService;
+import org.iiitb.se.links.home.fragments.SearchFragment;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -126,16 +107,13 @@ public class MainActivity extends Activity {
     // Handle action buttons
     switch (item.getItemId()) {
     case R.id.action_links_search:
-      // create intent to perform web search for this planet
-      Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-      intent.putExtra(SearchManager.QUERY, getActionBar().getTitle());
-      // catch event that there's no activity to handle intent
-      if (intent.resolveActivity(getPackageManager()) != null) {
-        startActivity(intent);
-      } else {
-        Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG)
-            .show();
-      }
+      Fragment fragment = new SearchFragment();
+      Bundle args = new Bundle();      
+      fragment.setArguments(args);
+
+      FragmentManager fragmentManager = getFragmentManager();
+      fragmentManager.beginTransaction().replace(R.id.content_frame, fragment)
+          .commit();
       return true;
     default:
       return super.onOptionsItemSelected(item);
