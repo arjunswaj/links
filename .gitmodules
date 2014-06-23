@@ -4,3 +4,12 @@
 [submodule "mobile_app/android/lib/scribe"]
 	path = mobile_app/android/lib/scribe
 	url = https://github.com/arjunswaj/scribe-java.git
+[submodule "mobile_app/android/lib/cardslib"]
+	path = mobile_app/android/lib/cardslib
+	url = https://github.com/gabrielemariotti/cardslib.git
+[submodule "mobile_app/android/lib/staggered_grid"]
+	path = mobile_app/android/lib/staggered_grid
+	url = https://github.com/etsy/AndroidStaggeredGrid.git
+[submodule "mobile_app/android/lib/listview_animations"]
+	path = mobile_app/android/lib/listview_animations
+	url = https://github.com/nhaarman/ListViewAnimations.git

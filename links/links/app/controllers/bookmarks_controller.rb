@@ -2,6 +2,7 @@ require 'nokogiri'
 require 'open-uri'
 
 class BookmarksController < ApplicationController
+  include BookmarksHelper
   before_action  :authenticate_user!, only: [:show, :edit, :update, :destroy, :index, :timeline]
   before_action  :set_bookmark, only: [:show, :edit, :update, :destroy]
   
@@ -170,7 +171,7 @@ class BookmarksController < ApplicationController
   # GET /bookmarks
   # GET /bookmarks.json
   def index
-    bookmarks_loader(Time.now)    
+    bookmarks_loader(Time.now, current_user.id)    
     bookmark = @bookmarks.first
     if bookmark
       session[:first_link_time] = bookmark.updated_at    
@@ -182,7 +183,7 @@ class BookmarksController < ApplicationController
   end
 
   def loadmore
-    bookmarks_loader(session[:last_link_time])
+    bookmarks_loader(session[:last_link_time], current_user.id)
     bookmark = @bookmarks.last
     if bookmark
       session[:last_link_time] = bookmark.updated_at    
@@ -291,14 +292,5 @@ class BookmarksController < ApplicationController
   def share_to_group_params
     params.permit(:bookmark_id, :group_ids => [])
   end
-
-  def bookmarks_loader(time)
-    @bookmark_plugins = PLUGIN_CONFIG['bookmark']
-    @bookmarks = Bookmark.eager_load(:tags, :user, :url)
-      .eager_load(group: :memberships)
-      .where("(users.id = :user_id AND bookmarks.group_id IS NULL) OR (bookmarks.group_id IS NOT NULL AND memberships.user_id = :user_id AND memberships.acceptance_status = :membership_status)", user_id: "#{current_user.id}", membership_status: "t")
-      .where("bookmarks.updated_at < :now", now: time)
-      .order('bookmarks.updated_at DESC')
-      .limit(5)
-  end
+  
 end
