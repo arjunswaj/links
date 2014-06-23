@@ -1,0 +1,8 @@
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bookmark_tag"
+    style="@style/card.expand_simple_title"    
+    android:layout_width="wrap_content"    
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:text="@string/bookmark_domain" />

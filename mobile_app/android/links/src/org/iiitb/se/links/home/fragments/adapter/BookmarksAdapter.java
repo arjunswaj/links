@@ -1,6 +1,5 @@
 package org.iiitb.se.links.home.fragments.adapter;
 
-import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.view.CardView;
 
 import org.iiitb.se.links.home.cards.BookmarkCard;

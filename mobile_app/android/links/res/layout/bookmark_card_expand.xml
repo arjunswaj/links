@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <TextView
+        android:id="@+id/bookmark_description"
+        style="@style/card.expand_simple_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:text="@string/bookmark_domain" />
+
+    <org.iiitb.se.links.custom.ExpandableHeightGridView
+        android:id="@+id/bookmark_tags"
+        style="@style/card.main_contentExpand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="5dp"
+        android:horizontalSpacing="2dp"
+        android:isScrollContainer="false"
+        android:numColumns="4"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="20dp" />
+
+</LinearLayout>

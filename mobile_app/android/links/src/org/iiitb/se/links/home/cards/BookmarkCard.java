@@ -5,13 +5,13 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.iiitb.se.links.R;
+import org.iiitb.se.links.home.cards.expand.BookmarkCardExpand;
 import org.iiitb.se.links.utils.DomainExtractor;
 import org.iiitb.se.links.utils.StringConstants;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.CardExpand;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.internal.ViewToClickToExpand;
 import it.gmariotti.cardslib.library.internal.base.BaseCard;
@@ -40,7 +40,7 @@ public class BookmarkCard extends Card {
 	String formattedDate = null;
 	CardView cardView = null;
 	CardHeader header = null;
-	CardExpand cardExpand = null;
+	BookmarkCardExpand bookmarkCardExpand = null;
 
 	public JSONObject getBookmark() {
 		return bookmark;
@@ -93,8 +93,8 @@ public class BookmarkCard extends Card {
 		});
 		addCardHeader(header);
 
-		cardExpand = new CardExpand(context);
-		addCardExpand(cardExpand);
+		bookmarkCardExpand = new BookmarkCardExpand(context, bookmark);		
+		addCardExpand(bookmarkCardExpand);
 		
 		this.setOnClickListener(new OnCardClickListener() {			
 			@Override
@@ -125,8 +125,8 @@ public class BookmarkCard extends Card {
 
 	private void setData() {
 		// Set the header title
-		header.setTitle(title);
-		cardExpand.setTitle(description);
+		header.setTitle(title);		
+		bookmarkCardExpand.setBookmark(bookmark);
 		mDomain.setText(DomainExtractor.getBaseDomain(url));
 		mUpdatedTime.setText(formattedDate);
 		setExpanded(false);
