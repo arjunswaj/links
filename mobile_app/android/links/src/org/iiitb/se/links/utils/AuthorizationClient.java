@@ -1,6 +1,6 @@
 package org.iiitb.se.links.utils;
 
-import org.iiitb.se.links.home.fragments.ResourceLoader;
+import org.iiitb.se.links.home.ResourceLoader;
 import org.scribe.model.Token;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;

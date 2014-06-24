@@ -1,6 +1,7 @@
 package org.iiitb.se.links.home.fragments;
 
 import org.iiitb.se.links.R;
+import org.iiitb.se.links.home.ResourceLoader;
 import org.iiitb.se.links.home.fragments.adapter.BookmarksAdapter;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.AuthorizationClient;
