@@ -8,7 +8,8 @@
         <item>Groups</item>
         <item>Settings</item>
     </string-array>
-
+	<string name="authorize_links">Authorize Links</string>
+	
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_links_search">keyword or #tagname</string>

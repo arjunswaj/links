@@ -1692,19 +1692,20 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f0a000b;
-        public static final int action_links_search=0x7f0a0013;
+        public static final int action_links_search=0x7f0a0014;
         public static final int app_name=0x7f0a000d;
-        public static final int app_not_available=0x7f0a0014;
-        public static final int bookmark_description=0x7f0a0018;
-        public static final int bookmark_domain=0x7f0a0015;
-        public static final int bookmark_more=0x7f0a0016;
-        public static final int bookmark_updated_time=0x7f0a0017;
+        public static final int app_not_available=0x7f0a0015;
+        public static final int authorize_links=0x7f0a0011;
+        public static final int bookmark_description=0x7f0a0019;
+        public static final int bookmark_domain=0x7f0a0016;
+        public static final int bookmark_more=0x7f0a0017;
+        public static final int bookmark_updated_time=0x7f0a0018;
         /**  Card with List 
          */
         public static final int card_empty_cardwithlist_text=0x7f0a000f;
         public static final int card_progressbar_cardwithlist_text=0x7f0a0010;
-        public static final int drawer_close=0x7f0a0012;
-        public static final int drawer_open=0x7f0a0011;
+        public static final int drawer_close=0x7f0a0013;
+        public static final int drawer_open=0x7f0a0012;
         /**  Undo Controller
  Undo Controller
          */
