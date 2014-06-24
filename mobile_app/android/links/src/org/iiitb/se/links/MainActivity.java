@@ -36,6 +36,11 @@ public class MainActivity extends Activity {
   private FragmentTypes fragmentTypes;
   private static final String TAG = "MainActivity";
 
+  
+  public SearchView getSearchView() {
+    return searchView;
+  }
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -135,7 +140,7 @@ public class MainActivity extends Activity {
             fragment.setArguments(args);
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment).commit();
+                .replace(R.id.content_frame, fragment).addToBackStack(null).commit();
           }
           return true;
         }
@@ -197,7 +202,7 @@ public class MainActivity extends Activity {
 
       FragmentManager fragmentManager = getFragmentManager();
       fragmentManager.beginTransaction().replace(R.id.content_frame, fragment)
-          .commit();
+          .addToBackStack(null).commit();
     }
     // update selected item and title, then close the drawer
     mDrawerList.setItemChecked(position, true);
