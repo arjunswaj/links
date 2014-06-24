@@ -9,6 +9,8 @@
         <item>Settings</item>
     </string-array>
 	<string name="authorize_links">Authorize Links</string>
+	<string name="search">Search</string>
+	<string name="search_hint">#tags or bookmarks</string>
 	
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>

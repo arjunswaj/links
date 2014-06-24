@@ -12,16 +12,17 @@ import org.scribe.model.Response;
 import org.scribe.model.Token;
 import org.scribe.model.Verb;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
 /**
  * Fragment that appears in the "content_frame", shows Links
  */
-public class SearchFragment extends AbstractBookmarkFragment{
-  private static final String TAG = "SearchFragment";
+public class BookmarkSearchFragment extends AbstractBookmarkFragment {
+  private static final String TAG = "BookmarkSearchFragment";
 
-  public SearchFragment() {
+  public BookmarkSearchFragment() {
     // Empty constructor required for fragment subclasses
   }
 
@@ -36,21 +37,22 @@ public class SearchFragment extends AbstractBookmarkFragment{
         String resourceURL = null;
         String lastBookmarkUpdatedAt = sharedPreferences.getString(
             AppConstants.LAST_SEARCH_BOOKMARK_UPDATED_AT, null);
-
+        String query = Uri.encode(getArguments().getString(AppConstants.SEARCH_QUERY));        
         switch (bookmarkLoadType) {
           case MORE_BOOKMARKS:
-            resourceURL = URLConstants.SEARCH_MORE_BOOKMARKS + "/dev/"
-                + lastBookmarkUpdatedAt;
+            resourceURL = URLConstants.SEARCH_MORE_BOOKMARKS + "/" + query
+                + "/" + lastBookmarkUpdatedAt;
             break;
           case REFRESH_BOOKMARKS:
             break;
           case TIMELINE:
-            resourceURL = URLConstants.SEARCH + "/dev";
+            resourceURL = URLConstants.SEARCH + "/" + query;
             break;
           default:
             break;
 
-        }
+        }        
+        
         OAuthRequest request = new OAuthRequest(Verb.GET, resourceURL);
         mOauthService.signRequest(accessToken, request);
         response = request.send();
@@ -95,6 +97,6 @@ public class SearchFragment extends AbstractBookmarkFragment{
 
     }).execute();
 
-  } 
+  }
 
 }

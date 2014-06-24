@@ -1,11 +1,9 @@
 package org.iiitb.se.links.home.cards.expand;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import it.gmariotti.cardslib.library.internal.CardExpand;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.iiitb.se.links.R;
 import org.iiitb.se.links.custom.ExpandableHeightGridView;
@@ -19,12 +17,15 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class BookmarkCardExpand extends CardExpand {
+  public interface SelectTag
+  {
+      void doSearch(String tagname);
+  }
+  
 	JSONObject bookmark;
 	Context context;
 	TextView bookmarkDescription;

@@ -7,7 +7,7 @@ module SearchesHelper
       .where("bookmarks.updated_at < :now", now: time)
       .where("LOWER(tags.tagname) = LOWER(:tag)", tag: "#{tagname}")
       .order('bookmarks.updated_at DESC')    
-      .limit(5) 
+      .limit(10) 
   end
 
   def bookmarks_searcher(time, keyword, user_id)
@@ -17,6 +17,6 @@ module SearchesHelper
       .where("bookmarks.updated_at < :now", now: time)
       .where("LOWER(title) LIKE LOWER(:query) OR LOWER(description) LIKE LOWER(:query)", query: "%#{keyword}%")      
       .order('bookmarks.updated_at DESC') 
-      .limit(5)
+      .limit(10)
   end
 end
