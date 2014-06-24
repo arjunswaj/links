@@ -20,11 +20,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class BookmarkCardExpand extends CardExpand {
-  public interface SelectTag
-  {
-      void doSearch(String tagname);
-  }
+public class BookmarkCardExpand extends CardExpand {  
   
 	JSONObject bookmark;
 	Context context;
