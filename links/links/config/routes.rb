@@ -34,6 +34,7 @@ Links::Application.routes.draw do
   resources :bookmarks
   get "/timeline" => "bookmarks#timeline", :as => 'timeline'
   get "/loadmore" => "bookmarks#loadmore", :as => 'loadmore'
+  get 'icon/:id' => 'bookmarks#show_image', :as => 'icon'
   
   get ":id/editbookmark" => "bookmarks#editbookmark", :as => 'editbookmark'
   post "/saveurl" => "bookmarks#saveurl", :as => 'saveurl'
