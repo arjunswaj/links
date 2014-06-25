@@ -20,17 +20,28 @@ import android.util.Log;
  */
 public class LinkFragment extends AbstractBookmarkFragment {
   private static final String TAG = "LinkFragment";
-  
+
   public LinkFragment() {
     // Empty constructor required for fragment subclasses
   }
 
   protected void fetchBookmarks(final Token accessToken,
       final BookmarkLoadType bookmarkLoadType) {
-    (new AsyncTask<Void, Void, String>() {
+    (new AsyncTask<Void, Integer, String>() {
       Response response;
       int status;
 
+      @Override
+      protected void onPreExecute() {
+        mProgressDialog.setProgress(0);
+        mProgressDialog.show();
+      }
+
+      @Override
+      protected void onProgressUpdate(Integer... progress) {
+        mProgressDialog.setProgress(progress[0]);
+      }
+      
       @Override
       protected String doInBackground(Void... params) {
         String resourceURL = null;
@@ -45,6 +56,7 @@ public class LinkFragment extends AbstractBookmarkFragment {
           case REFRESH_BOOKMARKS:
             break;
           case TIMELINE:
+            bookmarks.clear();
             resourceURL = URLConstants.TIMELINE;
             break;
           default:
@@ -60,6 +72,7 @@ public class LinkFragment extends AbstractBookmarkFragment {
 
       @Override
       protected void onPostExecute(String responseBody) {
+        mProgressDialog.hide();
         if (null == responseBody || 401 == status) {
           startAuthorize();
         } else {
@@ -67,17 +80,17 @@ public class LinkFragment extends AbstractBookmarkFragment {
             // System.out.println(responseBody);
             JSONArray resp = new JSONArray(responseBody);
             for (int index = 0; index < resp.length(); index += 1) {
-              bookmarks.put(resp.get(index));
+              bookmarks.add(resp.getJSONObject(index));
             }
 
-            if (0 < bookmarks.length()) {
+            if (0 < bookmarks.size()) {
 
-              JSONObject linkObj = bookmarks.getJSONObject(0);
+              JSONObject linkObj = bookmarks.get(0);
               String updatedAt = linkObj.getString(StringConstants.UPDATED_AT);
               sharedPreferencesEditor.putString(
                   AppConstants.FIRST_BOOKMARK_UPDATED_AT, updatedAt);
 
-              linkObj = bookmarks.getJSONObject(bookmarks.length() - 1);
+              linkObj = bookmarks.get(bookmarks.size() - 1);
               updatedAt = linkObj.getString(StringConstants.UPDATED_AT);
               sharedPreferencesEditor.putString(
                   AppConstants.LAST_BOOKMARK_UPDATED_AT, updatedAt);

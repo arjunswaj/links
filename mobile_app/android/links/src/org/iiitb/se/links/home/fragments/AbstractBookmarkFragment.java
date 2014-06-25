@@ -1,12 +1,15 @@
 package org.iiitb.se.links.home.fragments;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.iiitb.se.links.R;
 import org.iiitb.se.links.home.ResourceLoader;
 import org.iiitb.se.links.home.fragments.adapter.BookmarksAdapter;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.AuthorizationClient;
 import org.iiitb.se.links.utils.BookmarkLoadType;
-import org.json.JSONArray;
+import org.json.JSONObject;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.LinksApi;
 import org.scribe.model.Token;
@@ -14,6 +17,7 @@ import org.scribe.oauth.OAuthService;
 
 import android.app.Dialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,7 +31,8 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 
-public abstract class AbstractBookmarkFragment extends Fragment implements ResourceLoader {
+public abstract class AbstractBookmarkFragment extends Fragment implements
+    ResourceLoader {
   protected int lastFirstVisible = 0;
   protected int lastVisibleItemCount = 0;
   protected int lastTotalItemCount = 0;
@@ -39,13 +44,15 @@ public abstract class AbstractBookmarkFragment extends Fragment implements Resou
   protected Token mRequestToken;
   protected ListView mListView;
   protected BookmarksAdapter bookmarksAdapter;
-  protected JSONArray bookmarks = new JSONArray();
+  protected List<JSONObject> bookmarks = new ArrayList<JSONObject>();
   protected static final Token EMPTY_TOKEN = null;
   private static final String TAG = "AbstractBookmarkFragment";
   protected SharedPreferences sharedPreferences;
   protected SharedPreferences.Editor sharedPreferencesEditor;
   protected WebViewClient mWebViewClient;
-  
+
+  protected ProgressDialog mProgressDialog;
+
   protected abstract void fetchBookmarks(final Token accessToken,
       final BookmarkLoadType bookmarkLoadType);
 
@@ -59,7 +66,6 @@ public abstract class AbstractBookmarkFragment extends Fragment implements Resou
     View rootView = inflater.inflate(R.layout.fragment_links, container, false);
     authDialog = new Dialog(getActivity());
     authDialog.setContentView(R.layout.auth_dialog);
-          
 
     int i = getArguments().getInt(LINK_OPTION_NUMBER);
     String linkOption = getResources().getStringArray(R.array.links_options)[i];
@@ -69,12 +75,19 @@ public abstract class AbstractBookmarkFragment extends Fragment implements Resou
         .apiKey(AppConstants.API_KEY).apiSecret(AppConstants.API_SECRET)
         .callback(AppConstants.URN_IETF_WG_OAUTH_2_0_OOB).build();
 
+    mProgressDialog = new ProgressDialog(getActivity());
+
+    mProgressDialog.setMessage(getString(R.string.loading));
+    mProgressDialog.setIndeterminate(false);
+    mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
     mWebView = (WebView) authDialog.findViewById(R.id.webView);
     mWebView.clearCache(true);
-    mWebView.getSettings().setJavaScriptEnabled(true);  
-    mWebViewClient = new AuthorizationClient(getActivity(), authDialog, mOauthService, this, mRequestToken);
+    mWebView.getSettings().setJavaScriptEnabled(true);
+    mWebViewClient = new AuthorizationClient(getActivity(), authDialog,
+        mOauthService, this, mRequestToken);
     mWebView.setWebViewClient(mWebViewClient);
-    
+
     String accessTokenKey = sharedPreferences.getString(
         AppConstants.ACCESS_TOKEN_KEY, null);
     String accessTokenSecret = sharedPreferences.getString(
@@ -145,15 +158,26 @@ public abstract class AbstractBookmarkFragment extends Fragment implements Resou
 
     });
   }
-  
+
   @Override
   public void fetchProtectedResource(final Token accessToken) {
     fetchBookmarks(accessToken, BookmarkLoadType.TIMELINE);
   }
-  
+
   @Override
   public void startAuthorize() {
-    (new AsyncTask<Void, Void, String>() {
+    (new AsyncTask<Void, Integer, String>() {
+      @Override
+      protected void onPreExecute() {
+        mProgressDialog.setProgress(0);
+        mProgressDialog.show();
+      }
+      
+      @Override
+      protected void onProgressUpdate(Integer... progress) {
+        mProgressDialog.setProgress(progress[0]);
+      }
+      
       @Override
       protected String doInBackground(Void... params) {
         return mOauthService.getAuthorizationUrl(EMPTY_TOKEN);
@@ -161,8 +185,10 @@ public abstract class AbstractBookmarkFragment extends Fragment implements Resou
 
       @Override
       protected void onPostExecute(String url) {
+        mProgressDialog.hide();
         mWebView.loadUrl(url);
       }
+            
     }).execute();
   }
 

@@ -17,7 +17,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 /**
- * Fragment that appears in the "content_frame", shows Links
+ * Fragment that appears in the "content_frame", shows Links after Search
  */
 public class BookmarkSearchFragment extends AbstractBookmarkFragment {
   private static final String TAG = "BookmarkSearchFragment";
@@ -28,16 +28,28 @@ public class BookmarkSearchFragment extends AbstractBookmarkFragment {
 
   protected void fetchBookmarks(final Token accessToken,
       final BookmarkLoadType bookmarkLoadType) {
-    (new AsyncTask<Void, Void, String>() {
+    (new AsyncTask<Void, Integer, String>() {
       Response response;
       int status;
+
+      @Override
+      protected void onPreExecute() {
+        mProgressDialog.setProgress(0);
+        mProgressDialog.show();
+      }
+
+      @Override
+      protected void onProgressUpdate(Integer... progress) {
+        mProgressDialog.setProgress(progress[0]);
+      }
 
       @Override
       protected String doInBackground(Void... params) {
         String resourceURL = null;
         String lastBookmarkUpdatedAt = sharedPreferences.getString(
             AppConstants.LAST_SEARCH_BOOKMARK_UPDATED_AT, null);
-        String query = Uri.encode(getArguments().getString(AppConstants.SEARCH_QUERY));        
+        String query = Uri.encode(getArguments().getString(
+            AppConstants.SEARCH_QUERY));
         switch (bookmarkLoadType) {
           case MORE_BOOKMARKS:
             resourceURL = URLConstants.SEARCH_MORE_BOOKMARKS + "/" + query
@@ -46,13 +58,14 @@ public class BookmarkSearchFragment extends AbstractBookmarkFragment {
           case REFRESH_BOOKMARKS:
             break;
           case TIMELINE:
+            bookmarks.clear();
             resourceURL = URLConstants.SEARCH + "/" + query;
             break;
           default:
             break;
 
-        }        
-        
+        }
+
         OAuthRequest request = new OAuthRequest(Verb.GET, resourceURL);
         mOauthService.signRequest(accessToken, request);
         response = request.send();
@@ -62,24 +75,24 @@ public class BookmarkSearchFragment extends AbstractBookmarkFragment {
 
       @Override
       protected void onPostExecute(String responseBody) {
+        mProgressDialog.hide();
         if (null == responseBody || 401 == status) {
           startAuthorize();
         } else {
           try {
-            // System.out.println(responseBody);
             JSONArray resp = new JSONArray(responseBody);
             for (int index = 0; index < resp.length(); index += 1) {
-              bookmarks.put(resp.get(index));
+              bookmarks.add(resp.getJSONObject(index));
             }
 
-            if (0 < bookmarks.length()) {
+            if (0 < bookmarks.size()) {
 
-              JSONObject linkObj = bookmarks.getJSONObject(0);
+              JSONObject linkObj = bookmarks.get(0);
               String updatedAt = linkObj.getString(StringConstants.UPDATED_AT);
               sharedPreferencesEditor.putString(
                   AppConstants.FIRST_SEARCH_BOOKMARK_UPDATED_AT, updatedAt);
 
-              linkObj = bookmarks.getJSONObject(bookmarks.length() - 1);
+              linkObj = bookmarks.get(bookmarks.size() - 1);
               updatedAt = linkObj.getString(StringConstants.UPDATED_AT);
               sharedPreferencesEditor.putString(
                   AppConstants.LAST_SEARCH_BOOKMARK_UPDATED_AT, updatedAt);
