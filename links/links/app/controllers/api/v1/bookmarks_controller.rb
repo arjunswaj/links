@@ -51,7 +51,9 @@ module Api
 			    end unless tags.nil?			    
 			    
 			    if @bookmark.save
-			        respond_with strip_bookmark_to_json(@bookmark)
+			    	respond_to do |format|
+  						format.json{ render :json => strip_bookmark_to_json(@bookmark).to_json }
+					end			        
 			    else
 			       render :status => 404
 			    end			    

@@ -241,17 +241,21 @@ public class MainActivity extends Activity {
         .setPositiveButton(getString(android.R.string.ok),
             new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
-                Fragment fragment = new AddBookmarkFragment();
-                fragmentTypes = FragmentTypes.ADD_BOOKMARK_FRAGMENT;
-                Bundle args = new Bundle();
-                args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 3);
-                args.putString(StringConstants.URL, userInput.getText().toString());
-                fragment.setArguments(args);
+                String url = userInput.getText().toString();
+                if (null != url && !url.isEmpty()) {
+                  url = url.trim();
+                  Fragment fragment = new AddBookmarkFragment();
+                  fragmentTypes = FragmentTypes.ADD_BOOKMARK_FRAGMENT;
+                  Bundle args = new Bundle();
+                  args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 3);
 
-                FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, fragment)
-                    .commit();
+                  args.putString(StringConstants.URL, url);
+                  fragment.setArguments(args);
+
+                  FragmentManager fragmentManager = getFragmentManager();
+                  fragmentManager.beginTransaction()
+                      .replace(R.id.content_frame, fragment).commit();
+                }
               }
             })
         .setNegativeButton(getString(android.R.string.cancel),
