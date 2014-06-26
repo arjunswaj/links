@@ -250,7 +250,7 @@ public class MainActivity extends Activity {
 
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, fragment).addToBackStack(null)
+                    .replace(R.id.content_frame, fragment)
                     .commit();
               }
             })

@@ -12,4 +12,7 @@ public class URLConstants {
       + "/api/searches/search_bookmark";
   public static final String SEARCH_MORE_BOOKMARKS = BASE_URL
       + "/api/searches/searchmore";
+  
+  public static final String SAVE_BOOKMARK = BASE_URL
+      + "/api/savebookmark";
 }

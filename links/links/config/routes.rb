@@ -24,7 +24,8 @@ Links::Application.routes.draw do
 
   # For bookmarks REST API
 	namespace :api,defaults: {format: 'json'} do
-			scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do					
+			scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do	
+          post "/savebookmark"	=> "bookmarks#savebookmark", :as => 'api_savebookmark'			
           get "/timeline" => "bookmarks#timeline", :as => 'api_timeline'
           get "/loadmore/:time" => "bookmarks#loadmore", :as => 'api_loadmore'
 			end

@@ -7,13 +7,17 @@ import org.iiitb.se.links.home.ResourceLoader;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.AuthorizationClient;
 import org.iiitb.se.links.utils.StringConstants;
+import org.iiitb.se.links.utils.URLConstants;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.LinksApi;
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Response;
 import org.scribe.model.Token;
+import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
 import android.app.Dialog;
@@ -103,52 +107,85 @@ public class AddBookmarkFragment extends Fragment implements ResourceLoader {
         mOauthService, this, mRequestToken);
     mWebView.setWebViewClient(mWebViewClient);
 
-    String accessTokenKey = sharedPreferences.getString(
-        AppConstants.ACCESS_TOKEN_KEY, null);
-    String accessTokenSecret = sharedPreferences.getString(
-        AppConstants.ACCESS_TOKEN_SECRET, null);
-    if (null == accessTokenKey || null == accessTokenSecret) {
-      Log.i(TAG, "Token Key is not saved. Will start authorization.");
-      authDialog.show();
-      authDialog.setTitle(getResources().getString(R.string.authorize_links));
-      // authDialog.setCancelable(true);
-      startAuthorize();
-    } else {
-      Log.i(TAG, "Token Key found. Can save the- bookmarks.");
-    }
-
     cancel.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View arg0) {
-        getActivity().getFragmentManager().beginTransaction()
-            .remove(AddBookmarkFragment.this).commit();
-        
-        
-        Fragment fragment = new LinkFragment();
-        Bundle args = new Bundle();
-        args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 0);
-        fragment.setArguments(args);
-        getActivity().getFragmentManager().beginTransaction()
-            .replace(R.id.content_frame, fragment).commit();
+        closeThisFragmentAndLoadHome();
       }
     });
 
     ok.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View arg0) {
-        saveBookmark();
+        String accessTokenKey = sharedPreferences.getString(
+            AppConstants.ACCESS_TOKEN_KEY, null);
+        String accessTokenSecret = sharedPreferences.getString(
+            AppConstants.ACCESS_TOKEN_SECRET, null);
+        Token accessToken = new Token(accessTokenKey, accessTokenSecret);
+        saveBookmark(accessToken);
       }
     });
     return rootView;
 
   }
 
-  private void saveBookmark() {
-    String accessTokenKey = sharedPreferences.getString(
-        AppConstants.ACCESS_TOKEN_KEY, null);
-    String accessTokenSecret = sharedPreferences.getString(
-        AppConstants.ACCESS_TOKEN_SECRET, null);
-    Token accessToken = new Token(accessTokenKey, accessTokenSecret);
+  private void closeThisFragmentAndLoadHome() {
+    getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+
+    Fragment fragment = new LinkFragment();
+    Bundle args = new Bundle();
+    args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 0);
+    fragment.setArguments(args);
+    getActivity().getFragmentManager().beginTransaction()
+        .replace(R.id.content_frame, fragment).commit();
+  }
+
+  private void saveBookmark(final Token accessToken) {
+    (new AsyncTask<Void, Integer, String>() {
+      Response response;
+      int status;
+
+      @Override
+      protected void onPreExecute() {
+        mProgressDialog.show();
+      }
+
+      @Override
+      protected String doInBackground(Void... params) {
+        String resourceURL = URLConstants.SAVE_BOOKMARK;
+        OAuthRequest request = new OAuthRequest(Verb.POST, resourceURL);
+        request.addBodyParameter(StringConstants.URL, url.getText().toString());
+        request.addBodyParameter(StringConstants.TITLE, title.getText().toString());
+        request.addBodyParameter(StringConstants.DESCRIPTION, description.getText().toString());
+        request.addBodyParameter(StringConstants.TAGS, tags.getText().toString());
+        
+        mOauthService.signRequest(accessToken, request);
+        response = request.send();
+        status = response.getCode();
+        return response.getBody();
+      }
+
+      @Override
+      protected void onPostExecute(String responseBody) {
+        mProgressDialog.hide();
+        if (null == responseBody || 401 == status) {
+          startAuthorize();
+        } else {
+          hideKeyboard();
+          closeThisFragmentAndLoadHome();
+        }
+      }
+    }).execute();
+  }
+
+  private void hideKeyboard() {
+    InputMethodManager imm = (InputMethodManager) getActivity()
+        .getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(url.getWindowToken(), 0);
+    imm.hideSoftInputFromWindow(title.getWindowToken(), 0);
+    imm.hideSoftInputFromWindow(description.getWindowToken(), 0);
+    imm.hideSoftInputFromWindow(tags.getWindowToken(), 0);
+
   }
 
   public AddBookmarkFragment() {
@@ -157,14 +194,35 @@ public class AddBookmarkFragment extends Fragment implements ResourceLoader {
 
   @Override
   public void fetchProtectedResource(Token accessToken) {
-    // TODO Auto-generated method stub
-
+    saveBookmark(accessToken);
   }
 
   @Override
   public void startAuthorize() {
-    // TODO Auto-generated method stub
+    (new AsyncTask<Void, Integer, String>() {
+      @Override
+      protected void onPreExecute() {
+        mProgressDialog.setProgress(0);
+        mProgressDialog.show();
+      }
 
+      @Override
+      protected void onProgressUpdate(Integer... progress) {
+        mProgressDialog.setProgress(progress[0]);
+      }
+
+      @Override
+      protected String doInBackground(Void... params) {
+        return mOauthService.getAuthorizationUrl(EMPTY_TOKEN);
+      }
+
+      @Override
+      protected void onPostExecute(String url) {
+        mProgressDialog.hide();
+        mWebView.loadUrl(url);
+      }
+
+    }).execute();
   }
 
   private void fetchWebPageDetails() {
@@ -201,16 +259,6 @@ public class AddBookmarkFragment extends Fragment implements ResourceLoader {
         }
         mProgressDialog.hide();
         hideKeyboard();
-      }
-
-      private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getActivity()
-            .getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(url.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(title.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(description.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(tags.getWindowToken(), 0);
-
       }
 
     }).execute();
