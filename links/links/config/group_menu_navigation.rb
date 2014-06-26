@@ -64,6 +64,8 @@ SimpleNavigation::Configuration.run do |navigation|
     primary.item :delete, 'Delete', group_path(@group), {:method => :delete} if GroupsController.group_owner? current_user.id, @group.id
     
     primary.item :edit, 'Edit', edit_group_path(@group) if GroupsController.group_owner? current_user.id, @group.id
+    
+    primary.item :unsubscribe, 'Unsubscribe', unsubscribe_user_from_group_path(@group) if !GroupsController.group_owner? current_user.id, @group.id
 
     # Add an item which has a sub navigation (same params, but with block)
     #primary.item :key_2, 'name', url, options do |sub_nav|

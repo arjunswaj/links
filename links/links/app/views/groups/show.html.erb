@@ -16,7 +16,7 @@
 		<input type="text" name="users[]" id="ms" placeholder="Add Users">
 		</input>
 		<%= submit_tag "Invite", :id => "submit" %>
-		<%end%>
+		<%end if GroupsController.group_owner? current_user.id, @group.id%>
 	</div>
 
 	<div class="timeline">
