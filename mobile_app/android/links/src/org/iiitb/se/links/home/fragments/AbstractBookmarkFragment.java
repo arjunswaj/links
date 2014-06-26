@@ -35,9 +35,7 @@ public abstract class AbstractBookmarkFragment extends Fragment implements
     ResourceLoader {
   protected int lastFirstVisible = 0;
   protected int lastVisibleItemCount = 0;
-  protected int lastTotalItemCount = 0;
-
-  public static final String LINK_OPTION_NUMBER = "link_option_number";
+  protected int lastTotalItemCount = 0;  
   protected WebView mWebView;
   protected Dialog authDialog;
   protected OAuthService mOauthService;
@@ -67,7 +65,7 @@ public abstract class AbstractBookmarkFragment extends Fragment implements
     authDialog = new Dialog(getActivity());
     authDialog.setContentView(R.layout.auth_dialog);
 
-    int i = getArguments().getInt(LINK_OPTION_NUMBER);
+    int i = getArguments().getInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER);
     String linkOption = getResources().getStringArray(R.array.links_options)[i];
     getActivity().setTitle(linkOption);
 
@@ -78,7 +76,7 @@ public abstract class AbstractBookmarkFragment extends Fragment implements
     mProgressDialog = new ProgressDialog(getActivity());
 
     mProgressDialog.setMessage(getString(R.string.loading));
-    mProgressDialog.setIndeterminate(false);
+    mProgressDialog.setIndeterminate(true);
     mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
     mWebView = (WebView) authDialog.findViewById(R.id.webView);

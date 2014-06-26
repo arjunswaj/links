@@ -1,25 +1,31 @@
 package org.iiitb.se.links;
 
+import org.iiitb.se.links.home.fragments.AddBookmarkFragment;
 import org.iiitb.se.links.home.fragments.LinkFragment;
 import org.iiitb.se.links.home.fragments.BookmarkSearchFragment;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.FragmentTypes;
+import org.iiitb.se.links.utils.StringConstants;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
@@ -36,7 +42,6 @@ public class MainActivity extends Activity {
   private FragmentTypes fragmentTypes;
   private static final String TAG = "MainActivity";
 
-  
   public SearchView getSearchView() {
     return searchView;
   }
@@ -140,7 +145,8 @@ public class MainActivity extends Activity {
             fragment.setArguments(args);
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                .replace(R.id.content_frame, fragment).addToBackStack(null)
+                .commit();
           }
           return true;
         }
@@ -194,10 +200,17 @@ public class MainActivity extends Activity {
       case 1:
         // fragment = new GroupFragment();
         fragmentTypes = FragmentTypes.GROUP_FRAGMENT;
+        break;
+      case 2:
+        break;
+      case 3:
+        fragmentTypes = FragmentTypes.ADD_BOOKMARK_FRAGMENT;
+        openDialogToAddURL();
+        break;
     }
     if (null != fragment) {
       Bundle args = new Bundle();
-      args.putInt(LinkFragment.LINK_OPTION_NUMBER, position);
+      args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, position);
       fragment.setArguments(args);
 
       FragmentManager fragmentManager = getFragmentManager();
@@ -208,6 +221,52 @@ public class MainActivity extends Activity {
     mDrawerList.setItemChecked(position, true);
     setTitle(mLinksOptions[position]);
     mDrawerLayout.closeDrawer(mDrawerList);
+  }
+
+  private void openDialogToAddURL() {
+    LayoutInflater li = LayoutInflater.from(this);
+    View promptsView = li.inflate(R.layout.bookmark_url, null);
+
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+    // set prompts.xml to alertdialog builder
+    alertDialogBuilder.setView(promptsView);
+
+    final EditText userInput = (EditText) promptsView
+        .findViewById(R.id.bookmark_url);
+
+    // set dialog message
+    alertDialogBuilder
+        .setCancelable(false)
+        .setPositiveButton(getString(android.R.string.ok),
+            new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                Fragment fragment = new AddBookmarkFragment();
+                fragmentTypes = FragmentTypes.ADD_BOOKMARK_FRAGMENT;
+                Bundle args = new Bundle();
+                args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 3);
+                args.putString(StringConstants.URL, userInput.getText().toString());
+                fragment.setArguments(args);
+
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, fragment).addToBackStack(null)
+                    .commit();
+              }
+            })
+        .setNegativeButton(getString(android.R.string.cancel),
+            new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+              }
+            });
+
+    // create alert dialog
+    AlertDialog alertDialog = alertDialogBuilder.create();
+
+    // show it
+    alertDialog.show();
+
   }
 
   @Override

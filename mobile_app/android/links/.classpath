@@ -6,5 +6,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/scribe"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/jsoup"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

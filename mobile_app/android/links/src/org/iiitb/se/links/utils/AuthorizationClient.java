@@ -38,7 +38,7 @@ public class AuthorizationClient extends WebViewClient {
     
     mProgressDialog = new ProgressDialog(activity);
     mProgressDialog.setMessage(activity.getString(R.string.loading));
-    mProgressDialog.setIndeterminate(false);
+    mProgressDialog.setIndeterminate(true);
     mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
     
   }
