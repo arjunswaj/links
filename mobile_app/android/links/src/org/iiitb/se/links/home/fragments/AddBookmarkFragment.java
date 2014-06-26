@@ -155,10 +155,13 @@ public class AddBookmarkFragment extends Fragment implements ResourceLoader {
         String resourceURL = URLConstants.SAVE_BOOKMARK;
         OAuthRequest request = new OAuthRequest(Verb.POST, resourceURL);
         request.addBodyParameter(StringConstants.URL, url.getText().toString());
-        request.addBodyParameter(StringConstants.TITLE, title.getText().toString());
-        request.addBodyParameter(StringConstants.DESCRIPTION, description.getText().toString());
-        request.addBodyParameter(StringConstants.TAGS, tags.getText().toString());
-        
+        request.addBodyParameter(StringConstants.TITLE, title.getText()
+            .toString());
+        request.addBodyParameter(StringConstants.DESCRIPTION, description
+            .getText().toString());
+        request.addBodyParameter(StringConstants.TAGS, tags.getText()
+            .toString());
+
         mOauthService.signRequest(accessToken, request);
         response = request.send();
         status = response.getCode();
@@ -246,15 +249,18 @@ public class AddBookmarkFragment extends Fragment implements ResourceLoader {
 
       @Override
       protected void onPostExecute(Document doc) {
-        title.setText(doc.title());
-        Elements metas = doc.select(StringConstants.META);
-        for (Element meta : metas) {
-          if (meta.attr(StringConstants.NAME).equals(
-              StringConstants.DESCRIPTION)) {
-            description.setText(meta.attr(StringConstants.CONTENT));
-          }
-          if (meta.attr(StringConstants.NAME).equals(StringConstants.KEYWORDS)) {
-            tags.setText(meta.attr(StringConstants.CONTENT));
+        if (null != doc) {
+          title.setText(doc.title());
+          Elements metas = doc.select(StringConstants.META);
+          for (Element meta : metas) {
+            if (meta.attr(StringConstants.NAME).equals(
+                StringConstants.DESCRIPTION)) {
+              description.setText(meta.attr(StringConstants.CONTENT));
+            }
+            if (meta.attr(StringConstants.NAME)
+                .equals(StringConstants.KEYWORDS)) {
+              tags.setText(meta.attr(StringConstants.CONTENT));
+            }
           }
         }
         mProgressDialog.hide();
