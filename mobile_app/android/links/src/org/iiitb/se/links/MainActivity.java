@@ -13,6 +13,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -50,6 +51,8 @@ public class MainActivity extends Activity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    Intent intent = this.getIntent();
+    String action = intent.getAction();
 
     mTitle = mDrawerTitle = getTitle();
     mLinksOptions = getResources().getStringArray(R.array.links_options);
@@ -90,9 +93,38 @@ public class MainActivity extends Activity {
     };
     mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-    if (savedInstanceState == null) {
-      selectItem(0);
+    if (action.equalsIgnoreCase(Intent.ACTION_SEND)
+        && intent.hasExtra(Intent.EXTRA_TEXT)) {
+      String urlFromIntent = intent.getStringExtra(Intent.EXTRA_TEXT);
+      String subjectFromIntent = null;
+      if (intent.hasExtra(Intent.EXTRA_SUBJECT)) {
+        subjectFromIntent = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+      }
+      openLinksSavePage(urlFromIntent, subjectFromIntent);
+    } else {
+      if (savedInstanceState == null) {
+        selectItem(0);
+      }
     }
+  }
+
+  private void openLinksSavePage(String urlFromIntent, String subjectFromIntent) {
+    Fragment fragment = new AddBookmarkFragment();
+    fragmentTypes = FragmentTypes.ADD_BOOKMARK_FRAGMENT;
+    Bundle args = new Bundle();
+    args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 3);
+
+    args.putString(StringConstants.URL, urlFromIntent);
+    if (null != subjectFromIntent) {
+      args.putString(StringConstants.TITLE, subjectFromIntent);
+    }
+
+    fragment.setArguments(args);
+
+    FragmentManager fragmentManager = getFragmentManager();
+    fragmentManager.beginTransaction().replace(R.id.content_frame, fragment)
+        .commit();
+
   }
 
   @Override
@@ -244,17 +276,7 @@ public class MainActivity extends Activity {
                 String url = userInput.getText().toString();
                 if (null != url && !url.isEmpty()) {
                   url = url.trim();
-                  Fragment fragment = new AddBookmarkFragment();
-                  fragmentTypes = FragmentTypes.ADD_BOOKMARK_FRAGMENT;
-                  Bundle args = new Bundle();
-                  args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 3);
-
-                  args.putString(StringConstants.URL, url);
-                  fragment.setArguments(args);
-
-                  FragmentManager fragmentManager = getFragmentManager();
-                  fragmentManager.beginTransaction()
-                      .replace(R.id.content_frame, fragment).commit();
+                  openLinksSavePage(url, null);
                 }
               }
             })

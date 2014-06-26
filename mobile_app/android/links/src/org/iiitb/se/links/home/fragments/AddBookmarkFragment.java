@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -94,7 +93,12 @@ public class AddBookmarkFragment extends Fragment implements ResourceLoader {
     String bookmarkUrl = getArguments().getString(StringConstants.URL);
     if (null != bookmarkUrl) {
       url.setText(bookmarkUrl);
-      fetchWebPageDetails();
+      String bookmarkTitle = getArguments().getString(StringConstants.TITLE);
+      if (null == bookmarkTitle) {
+        fetchWebPageDetails();
+      } else {
+        title.setText(bookmarkTitle);
+      }
     }
     mOauthService = new ServiceBuilder().provider(LinksApi.class)
         .apiKey(AppConstants.API_KEY).apiSecret(AppConstants.API_SECRET)

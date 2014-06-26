@@ -12,6 +12,7 @@
     
     <string name="http">http://</string>
     <string name="loading">Loading&#8230;</string>
+    <string name="share">Share</string>
 	<string name="authorize_links">Authorize Links</string>
 	<string name="search">Search</string>
 	<string name="search_hint">#tags or bookmarks</string>
