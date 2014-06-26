@@ -1,5 +1,5 @@
 		<div>
-			<%= form_tag("/searches/search_bookmark", method: "post", remote: true, class:"search-form", id:"search-form") do %>
+			<%= form_tag("/searches/search_bookmark", method: "get", remote: true, class:"search-form", id:"search-form") do %>
 				<div class="search-field">
 					<%= text_field_tag(:keyword, nil, {placeholder: "keywords or #tagname", id:"keyword"}) %>
 				</div>

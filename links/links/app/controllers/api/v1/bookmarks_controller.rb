@@ -29,36 +29,54 @@ module Api
 				respond_with formatted_bookmarks
 			end
 
-			def show
-				respond_with Bookmark.find(params[:id])
-			end
+			def savebookmark
+				url = Url.find_by_url(save_bookmark_params[:url])
+			    if url.nil?
+			      url = Url.new({:url => save_bookmark_params[:url]})
+			      if !url.save
+			        render :status => 404
+			      end
+			    end			    
+			    @bookmark = Bookmark.new({:title => save_bookmark_params[:title], :description => save_bookmark_params[:description], :url => url, :user_id => doorkeeper_token.resource_owner_id})			    
 
-			def create
-				bookmark = { :url_attributes => {:url => params[:url]}, :title => params[:title], :description => params[:description], :user_id => doorkeeper_token.resource_owner_id}
-				respond_with Bookmark.create(bookmark)
-			end
-
-			def update
-				bookmark = { :url_attributes => {:url => params[:url]}, :title => params[:title], :description => params[:description], :user_id => doorkeeper_token.resource_owner_id}
-				respond_with Bookmark.update(params[:id], bookmark)
-			end
-
-			def destroy
-				respond_with Bookmark.destroy(params[:id])
-			end
+			    tags = save_bookmark_params[:tags].split(",")
+			    tags.each do |tag|
+			      if Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).size == 0
+			        @tag = Tag.new
+			        @tag.tagname = tag.strip.gsub(' ','-').downcase
+			      @bookmark.tags << @tag
+			      else
+			        @bookmark.tags << Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).first
+			      end
+			    end unless tags.nil?			    
+			    
+			    if @bookmark.save
+			        respond_with strip_bookmark_to_json(@bookmark)
+			    else
+			       render :status => 404
+			    end			    
+			end			
 
 			private
 
 			def bookmarks_formatter
 				formatted_bookmarks = []
 				@bookmarks.each do  |bookmark|
-				  formatted_tags = []
-				  bookmark.tags.each do |tag|
-				    formatted_tags << tag.tagname
-				  end			  
-				  formatted_bookmarks << {:id => bookmark.id, :url => bookmark.url.url, :title => bookmark.title, :description => bookmark.description, :updated_at => bookmark.updated_at.to_i, :tags => formatted_tags}
+					formatted_bookmarks << strip_bookmark_to_json(bookmark)
 				end
 				respond_with formatted_bookmarks
+			end
+
+			def strip_bookmark_to_json(bookmark)
+				formatted_tags = []
+				bookmark.tags.each do |tag|
+				   formatted_tags << tag.tagname
+				end			  
+				{:id => bookmark.id, :url => bookmark.url.url, :title => bookmark.title, :description => bookmark.description, :updated_at => bookmark.updated_at.to_i, :tags => formatted_tags}
+				
+			end
+			def save_bookmark_params
+			    params.permit(:url, :title, :description, :tags)
 			end
 		end
 	end

@@ -1,4 +1,5 @@
 class SearchesController < ApplicationController
+  include SearchesHelper
   def index
   end
 
@@ -15,9 +16,9 @@ class SearchesController < ApplicationController
     keyword = link_search_params['keyword']      
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
     if keyword.start_with?('#')
-       bookmarks_tag_searcher(Time.now, keyword)
+       bookmarks_tag_searcher(Time.now, keyword, current_user.id)
     else
-       bookmarks_searcher(Time.now, keyword)
+       bookmarks_searcher(Time.now, keyword, current_user.id)
     end            
 
     bookmark = @bookmarks.last
@@ -34,9 +35,9 @@ class SearchesController < ApplicationController
 
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
     if keyword.start_with?('#')
-      bookmarks_tag_searcher(session[:last_link_time], keyword)
+      bookmarks_tag_searcher(session[:last_link_time], keyword, current_user.id)
     else
-      bookmarks_searcher(session[:last_link_time], keyword)      
+      bookmarks_searcher(session[:last_link_time], keyword, current_user.id)      
     end            
 
     bookmark = @bookmarks.last
@@ -69,25 +70,5 @@ class SearchesController < ApplicationController
   def link_search_params
     params.permit(:keyword)
   end
-
-  def bookmarks_tag_searcher(time, keyword)
-    tagname = keyword[1, keyword.length].strip.gsub(' ', '-').downcase
-      @bookmarks = Bookmark.eager_load(:tags, :user, :url)
-      .eager_load(group: :memberships)
-      .where("(users.id = :user_id AND bookmarks.group_id IS NULL) OR (bookmarks.group_id IS NOT NULL AND memberships.user_id = :user_id AND memberships.acceptance_status = :membership_status)", user_id: "#{current_user.id}", membership_status: "t")    
-      .where("bookmarks.updated_at < :now", now: time)
-      .where("LOWER(tags.tagname) = LOWER(:tag)", tag: "#{tagname}")
-      .order('bookmarks.updated_at DESC')    
-      .limit(5) 
-  end
-
-  def bookmarks_searcher(time, keyword)
-    @bookmarks = Bookmark.eager_load(:tags, :user, :url)
-      .eager_load(group: :memberships)
-      .where("(users.id = :user_id AND bookmarks.group_id IS NULL) OR (bookmarks.group_id IS NOT NULL AND memberships.user_id = :user_id AND memberships.acceptance_status = :membership_status)", user_id: "#{current_user.id}", membership_status: "t")
-      .where("bookmarks.updated_at < :now", now: time)
-      .where("LOWER(title) LIKE LOWER(:query) OR LOWER(description) LIKE LOWER(:query)", query: "%#{keyword}%")      
-      .order('bookmarks.updated_at DESC') 
-      .limit(5)
-  end
+ 
 end

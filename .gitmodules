@@ -13,3 +13,6 @@
 [submodule "mobile_app/android/lib/listview_animations"]
 	path = mobile_app/android/lib/listview_animations
 	url = https://github.com/nhaarman/ListViewAnimations.git
+[submodule "mobile_app/android/lib/jsoup"]
+	path = mobile_app/android/lib/jsoup
+	url = https://github.com/jhy/jsoup/

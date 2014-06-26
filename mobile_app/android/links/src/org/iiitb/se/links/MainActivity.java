@@ -1,46 +1,34 @@
 package org.iiitb.se.links;
 
-
+import org.iiitb.se.links.home.fragments.AddBookmarkFragment;
 import org.iiitb.se.links.home.fragments.LinkFragment;
+import org.iiitb.se.links.home.fragments.BookmarkSearchFragment;
 import org.iiitb.se.links.utils.AppConstants;
-import org.iiitb.se.links.utils.URLConstants;
-import org.scribe.builder.ServiceBuilder;
-import org.scribe.builder.api.LinksApi;
-import org.scribe.model.OAuthRequest;
-import org.scribe.model.Response;
-import org.scribe.model.Token;
-import org.scribe.model.Verb;
-import org.scribe.model.Verifier;
-import org.scribe.oauth.OAuthService;
+import org.iiitb.se.links.utils.FragmentTypes;
+import org.iiitb.se.links.utils.StringConstants;
 
 import android.app.Activity;
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.SearchManager;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 
 public class MainActivity extends Activity {
   private DrawerLayout mDrawerLayout;
@@ -50,8 +38,13 @@ public class MainActivity extends Activity {
   private CharSequence mDrawerTitle;
   private CharSequence mTitle;
   private String[] mLinksOptions;
-    
+  private SearchView searchView;
+  private FragmentTypes fragmentTypes;
   private static final String TAG = "MainActivity";
+
+  public SearchView getSearchView() {
+    return searchView;
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -74,6 +67,8 @@ public class MainActivity extends Activity {
     // enable ActionBar app icon to behave as action to toggle nav drawer
     getActionBar().setDisplayHomeAsUpEnabled(true);
     getActionBar().setHomeButtonEnabled(true);
+
+    searchView = new SearchView(getActionBar().getThemedContext());
 
     // ActionBarDrawerToggle ties together the the proper interactions
     // between the sliding drawer and the action bar app icon
@@ -102,9 +97,64 @@ public class MainActivity extends Activity {
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.main, menu);
-    return super.onCreateOptionsMenu(menu);
+    searchView.setQueryHint(getResources().getString(R.string.search_hint));
+    menu.add(Menu.NONE, Menu.NONE, 1, getResources().getString(R.string.search))
+        .setIcon(R.drawable.action_search)
+        .setActionView(searchView)
+        .setShowAsAction(
+            MenuItem.SHOW_AS_ACTION_ALWAYS
+                | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+
+    searchView.setOnQueryTextListener(new OnQueryTextListener() {
+      @Override
+      public boolean onQueryTextChange(String newText) {
+        if (newText.length() > 0) {
+          // Search
+
+        } else {
+          // Do something when there's no input
+        }
+        return false;
+      }
+
+      @Override
+      public boolean onQueryTextSubmit(String query) {
+        Fragment fragment = null;
+        if (null != query) {
+          InputMethodManager imm = (InputMethodManager) getApplication()
+              .getSystemService(Context.INPUT_METHOD_SERVICE);
+          imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+          // Based on the fragment type loaded, go to the respective search
+          // screen
+          switch (fragmentTypes) {
+            case BOOKMARK_FRAGMENT:
+            case BOOKMARK_SEARCH_FRAGMENT:
+              fragment = new BookmarkSearchFragment();
+              fragmentTypes = FragmentTypes.BOOKMARK_SEARCH_FRAGMENT;
+              break;
+
+            case GROUP_FRAGMENT:
+              break;
+            default:
+              break;
+
+          }
+          if (null != fragment) {
+            Bundle args = new Bundle();
+            args.putString(AppConstants.SEARCH_QUERY, query);
+            fragment.setArguments(args);
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, fragment).addToBackStack(null)
+                .commit();
+          }
+          return true;
+        }
+        return false;
+      }
+    });
+
+    return true;
   }
 
   /* Called whenever we call invalidateOptionsMenu() */
@@ -112,7 +162,7 @@ public class MainActivity extends Activity {
   public boolean onPrepareOptionsMenu(Menu menu) {
     // If the nav drawer is open, hide action items related to the content view
     boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-    menu.findItem(R.id.action_links_search).setVisible(!drawerOpen);
+    // menu.findItem(R.id.action_links_search).setVisible(!drawerOpen);
     return super.onPrepareOptionsMenu(menu);
   }
 
@@ -125,20 +175,8 @@ public class MainActivity extends Activity {
     }
     // Handle action buttons
     switch (item.getItemId()) {
-    case R.id.action_links_search:
-      // create intent to perform web search for this planet
-      Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-      intent.putExtra(SearchManager.QUERY, getActionBar().getTitle());
-      // catch event that there's no activity to handle intent
-      if (intent.resolveActivity(getPackageManager()) != null) {
-        startActivity(intent);
-      } else {
-        Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG)
-            .show();
-      }
-      return true;
-    default:
-      return super.onOptionsItemSelected(item);
+      default:
+        return super.onOptionsItemSelected(item);
     }
   }
 
@@ -153,19 +191,82 @@ public class MainActivity extends Activity {
 
   private void selectItem(int position) {
     // update the main content by replacing fragments
-    Fragment fragment = new LinkFragment();
-    Bundle args = new Bundle();
-    args.putInt(LinkFragment.LINK_OPTION_NUMBER, position);
-    fragment.setArguments(args);
+    Fragment fragment = null;
+    switch (position) {
+      case 0:
+        fragment = new LinkFragment();
+        fragmentTypes = FragmentTypes.BOOKMARK_FRAGMENT;
+        break;
+      case 1:
+        // fragment = new GroupFragment();
+        fragmentTypes = FragmentTypes.GROUP_FRAGMENT;
+        break;
+      case 2:
+        break;
+      case 3:
+        fragmentTypes = FragmentTypes.ADD_BOOKMARK_FRAGMENT;
+        openDialogToAddURL();
+        break;
+    }
+    if (null != fragment) {
+      Bundle args = new Bundle();
+      args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, position);
+      fragment.setArguments(args);
 
-    FragmentManager fragmentManager = getFragmentManager();
-    fragmentManager.beginTransaction().replace(R.id.content_frame, fragment)
-        .commit();
-
+      FragmentManager fragmentManager = getFragmentManager();
+      fragmentManager.beginTransaction().replace(R.id.content_frame, fragment)
+          .addToBackStack(null).commit();
+    }
     // update selected item and title, then close the drawer
     mDrawerList.setItemChecked(position, true);
     setTitle(mLinksOptions[position]);
     mDrawerLayout.closeDrawer(mDrawerList);
+  }
+
+  private void openDialogToAddURL() {
+    LayoutInflater li = LayoutInflater.from(this);
+    View promptsView = li.inflate(R.layout.bookmark_url, null);
+
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+    // set prompts.xml to alertdialog builder
+    alertDialogBuilder.setView(promptsView);
+
+    final EditText userInput = (EditText) promptsView
+        .findViewById(R.id.bookmark_url);
+
+    // set dialog message
+    alertDialogBuilder
+        .setCancelable(false)
+        .setPositiveButton(getString(android.R.string.ok),
+            new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                Fragment fragment = new AddBookmarkFragment();
+                fragmentTypes = FragmentTypes.ADD_BOOKMARK_FRAGMENT;
+                Bundle args = new Bundle();
+                args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 3);
+                args.putString(StringConstants.URL, userInput.getText().toString());
+                fragment.setArguments(args);
+
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit();
+              }
+            })
+        .setNegativeButton(getString(android.R.string.cancel),
+            new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+              }
+            });
+
+    // create alert dialog
+    AlertDialog alertDialog = alertDialogBuilder.create();
+
+    // show it
+    alertDialog.show();
+
   }
 
   @Override
@@ -191,5 +292,5 @@ public class MainActivity extends Activity {
     super.onConfigurationChanged(newConfig);
     // Pass any configuration change to the drawer toggls
     mDrawerToggle.onConfigurationChanged(newConfig);
-  }  
+  }
 }
