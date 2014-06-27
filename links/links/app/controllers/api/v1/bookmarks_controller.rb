@@ -1,5 +1,9 @@
 module Api 
-	module V1		
+	module V1	
+		require 'nokogiri'
+		require 'open-uri'
+		require 'timeout'
+	
 		class BookmarksController < ApplicationController
 			include BookmarksHelper
 			doorkeeper_for :all
@@ -30,13 +34,17 @@ module Api
 			end
 
 			def savebookmark
-				url = Url.find_by_url(save_bookmark_params[:url])
+				url_str = save_bookmark_params[:url]
+				annotations = get_annotations(url_str)
+				url = Url.find_by_url(url_str)
 			    if url.nil?
-			      url = Url.new({:url => save_bookmark_params[:url]})
+			      url = Url.new({:url => save_bookmark_params[:url], :icon => annotations[:icon]})
 			      if !url.save
 			        render :status => 404
 			      end
-			    end			    
+			    else
+			        Url.update(url.id, :icon => annotations[:icon]) if url.icon.nil? && annotations[:icon] != ''
+			    end		    
 			    @bookmark = Bookmark.new({:title => save_bookmark_params[:title], :description => save_bookmark_params[:description], :url => url, :user_id => doorkeeper_token.resource_owner_id})			    
 
 			    tags = save_bookmark_params[:tags].split(",")
@@ -90,6 +98,43 @@ module Api
 			def save_bookmark_params
 			    params.permit(:url, :title, :description, :tags)
 			end
+
+			# Extract annotations from url
+		    def get_annotations(url)
+		      # TODO: handle exceptions from openuri(network related)
+		      title = ''
+		      desc = ''
+		      keywords = []
+		      icon = nil
+
+		      begin
+		          doc = nil
+		        Timeout::timeout(50) {
+		          doc = Nokogiri::HTML(open(process_uri(url)))
+		        }
+		        title = doc.at_css('title').text if doc.at_css('title').text
+		        doc.css('meta').each do |meta|
+		          desc = meta['content'] if meta['name'] && (meta['name'].match 'description')
+		          keywords = meta['content'].split(",") if meta['name'] && (meta['name'].match 'keywords')
+
+		          if meta['property'] && (meta['property'].match 'og:image')
+		            image_url = meta['content']
+		            image_url = meta['content'].insert(0, 'http:') if meta['content'].match('^http').nil?
+		            open(image_url) do |f|
+		              icon = f.read
+		            end
+		          end
+		        end
+		      rescue Timeout::Error => ex
+		        logger.debug ex
+		        flash[:notice] = "Taking too long to retrieve annotations... :-(. Fill them yourself"
+		      rescue OpenURI::HTTPError => ex
+		        logger.debug ex
+		        flash[:notice] = ex.to_s
+		      ensure
+		        return {:title => title, :desc => desc, :keywords => keywords, :icon => icon}
+		      end
+		    end			
 		end
 	end
 end
