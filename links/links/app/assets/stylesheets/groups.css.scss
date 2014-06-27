@@ -64,14 +64,14 @@ padding-top: .51em;
   font-size: medium;
 }
 
-.groups-nav>li#create_group, .groups-nav>li#edit, .groups-nav>li#delete{
+.groups-nav>li#create_group, .groups-nav>li#edit, .groups-nav>li#delete, .groups-nav>li#unsubscribe{
   float:right;
   margin:0;
   padding:0;
   font-weight:bold;
 }
 
-.groups-nav>li#create_group>a, .groups-nav>li#edit>a, .groups-nav>li#delete>a {
+.groups-nav>li#create_group>a, .groups-nav>li#edit>a, .groups-nav>li#delete>a, .groups-nav>li#unsubscribe>a {
   //background:#ddd;
   //border-top:1px solid #fff;
   //font: menu;
@@ -82,7 +82,7 @@ padding-top: .51em;
   font-weight:bold;
 }
 
-.groups-nav>li#create_group>a:active, .groups-nav>li#edit>a:active, .groups-nav>li#delete>a:active {
+.groups-nav>li#create_group>a:active, .groups-nav>li#edit>a:active, .groups-nav>li#delete>a:active .groups-nav>li#unsusbcribe>a:active{
     border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
 }
 
