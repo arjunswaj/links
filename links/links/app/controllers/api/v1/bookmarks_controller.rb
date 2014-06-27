@@ -57,7 +57,17 @@ module Api
 			    else
 			       render :status => 404
 			    end			    
-			end			
+			end		
+
+			def deletebookmark
+				bookmark = Bookmark.find_by_id(params[:id])
+				if bookmark.user_id == doorkeeper_token.resource_owner_id
+					bookmark.destroy
+					head :ok
+				else
+					render :status => 504
+				end
+			end	
 
 			private
 
