@@ -4,29 +4,50 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.iiitb.se.links.MainActivity;
 import org.iiitb.se.links.R;
+import org.iiitb.se.links.home.ResourceLoader;
 import org.iiitb.se.links.home.cards.expand.BookmarkCardExpand;
+import org.iiitb.se.links.home.fragments.LinkFragment;
+import org.iiitb.se.links.utils.AppConstants;
+import org.iiitb.se.links.utils.AuthorizationClient;
 import org.iiitb.se.links.utils.DomainExtractor;
 import org.iiitb.se.links.utils.StringConstants;
+import org.iiitb.se.links.utils.URLConstants;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.scribe.builder.ServiceBuilder;
+import org.scribe.builder.api.LinksApi;
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Response;
+import org.scribe.model.Token;
+import org.scribe.model.Verb;
+import org.scribe.oauth.OAuthService;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.internal.ViewToClickToExpand;
 import it.gmariotti.cardslib.library.internal.base.BaseCard;
 import it.gmariotti.cardslib.library.view.CardView;
+import android.app.Dialog;
+import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class BookmarkCard extends Card {
+public class BookmarkCard extends Card implements ResourceLoader {
 
   protected TextView mDomain;
   protected TextView mUpdatedTime;
@@ -41,6 +62,20 @@ public class BookmarkCard extends Card {
   CardView cardView = null;
   CardHeader header = null;
   BookmarkCardExpand bookmarkCardExpand = null;
+  MenuItem share = null;
+  MenuItem delete = null;
+
+  private WebView mWebView;
+  private Dialog authDialog;
+  private OAuthService mOauthService;
+  private Token mRequestToken;
+  private static final Token EMPTY_TOKEN = null;
+  private static final String TAG = "BookmarkCard";
+  private SharedPreferences sharedPreferences;
+  private SharedPreferences.Editor sharedPreferencesEditor;
+  private WebViewClient mWebViewClient;
+
+  protected ProgressDialog mProgressDialog;
 
   public JSONObject getBookmark() {
     return bookmark;
@@ -64,25 +99,91 @@ public class BookmarkCard extends Card {
     init();
   }
 
+  private void deleteBookmark() {
+    String accessTokenKey = sharedPreferences.getString(
+        AppConstants.ACCESS_TOKEN_KEY, null);
+    String accessTokenSecret = sharedPreferences.getString(
+        AppConstants.ACCESS_TOKEN_SECRET, null);
+    if (null == accessTokenKey || null == accessTokenSecret) {
+      Log.i(TAG, "Token Key is not saved. Will start authorization.");
+      authDialog.show();
+      authDialog.setTitle(context.getString(R.string.authorize_links));
+      startAuthorize();
+    } else {
+      Log.i(TAG, "Token Key found. We're gonna delete the bookmark.");
+      Token accessToken = new Token(accessTokenKey, accessTokenSecret);
+      deleteBookmark(accessToken);
+    }
+
+  }
+
+  private void deleteBookmark(final Token accessToken) {
+    (new AsyncTask<Void, Integer, String>() {
+      Response response;
+      int status;
+
+      @Override
+      protected void onPreExecute() {
+        mProgressDialog.show();
+      }
+
+      @Override
+      protected String doInBackground(Void... params) {
+        String resourceURL = URLConstants.DELETE_BOOKMARK + "/" + id;
+        OAuthRequest request = new OAuthRequest(Verb.DELETE, resourceURL);
+        mOauthService.signRequest(accessToken, request);
+        response = request.send();
+        status = response.getCode();
+        return response.getBody();
+      }
+
+      @Override
+      protected void onPostExecute(String responseBody) {
+        mProgressDialog.hide();
+        if (null == responseBody || 401 == status) {
+          startAuthorize();
+        } else {
+          reloadHome();
+        }
+      }
+    }).execute();
+  }
+
+  private void reloadHome() {
+    Fragment fragment = new LinkFragment();
+    Bundle args = new Bundle();
+    args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 0);
+    fragment.setArguments(args);
+    ((MainActivity) context).getFragmentManager().beginTransaction()
+        .replace(R.id.content_frame, fragment).commit();
+  }
+
+  private void shareBookmark() {
+    Intent intent = new Intent(Intent.ACTION_SEND);
+    intent.setType("text/plain");
+    intent.putExtra(Intent.EXTRA_TEXT, url);
+    intent.putExtra(android.content.Intent.EXTRA_SUBJECT, title);
+    context.startActivity(Intent.createChooser(intent,
+        context.getString(R.string.share)));
+  }
+
   /**
    * Init
    */
   private void init() {
-
     header = new CardHeader(context);
     // Add a popup menu. This method set OverFlow button to visible
     header.setButtonOverflowVisible(true);
     header
         .setPopupMenuListener(new CardHeader.OnClickCardHeaderPopupMenuListener() {
           @Override
-          public void onMenuItemClick(BaseCard card, MenuItem item) {            
+          public void onMenuItemClick(BaseCard card, MenuItem item) {
             initData();
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT, url);
-            intent.putExtra(android.content.Intent.EXTRA_SUBJECT, title);
-            context.startActivity(Intent.createChooser(intent,
-                context.getString(R.string.share)));
+            if (item == share) {
+              shareBookmark();
+            } else if (item == delete) {
+              deleteBookmark();
+            }
           }
         });
     // Add a PopupMenuPrepareListener to add dynamically a menu entry it is
@@ -91,7 +192,9 @@ public class BookmarkCard extends Card {
         .setPopupMenuPrepareListener(new CardHeader.OnPrepareCardHeaderPopupMenuListener() {
           @Override
           public boolean onPreparePopupMenu(BaseCard card, PopupMenu popupMenu) {
-            popupMenu.getMenu().add(context.getString(R.string.share));
+            share = popupMenu.getMenu().add(context.getString(R.string.share));
+            delete = popupMenu.getMenu()
+                .add(context.getString(R.string.delete));
             return true;
           }
         });
@@ -108,6 +211,32 @@ public class BookmarkCard extends Card {
       }
     });
 
+    otherInit();
+  }
+
+  private void otherInit() {
+    sharedPreferences = ((MainActivity) context)
+        .getPreferences(context.MODE_PRIVATE);
+    sharedPreferencesEditor = ((MainActivity) context).getPreferences(
+        context.MODE_PRIVATE).edit();
+    authDialog = new Dialog(context);
+    authDialog.setContentView(R.layout.auth_dialog);
+    mOauthService = new ServiceBuilder().provider(LinksApi.class)
+        .apiKey(AppConstants.API_KEY).apiSecret(AppConstants.API_SECRET)
+        .callback(AppConstants.URN_IETF_WG_OAUTH_2_0_OOB).build();
+
+    mProgressDialog = new ProgressDialog(context);
+
+    mProgressDialog.setMessage(context.getString(R.string.loading));
+    mProgressDialog.setIndeterminate(true);
+    mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+    mWebView = (WebView) authDialog.findViewById(R.id.webView);
+    mWebView.clearCache(true);
+    mWebView.getSettings().setJavaScriptEnabled(true);
+    mWebViewClient = new AuthorizationClient((MainActivity) context,
+        authDialog, mOauthService, this, mRequestToken);
+    mWebView.setWebViewClient(mWebViewClient);
   }
 
   private void initData() {
@@ -147,5 +276,39 @@ public class BookmarkCard extends Card {
     ViewToClickToExpand viewToClickToExpand = ViewToClickToExpand.builder()
         .setupView(mMore);
     setViewToClickToExpand(viewToClickToExpand);
+  }
+
+  @Override
+  public void fetchProtectedResource(Token accessToken) {
+    deleteBookmark(accessToken);
+  }
+
+  @Override
+  public void startAuthorize() {
+    (new AsyncTask<Void, Integer, String>() {
+      @Override
+      protected void onPreExecute() {
+        mProgressDialog.setProgress(0);
+        mProgressDialog.show();
+      }
+
+      @Override
+      protected void onProgressUpdate(Integer... progress) {
+        mProgressDialog.setProgress(progress[0]);
+      }
+
+      @Override
+      protected String doInBackground(Void... params) {
+        return mOauthService.getAuthorizationUrl(EMPTY_TOKEN);
+      }
+
+      @Override
+      protected void onPostExecute(String url) {
+        mProgressDialog.hide();
+        mWebView.loadUrl(url);
+      }
+
+    }).execute();
+
   }
 }

@@ -16,7 +16,7 @@ public class BookmarksAdapter extends BaseAdapter {
 
   private Context context;
   private final List<JSONObject> bookmarks;
-
+  
   public BookmarksAdapter(Context context, List<JSONObject> bookmarks) {
     super();
     this.context = context;
@@ -64,6 +64,8 @@ public class BookmarksAdapter extends BaseAdapter {
       card = new BookmarkCard(context, bookmark);
       cardView = new CardView(context);
       cardView.setCard(card);
+      
+      
     }
 
     cardView.refreshCard(card);

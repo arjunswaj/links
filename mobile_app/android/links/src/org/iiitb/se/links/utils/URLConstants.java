@@ -15,4 +15,7 @@ public class URLConstants {
   
   public static final String SAVE_BOOKMARK = BASE_URL
       + "/api/savebookmark";
+  
+  public static final String DELETE_BOOKMARK = BASE_URL
+      + "/api/deletebookmark";
 }

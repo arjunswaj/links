@@ -96,6 +96,7 @@ public class MainActivity extends Activity {
     if (action.equalsIgnoreCase(Intent.ACTION_SEND)
         && intent.hasExtra(Intent.EXTRA_TEXT)) {
       String urlFromIntent = intent.getStringExtra(Intent.EXTRA_TEXT);
+      urlFromIntent = urlFromIntent.substring(urlFromIntent.indexOf(StringConstants.HTTP));
       String subjectFromIntent = null;
       if (intent.hasExtra(Intent.EXTRA_SUBJECT)) {
         subjectFromIntent = intent.getStringExtra(Intent.EXTRA_SUBJECT);
