@@ -2,171 +2,133 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.left {
-  float:left;
-}
-
 .right {
   float: right;
 }
-
 #groups-layout-left {
   float:left;
   width: 15%;
+  height: 100%;
 }
 
 #groups-layout-center {
   float:left;
   width: 70%;
+  height: 100%;
 }
 
 #groups-layout-right {
   float:right;
   width: 15%;
+  height: 100%;
 }
 
-#groups-content {
+div#groups-content {
   float:left;
   width:100%;
+  
+  > ul.groups-nav {
+    float: left;
+    width: 100%;
+    margin: 0;
+    list-style: none;
+    background: whitesmoke;
+    padding-bottom: .5em;
+    padding-top: .5em;
+    
+    >li {
+      float:left;
+      padding:0;
+      
+      >a {
+        display:block;
+        color:#444;
+        padding:0.25em 1em;
+        border-right:1px solid #aaa;
+        font-size: medium;
+      }
+    
+      >a.selected {
+        font-weight: bold;
+        font-size: medium;
+      }
+    }
+  
+    >li#edit {
+      float:right;
+      font-weight:bold;
+    }
+  
+    >li#create_group, >li#delete, >li#unsubscribe {
+      float:right;
+      margin-right: 1em;
+      font-weight:bold;
+    }
+  }
+  
+  > ul.subgroups-nav {
+    list-style:none;
+    margin:0;
+    >li {
+      font-weight:bold;
+      background:whitesmoke;
+      border-top:0.2em solid #fff;
+      float: left;
+      width: 100%;
+      padding-bottom: .4em;
+      padding-top: .4em;
+
+      >a {
+        float: left; 
+        padding:0.25em 1em;
+      }
+  
+      >div.action {
+        float: right;
+        padding-right: 1em;
+      }
+    }
+  }
 }
 
-div.groups-content.filler {
-padding-bottom: .5em;
+div#content {
+  background: whitesmoke;
 }
 
-.groups-nav {
-position: relative;
-float: left;
-width: 100%;
-margin: 0;
-list-style: none;
-background: whitesmoke;
-padding-bottom: .5em;
-padding-top: .51em;
+div#details {
+  //float: left;
+  //width: 50%;
+  > div > a {
+    color: #777777;
+  }
 }
 
-.groups-nav>li {
-  float:left;
-  margin:0;
-  padding:0;
+div#add-users {
+  //float: right;
+  //width: 50%;
+  
+  >form>input[type=submit] {
+    float: right;
+  }
 }
 
-.groups-nav>li>a  {
-  display:block;
-  color:#444;
-  text-decoration:none;
-  //background:#ddd;
-  margin:0;
-  padding:0.25em 1em;
-  border-left:1px solid #fff;
-  //border-top:1px solid #fff;
-  border-right:1px solid #aaa;
-  font-size: medium;
-}
+div.timeline>div#share {
+  padding: 1em 2em;
 
-.groups-nav>li#create_group, .groups-nav>li#edit, .groups-nav>li#delete, .groups-nav>li#unsubscribe{
-  float:right;
-  margin:0;
-  padding:0;
-  font-weight:bold;
-}
-
-.groups-nav>li#create_group>a, .groups-nav>li#edit>a, .groups-nav>li#delete>a, .groups-nav>li#unsubscribe>a {
-  //background:#ddd;
-  //border-top:1px solid #fff;
-  //font: menu;
-  display: inline-block; padding: 4px 8px ;
-  background: ButtonFace; color: ButtonText;
-  border-style: solid; border-width: 2px;
-  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
-  font-weight:bold;
-}
-
-.groups-nav>li#create_group>a:active, .groups-nav>li#edit>a:active, .groups-nav>li#delete>a:active .groups-nav>li#unsusbcribe>a:active{
-    border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
-}
-
-.groups-nav>li>a:hover,
-.groups-nav>li>a:active,
-.groups-nav>li>a.here:link,
-.groups-nav>li>a.here:visited {
-  background:white;
-}
-
-.groups-nav>li>a.here:link,
-.groups-nav>li>a.here:visited {
-  position:relative;
-  z-index:102;
-}
-
-.groups-nav>li>a.selected {
-//background-color: #afc0a4;
-//border: 1px solid;
-//border-color: #afc0a4;
-//color: #2f3c4c;
-font-weight: bold;
-font-size: medium; 
-}
-
-.subgroups-nav {
-  list-style:none;
-  margin:0;
-}
-
-.subgroups-nav>li{
-  display:block;
-  //color: #2f3c4c;
-  text-decoration:none;
-  font-weight:bold;
-  background:whitesmoke;
-  margin:0;
-  padding:.6em 1em;
-  //border-left:1px solid #fff;
-  border-top:1.5px solid #fff;
-  //border-right:1px solid #aaa;
-}
-
-.subgroups-nav>li>div.action {
-  float: right;
-}
-
-.subgroups-nav>li>div.action>a {
-  //background:#ddd;
-  //border-top:1px solid #fff;
-  //font: menu;
-  //display: inline-block; 
-  padding: 3px 6px ;
-  background: ButtonFace; color: ButtonText;
-  border-style: solid; border-width: 2px;
-  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
-  font-weight:bold;
-}
-
-div.textbox {
-    position:relative;
-    padding:5px 10px;
-    //background-color: rgb(215, 215, 215);
-    //border-radius: 2px 2px 2px 2px;
-    //border: 1px solid rgb(114, 114, 114);
-    //box-shadow: 0 1px 0 rgba(24, 24, 24,0.1);
-}
-
-input[type=text]{
-    //background:none;
-    //border:none;
-    width: 89%;
-    height: 25px;
-    //line-height: 30px;
-    //font-size: 12px;
-    //color: rgb(136, 136, 136);
-    //outline:none;
-
+  >form>input[type=text] {
+    width: 100%;
+    height: 1.5em;
+  }
+  
+  >form>input[type=submit] {
+    float: right;
+  }
 }
 
 div.timeline {
+  position: relative;
   border-bottom: 1px solid rgb(241, 203, 203);
-border-top: 1px solid rgb(241, 203, 203);
-border-left: 1px solid rgb(241, 203, 203);
-border-right: 1px solid rgb(241, 203, 203);
-padding: 0% 0%;
+  border-top: 1px solid rgb(241, 203, 203);
+  border-left: 1px solid rgb(241, 203, 203);
+  border-right: 1px solid rgb(241, 203, 203);
 }

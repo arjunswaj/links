@@ -1,0 +1,11 @@
+<p>
+<strong>Name: </strong> <%= @user.name %>
+</p>
+<p>
+<strong>Email: </strong><%= @user.email %>
+</p>
+<% if current_user == @user %>
+<p>
+	<%= link_to "Edit Profile", edit_user_registration_path, :class => 'btn'%>
+</p>
+<% end %>

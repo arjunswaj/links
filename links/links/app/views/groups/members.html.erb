@@ -9,14 +9,12 @@
 	<ul class='subgroups-nav'>
 		<% @members.each do |user| %>
 		<li>
-			<span> 
-				<%= user.name %>
-				<% if @group_owner && @group_owner != user %>
-				<div class='right'>
-					<%= link_to 'Remove', remove_user_from_group_path(@group, user), method: :delete, data: { confirm: 'Are you sure?' } %>
+				<%= link_to user.name, show_user_path(user) %> 
+				<% if GroupsController.group_owner?(current_user.id, @group.id) && !GroupsController.group_owner?(user.id, @group.id) %>
+				<div class='action'>
+					<%= link_to 'Remove', remove_user_from_group_path(@group, user), method: :delete, :class => 'btn', data: { confirm: 'Are you sure?' } %>
 				</div> 
 				<% end %>
-			</span>
 		</li>
 		<% end %>
 	</ul>

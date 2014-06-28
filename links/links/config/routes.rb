@@ -1,7 +1,7 @@
 require 'api_constraints'
 
 Links::Application.routes.draw do
-
+  
   resources :groups # TODO: Clean this up.
   get 'groups/members/:id' => 'groups#members', :as => 'group_members'
   get 'groups/pending_members/:id' => 'groups#pending_members', :as => 'group_pending_members'
@@ -63,8 +63,9 @@ Links::Application.routes.draw do
   get "/shareable_groups/:bookmark_id" => "groups#shareable_groups", :as => 'shareable_groups'
   post "/sharebookmark" => "bookmarks#share_bookmark_to_groups", :as => 'share_bookmark_to_groups'
 
-  # For authentication
+  # For authentication 
   devise_for :users
+  get 'users/:id' => 'users#show', :as => 'show_user'
 
   root to: 'bookmarks#timeline'
 

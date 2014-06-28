@@ -26,6 +26,7 @@
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
     <string name="bookmark_domain">domain</string>
     <string name="bookmark_more">More&#8230;</string>
+    <string name="bookmark_sharer">%1$s in %2$s</string>    
     <string name="bookmark_url">URL</string>
     <string name="bookmark_title">Title</string>
     <string name="bookmark_description">Description</string>

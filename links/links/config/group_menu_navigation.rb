@@ -59,13 +59,13 @@ SimpleNavigation::Configuration.run do |navigation|
     primary.item :members, 'Members', group_members_path(@group)
       #subnav.dom_attributes = {:class => 'subgroups-nav'}
     
-    primary.item :pending, 'Pending invitations', group_pending_members_path(@group) if !@pending_members.nil? && !@pending_members.empty?
+    primary.item :pending, 'Pending invitations', group_pending_members_path(@group) if !GroupsController.pending_members(@group.id, current_user.id).empty?
     
-    primary.item :delete, 'Delete', group_path(@group), {:method => :delete} if GroupsController.group_owner? current_user.id, @group.id
+    primary.item :delete, 'Delete', group_path(@group), {:method => :delete, :class => 'btn'} if GroupsController.group_owner? current_user.id, @group.id
     
-    primary.item :edit, 'Edit', edit_group_path(@group) if GroupsController.group_owner? current_user.id, @group.id
+    primary.item :edit, 'Edit', edit_group_path(@group), {:class => 'btn'} if GroupsController.group_owner? current_user.id, @group.id
     
-    primary.item :unsubscribe, 'Unsubscribe', unsubscribe_user_from_group_path(@group) if !GroupsController.group_owner? current_user.id, @group.id
+    primary.item :unsubscribe, 'Unsubscribe', unsubscribe_user_from_group_path(@group), {:class => 'btn'} if (GroupsController.group_member? current_user, @group) && (!GroupsController.group_owner? current_user.id, @group.id)
 
     # Add an item which has a sub navigation (same params, but with block)
     #primary.item :key_2, 'name', url, options do |sub_nav|

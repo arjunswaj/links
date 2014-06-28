@@ -5,26 +5,43 @@
 		&nbsp;
 	</div>
 
-	<div>
-		<strong>Group Owner:</strong>
-		<%= @group.user.name %>
+	<div id='content'>
+		<div id='details'>
+			<div>
+				<strong>Group Owner:</strong>
+				<%= link_to @group.owner.name, show_user_path(@group.owner)%>
+			</div>
+
+			<div>
+				<%= @group.description %>
+			</div>
+		</div>
+		<% if GroupsController.group_owner? current_user.id, @group.id %>
+		<div id='filler'>
+			&nbsp;
+		</div>
+		<div id='add-users'>
+			<%= form_tag(invite_users_to_group_path(@group), method: "post", :id => "form") do %>
+			<div id="magicsuggest"></div>
+			<input type="text" name="users[]" id="ms" placeholder="Add Users">
+			</input>
+			<%= submit_tag "Invite", :id => "submit", :class => 'btn' %>
+			<%end %>
+		</div>
+		<% end %>
+		&nbsp;
 	</div>
 
-	<div class='textbox'>
-		<%= form_tag(invite_users_to_group_path(@group), method: "post", :id => "form") do %>
-		<div id="magicsuggest"></div>
-		<input type="text" name="users[]" id="ms" placeholder="Add Users">
-		</input>
-		<%= submit_tag "Invite", :id => "submit" %>
-		<%end if GroupsController.group_owner? current_user.id, @group.id%>
+	<div id='filler'>
+		&nbsp;
 	</div>
 
 	<div class="timeline">
-		<div class='textbox'>
+		<div id='share'>
 			<h4>Shares</h4>
 			<%= form_tag(saveurl_for_group_share_path(@group), method: "post", remote: true) do %>
 			<%= text_field_tag(:url, nil, {placeholder: "Paste the URL here..."}) %>
-			<%= submit_tag("Share", class:"btn") %>
+			<%= submit_tag("Share", class:'btn') %>
 			<% end %>
 		</div>
 
@@ -33,7 +50,5 @@
 		</div>
 
 	</div>
-
-</div>
 </div>
 <% end %>

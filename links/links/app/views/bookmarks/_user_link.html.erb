@@ -14,7 +14,7 @@
 			<%
 				if bookmark.group_id
 			%>
-				<%= bookmark.user.name %>
+				<%= link_to bookmark.user.name, show_user_path(bookmark.user) %>
 				in
 				<%= link_to bookmark.group.name, "/groups/" + bookmark.group_id.to_s %> 			
 			<%

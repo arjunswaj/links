@@ -6,18 +6,20 @@ class GroupsController < ApplicationController
   # GET /groups
   def index
     @all_groups = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, true)
-    group_invites
   end
     
   def owned_groups
-    @owned_groups = Group.where("user_id = ?", current_user)
-    group_invites
+    @owned_groups = Group.where("owner_id = ?", current_user)
   end
 
+  def self.group_invites(user)
+    Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , user, false)
+  end
+  
   def group_invites
-    @invites = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, false) 
+    @invites = GroupsController.group_invites current_user
   end
-
+  
   def shareable_groups
     index
     owned_groups
@@ -33,10 +35,6 @@ class GroupsController < ApplicationController
   def show
     set_group
 
-    if GroupsController.group_owner? current_user.id, params[:id]
-      @pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], false)
-    end
-  
     # For groups timeline
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']    
     @bookmarks = Bookmark.eager_load(:tags, :user, :url)
@@ -49,14 +47,17 @@ class GroupsController < ApplicationController
   def members
     set_group    
     @members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], true) if GroupsController.group_member? current_user.id, params[:id]
-    @pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], false) if GroupsController.group_owner? current_user.id, params[:id]
-    @group_owner = current_user if GroupsController.group_owner? current_user.id, params[:id] # TODO: Can this be shifted to the erb?
+  end
+
+  def self.pending_members(group_id, owner_id)
+    pending_members = []
+    pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", group_id, false) if GroupsController.group_owner? owner_id, group_id
+    return pending_members
   end
   
   def pending_members
     set_group    
-    @pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], false) if GroupsController.group_owner? current_user.id, params[:id]
-    @group_owner = current_user if GroupsController.group_owner? current_user.id, params[:id]
+    @pending_members = GroupsController.pending_members(params[:id], current_user.id)
   end
 
   # GET /groups/new
@@ -204,7 +205,7 @@ class GroupsController < ApplicationController
       set_group
       current_user.groups.delete(@group)
       respond_to do |format|
-        format.html { redirect_to group_path(@group), notice: 'Unsubscribed successfully.' }
+        format.html { redirect_to groups_path, notice: 'Unsubscribed successfully.' }
         format.json { head :no_content }
       end
     else
@@ -233,8 +234,8 @@ class GroupsController < ApplicationController
     end
   end
   
-  def self.group_owner?(user_id, group_id)
-    return !Group.where("user_id = ? and id = ?", user_id, group_id).empty?
+  def self.group_owner?(owner_id, group_id)
+    return !Group.where("owner_id = ? and id = ?", owner_id, group_id).empty?
   end
   
   def self.group_member?(user_id, group_id)
@@ -247,14 +248,13 @@ class GroupsController < ApplicationController
     begin
       @group = Group.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      #render :file => "public/404.html", :status => :unauthorized, :layout => false
       redirect_to groups_path, alert: "Specified group, #{params[:id]}, does not exist"
     end
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def group_params
-    params.require(:group).permit(:name)
+    params.require(:group).permit(:name, :description)
   end
 
   def user_receiver_params
