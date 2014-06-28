@@ -183,7 +183,7 @@ class GroupsController < ApplicationController
   def remove_user
     group = Group.find(params[:group_id])
     user = User.find(params[:user_id])
-    if (group_owner? current_user.id, group.id) && (user != current_user)
+    if (GroupsController.group_owner? current_user.id, group.id) && (user != current_user)
       group.users.delete user
       respond_to do |format|
         format.html { redirect_to group_path(group), notice: 'Removed user successfully.' }
@@ -200,7 +200,7 @@ class GroupsController < ApplicationController
   # POST /groups/1/unsubscribe
   # POST /groups/1/unsubscribe.json
   def unsubscribe
-    if (!group_owner? current_user.id, params[:id]) && (group_member? current_user.id, params[:id])
+    if (!GroupsController.group_owner? current_user.id, params[:id]) && (GroupsController.group_member? current_user.id, params[:id])
       set_group
       current_user.groups.delete(@group)
       respond_to do |format|
@@ -218,7 +218,7 @@ class GroupsController < ApplicationController
   # DELETE /groups/1/users/2/cancel
   # DELETE /groups/1/users/2/cancel.json
   def cancel_invite
-    if (group_owner? current_user.id, params[:group_id])
+    if (GroupsController.group_owner? current_user.id, params[:group_id])
       membership = Membership.find_by_user_id_and_group_id_and_acceptance_status(params[:user_id], params[:group_id], false)
       Membership.delete membership unless membership.nil?
       respond_to do |format|
