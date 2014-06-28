@@ -13,7 +13,8 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ShareGroupsAdapter extends AbstractGroupsAdapter implements ShareGroupCard.GroupClickListener{
+public class ShareGroupsAdapter extends AbstractGroupsAdapter implements
+    ShareGroupCard.GroupClickListener {
   protected static final String TAG = "ShareGroupsAdapter";
   private Set<String> groupIdsToShareWith = new HashSet<String>();
   private ShareGroupCard card = null;
@@ -41,7 +42,7 @@ public class ShareGroupsAdapter extends AbstractGroupsAdapter implements ShareGr
     } else {
       card = new ShareGroupCard(context, group, this);
       cardView = new CardView(context);
-      cardView.setCard(card);      
+      cardView.setCard(card);
     }
 
     cardView.refreshCard(card);
@@ -49,12 +50,12 @@ public class ShareGroupsAdapter extends AbstractGroupsAdapter implements ShareGr
   }
 
   @Override
-  public void notifyClickedGroup(ShareGroupCard card) {    
+  public void notifyClickedGroup(ShareGroupCard card) {
     groupIdsToShareWith.add(card.getId());
   }
-  
+
   @Override
   public void notifyUnClickedGroup(ShareGroupCard card) {
-    groupIdsToShareWith.remove(card.getId());    
+    groupIdsToShareWith.remove(card.getId());
   }
 }

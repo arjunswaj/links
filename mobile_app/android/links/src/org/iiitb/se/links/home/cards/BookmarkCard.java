@@ -64,12 +64,15 @@ public class BookmarkCard extends Card implements ResourceLoader {
   protected TextView mDomain;
   protected TextView mUpdatedTime;
   protected TextView mMore;
+  protected TextView mGroupInfo;
   JSONObject bookmark;
   Context context;
   String id = null;
   String url = null;
   String title = null;
   String description = null;
+  String groupname = null;
+  String username = null;
   String formattedDate = null;
   CardView cardView = null;
   CardHeader header = null;
@@ -448,6 +451,9 @@ public class BookmarkCard extends Card implements ResourceLoader {
       url = bookmark.getString(StringConstants.URL);
       title = bookmark.getString(StringConstants.TITLE);
       description = bookmark.getString(StringConstants.DESCRIPTION);
+      groupname = bookmark.optString(StringConstants.LINK_GROUP_NAME, null);
+      username = bookmark.optString(StringConstants.USER_NAME, null);
+      
       long epoch = bookmark.getLong(StringConstants.UPDATED_AT);
 
       Date date = new Date(epoch * 1000);
@@ -465,6 +471,13 @@ public class BookmarkCard extends Card implements ResourceLoader {
     bookmarkCardExpand.setBookmark(bookmark);
     mDomain.setText(DomainExtractor.getBaseDomain(url));
     mUpdatedTime.setText(formattedDate);
+    
+    if (null != groupname) {
+      mGroupInfo.setText(context.getString(R.string.bookmark_sharer, username, groupname));
+    } else {
+      mGroupInfo.setText("");
+    }
+    
     setExpanded(false);
   }
 
@@ -474,6 +487,8 @@ public class BookmarkCard extends Card implements ResourceLoader {
     mDomain = (TextView) parent.findViewById(R.id.bookmark_domain);
     mUpdatedTime = (TextView) parent.findViewById(R.id.bookmark_updated_time);
     mMore = (TextView) parent.findViewById(R.id.bookmark_more);
+    mGroupInfo = (TextView) parent.findViewById(R.id.bookmark_shared_group);
+    
     initData();
     setData();
     ViewToClickToExpand viewToClickToExpand = ViewToClickToExpand.builder()

@@ -111,10 +111,16 @@ module Api
 				formatted_tags = []
 				bookmark.tags.each do |tag|
 				   formatted_tags << tag.tagname
-				end			  
-				{:id => bookmark.id, :url => bookmark.url.url, :title => bookmark.title, :description => bookmark.description, :updated_at => bookmark.updated_at.to_i, :tags => formatted_tags}
-				
+				end			  				
+				bookmark_json = {:id => bookmark.id, :url => bookmark.url.url, :title => bookmark.title, :description => bookmark.description, :updated_at => bookmark.updated_at.to_i, :tags => formatted_tags}
+
+				if bookmark.group_id
+					bookmark_json[:username] = bookmark.user.name
+					bookmark_json[:groupname] = bookmark.group.name	
+				end				
+				bookmark_json
 			end
+			
 			def save_bookmark_params
 			    params.permit(:url, :title, :description, :tags)
 			end
