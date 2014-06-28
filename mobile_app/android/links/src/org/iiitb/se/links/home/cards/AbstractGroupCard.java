@@ -26,7 +26,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -74,6 +73,13 @@ public abstract class AbstractGroupCard extends Card implements ResourceLoader {
    */
   public AbstractGroupCard(Context context, JSONObject group) {
     super(context, R.layout.group_card);
+    this.group = group;
+    this.context = context;
+    init();
+  }
+  
+  public AbstractGroupCard(Context context, JSONObject group, int layout) {
+    super(context, layout);
     this.group = group;
     this.context = context;
     init();

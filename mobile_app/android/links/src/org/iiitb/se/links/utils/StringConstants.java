@@ -9,6 +9,9 @@ public class StringConstants {
 	public static final String TAGS = "tags";
 	public static final String KEYWORDS = "keywords";
 	
+	public static final String BOOKMARK_ID = "bookmark_id";
+	public static final String GROUP_ID_ARRAY = "group_ids[]";
+	
 	public static final String GROUP_NAME = "name";
 	
 	public static final String META = "meta";

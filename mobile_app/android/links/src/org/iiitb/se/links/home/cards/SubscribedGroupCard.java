@@ -22,7 +22,7 @@ import android.widget.PopupMenu;
 
 public class SubscribedGroupCard extends AbstractGroupCard {
   private MenuItem unsubscribe = null;
-  
+
   public SubscribedGroupCard(Context context, JSONObject group) {
     super(context, group);
   }

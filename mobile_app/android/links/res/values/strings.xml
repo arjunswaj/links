@@ -12,8 +12,11 @@
 
     <string name="http">http://</string>
     <string name="loading">Loading&#8230;</string>
-    <string name="share">Share</string>
+    <string name="share_with_apps">Share with Apps</string>
     <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="share">Share</string>
+    <string name="share_with_groups">Share with Groups&#8230;</string>
     <string name="authorize_links">Authorize Links</string>
     <string name="search">Search</string>
     <string name="search_hint">#tags or bookmarks</string>

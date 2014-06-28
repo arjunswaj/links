@@ -1,20 +1,32 @@
 package org.iiitb.se.links.home.cards;
 
+import it.gmariotti.cardslib.library.internal.Card;
+import it.gmariotti.cardslib.library.internal.CardHeader;
+import it.gmariotti.cardslib.library.internal.ViewToClickToExpand;
+import it.gmariotti.cardslib.library.internal.base.BaseCard;
+import it.gmariotti.cardslib.library.view.CardView;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.iiitb.se.links.MainActivity;
 import org.iiitb.se.links.R;
 import org.iiitb.se.links.home.ResourceLoader;
 import org.iiitb.se.links.home.cards.expand.BookmarkCardExpand;
 import org.iiitb.se.links.home.fragments.LinkFragment;
+import org.iiitb.se.links.home.fragments.adapter.ShareGroupsAdapter;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.AuthorizationClient;
+import org.iiitb.se.links.utils.BookmarkOperations;
 import org.iiitb.se.links.utils.DomainExtractor;
 import org.iiitb.se.links.utils.FragmentTypes;
 import org.iiitb.se.links.utils.StringConstants;
 import org.iiitb.se.links.utils.URLConstants;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.scribe.builder.ServiceBuilder;
@@ -25,26 +37,25 @@ import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
-import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.CardHeader;
-import it.gmariotti.cardslib.library.internal.ViewToClickToExpand;
-import it.gmariotti.cardslib.library.internal.base.BaseCard;
-import it.gmariotti.cardslib.library.view.CardView;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -63,8 +74,12 @@ public class BookmarkCard extends Card implements ResourceLoader {
   CardView cardView = null;
   CardHeader header = null;
   BookmarkCardExpand bookmarkCardExpand = null;
-  MenuItem share = null;
+  MenuItem shareWithApps = null;
   MenuItem delete = null;
+  MenuItem shareWithGroups = null;
+  MenuItem edit = null;
+
+  BookmarkOperations bookmarkOperations;
 
   private WebView mWebView;
   private Dialog authDialog;
@@ -74,8 +89,11 @@ public class BookmarkCard extends Card implements ResourceLoader {
   private static final String TAG = "BookmarkCard";
   private SharedPreferences sharedPreferences;
   private SharedPreferences.Editor sharedPreferencesEditor;
+  protected List<JSONObject> groups = new ArrayList<JSONObject>();
   private WebViewClient mWebViewClient;
 
+  protected ListView mListView;
+  protected ShareGroupsAdapter groupsAdapter;
   protected ProgressDialog mProgressDialog;
 
   public JSONObject getBookmark() {
@@ -100,7 +118,80 @@ public class BookmarkCard extends Card implements ResourceLoader {
     init();
   }
 
+  private void getShareableGroups() {
+    bookmarkOperations = BookmarkOperations.GET_SHARABLE_GROUPS;
+    String accessTokenKey = sharedPreferences.getString(
+        AppConstants.ACCESS_TOKEN_KEY, null);
+    String accessTokenSecret = sharedPreferences.getString(
+        AppConstants.ACCESS_TOKEN_SECRET, null);
+    if (null == accessTokenKey || null == accessTokenSecret) {
+      Log.i(TAG, "Token Key is not saved. Will start authorization.");
+      authDialog.show();
+      authDialog.setTitle(context.getString(R.string.authorize_links));
+      startAuthorize();
+    } else {
+      Log.i(TAG, "Token Key found. We're gonna get sharable the bookmark.");
+      Token accessToken = new Token(accessTokenKey, accessTokenSecret);
+      getShareableGroups(accessToken);
+    }
+
+  }
+
+  private void getShareableGroups(final Token accessToken) {
+    (new AsyncTask<Void, Integer, String>() {
+      Response response;
+      int status;
+
+      @Override
+      protected void onPreExecute() {
+        mProgressDialog.setProgress(0);
+        mProgressDialog.show();
+      }
+
+      @Override
+      protected void onProgressUpdate(Integer... progress) {
+        mProgressDialog.setProgress(progress[0]);
+      }
+
+      @Override
+      protected String doInBackground(Void... params) {
+        String resourceURL = URLConstants.SUBSCRIBED_GROUPS_INDEX;
+        OAuthRequest request = new OAuthRequest(Verb.GET, resourceURL);
+        mOauthService.signRequest(accessToken, request);
+        response = request.send();
+        status = response.getCode();
+        return response.getBody();
+      }
+
+      @Override
+      protected void onPostExecute(String responseBody) {
+        mProgressDialog.hide();
+        if (null == responseBody || 401 == status) {
+          startAuthorize();
+        } else {
+          try {
+            // System.out.println(responseBody);
+            JSONArray resp = new JSONArray(responseBody);
+            for (int index = 0; index < resp.length(); index += 1) {
+              groups.add(resp.getJSONObject(index));
+            }
+
+            if (0 < groups.size()) {
+              groupsAdapter.notifyDataSetChanged();
+              Log.i(TAG, "Fetched the Groups");
+            }
+          } catch (JSONException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+
+    }).execute();
+
+  }
+
   private void deleteBookmark() {
+    bookmarkOperations = BookmarkOperations.DELETE;
     String accessTokenKey = sharedPreferences.getString(
         AppConstants.ACCESS_TOKEN_KEY, null);
     String accessTokenSecret = sharedPreferences.getString(
@@ -150,6 +241,102 @@ public class BookmarkCard extends Card implements ResourceLoader {
     }).execute();
   }
 
+  private void shareBookmarkWithGroupsIamPartOf() {
+    bookmarkOperations = BookmarkOperations.SHARE;
+    String accessTokenKey = sharedPreferences.getString(
+        AppConstants.ACCESS_TOKEN_KEY, null);
+    String accessTokenSecret = sharedPreferences.getString(
+        AppConstants.ACCESS_TOKEN_SECRET, null);
+    if (null == accessTokenKey || null == accessTokenSecret) {
+      Log.i(TAG, "Token Key is not saved. Will start authorization.");
+      authDialog.show();
+      authDialog.setTitle(context.getString(R.string.authorize_links));
+      startAuthorize();
+    } else {
+      Log.i(TAG, "Token Key found. We're gonna share the bookmark with groups.");
+      Token accessToken = new Token(accessTokenKey, accessTokenSecret);
+      shareBookmark(accessToken);
+    }
+  }
+
+  private void shareBookmark(final Token accessToken) {
+    (new AsyncTask<Void, Integer, String>() {
+      Response response;
+      int status;
+
+      @Override
+      protected void onPreExecute() {
+        mProgressDialog.show();
+      }
+
+      @Override
+      protected String doInBackground(Void... params) {
+        String resourceURL = URLConstants.SHARE_BOOKMARK;
+        OAuthRequest request = new OAuthRequest(Verb.POST, resourceURL);
+        request.addBodyParameter(StringConstants.BOOKMARK_ID, id);
+        Set<String> groupIds = groupsAdapter.getGroupIdsToShareWith();
+        for (String groupId : groupIds) {
+          Log.i(TAG, "Group ID: " + groupId);
+          request.addBodyParameter(StringConstants.GROUP_ID_ARRAY, groupId);
+        }
+        mOauthService.signRequest(accessToken, request);
+        response = request.send();
+        status = response.getCode();
+        return response.getBody();
+      }
+
+      @Override
+      protected void onPostExecute(String responseBody) {
+        mProgressDialog.hide();
+        if (null == responseBody || 401 == status) {
+          startAuthorize();
+        } else {
+          reloadHome();
+        }
+      }
+    }).execute();
+
+  }
+
+  protected void shareBookmarkWithGroups() {
+    LayoutInflater li = LayoutInflater.from(context);
+    View promptsView = li.inflate(R.layout.fragment_groups, null);
+
+    mListView = (ListView) promptsView.findViewById(R.id.groups_card_listview);
+    groupsAdapter = new ShareGroupsAdapter(context, groups);
+    mListView.setAdapter(groupsAdapter);
+    getShareableGroups();
+
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+
+    // set prompts.xml to alertdialog builder
+    alertDialogBuilder.setView(promptsView);
+
+    // set dialog message
+    alertDialogBuilder
+        .setTitle(context.getString(R.string.share_with_groups))
+        .setCancelable(false)
+        .setPositiveButton(context.getString(android.R.string.ok),
+            new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                shareBookmarkWithGroupsIamPartOf();
+              }
+            })
+        .setNegativeButton(context.getString(android.R.string.cancel),
+            new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+              }
+            });
+
+    // create alert dialog
+    AlertDialog alertDialog = alertDialogBuilder.create();
+
+    // show it
+    alertDialog.show();
+
+  }
+
   private void reloadHome() {
     ((MainActivity) context).fragmentTypes = FragmentTypes.BOOKMARK_FRAGMENT;
     Fragment fragment = new LinkFragment();
@@ -161,13 +348,13 @@ public class BookmarkCard extends Card implements ResourceLoader {
         .replace(R.id.content_frame, fragment).commit();
   }
 
-  private void shareBookmark() {
+  private void shareBookmarkWithApps() {
     Intent intent = new Intent(Intent.ACTION_SEND);
     intent.setType("text/plain");
     intent.putExtra(Intent.EXTRA_TEXT, url);
     intent.putExtra(android.content.Intent.EXTRA_SUBJECT, title);
     context.startActivity(Intent.createChooser(intent,
-        context.getString(R.string.share)));
+        context.getString(R.string.share_with_apps)));
   }
 
   /**
@@ -182,10 +369,14 @@ public class BookmarkCard extends Card implements ResourceLoader {
           @Override
           public void onMenuItemClick(BaseCard card, MenuItem item) {
             initData();
-            if (item == share) {
-              shareBookmark();
+            if (item == shareWithGroups) {
+              shareBookmarkWithGroups();
+            } else if (item == edit) {
+              editBookmark();
             } else if (item == delete) {
               deleteBookmark();
+            } else if (item == shareWithApps) {
+              shareBookmarkWithApps();
             }
           }
         });
@@ -195,9 +386,13 @@ public class BookmarkCard extends Card implements ResourceLoader {
         .setPopupMenuPrepareListener(new CardHeader.OnPrepareCardHeaderPopupMenuListener() {
           @Override
           public boolean onPreparePopupMenu(BaseCard card, PopupMenu popupMenu) {
-            share = popupMenu.getMenu().add(context.getString(R.string.share));
+            shareWithGroups = popupMenu.getMenu().add(
+                context.getString(R.string.share));
+            edit = popupMenu.getMenu().add(context.getString(R.string.edit));
             delete = popupMenu.getMenu()
                 .add(context.getString(R.string.delete));
+            shareWithApps = popupMenu.getMenu().add(
+                context.getString(R.string.share_with_apps));
             return true;
           }
         });
@@ -215,6 +410,11 @@ public class BookmarkCard extends Card implements ResourceLoader {
     });
 
     otherInit();
+  }
+
+  protected void editBookmark() {
+    // TODO Auto-generated method stub
+
   }
 
   private void otherInit() {
@@ -283,7 +483,21 @@ public class BookmarkCard extends Card implements ResourceLoader {
 
   @Override
   public void fetchProtectedResource(Token accessToken) {
-    deleteBookmark(accessToken);
+    switch (bookmarkOperations) {
+      case DELETE:
+        deleteBookmark(accessToken);
+        break;
+      case EDIT:
+        break;
+      case SHARE:
+        shareBookmark(accessToken);
+        break;
+      case GET_SHARABLE_GROUPS:
+        getShareableGroups(accessToken);
+        break;
+      default:
+        break;
+    }
   }
 
   @Override
