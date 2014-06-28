@@ -12,6 +12,7 @@ import org.iiitb.se.links.home.fragments.LinkFragment;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.AuthorizationClient;
 import org.iiitb.se.links.utils.DomainExtractor;
+import org.iiitb.se.links.utils.FragmentTypes;
 import org.iiitb.se.links.utils.StringConstants;
 import org.iiitb.se.links.utils.URLConstants;
 import org.json.JSONException;
@@ -152,7 +153,8 @@ public class BookmarkCard extends Card implements ResourceLoader {
   private void reloadHome() {
     Fragment fragment = new LinkFragment();
     Bundle args = new Bundle();
-    args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 0);
+    args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER,
+        FragmentTypes.BOOKMARK_FRAGMENT.ordinal());
     fragment.setArguments(args);
     ((MainActivity) context).getFragmentManager().beginTransaction()
         .replace(R.id.content_frame, fragment).commit();

@@ -3,6 +3,8 @@ package org.iiitb.se.links;
 import org.iiitb.se.links.home.fragments.AddBookmarkFragment;
 import org.iiitb.se.links.home.fragments.LinkFragment;
 import org.iiitb.se.links.home.fragments.BookmarkSearchFragment;
+import org.iiitb.se.links.home.fragments.RequestsGroupFragment;
+import org.iiitb.se.links.home.fragments.SubscribedGroupFragment;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.FragmentTypes;
 import org.iiitb.se.links.utils.StringConstants;
@@ -113,7 +115,7 @@ public class MainActivity extends Activity {
     Fragment fragment = new AddBookmarkFragment();
     fragmentTypes = FragmentTypes.ADD_BOOKMARK_FRAGMENT;
     Bundle args = new Bundle();
-    args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 3);
+    args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, fragmentTypes.ordinal());
 
     args.putString(StringConstants.URL, urlFromIntent);
     if (null != subjectFromIntent) {
@@ -160,13 +162,13 @@ public class MainActivity extends Activity {
           // Based on the fragment type loaded, go to the respective search
           // screen
           switch (fragmentTypes) {
-            case BOOKMARK_FRAGMENT:
-            case BOOKMARK_SEARCH_FRAGMENT:
+            case BOOKMARK_FRAGMENT:            
               fragment = new BookmarkSearchFragment();
-              fragmentTypes = FragmentTypes.BOOKMARK_SEARCH_FRAGMENT;
               break;
 
-            case GROUP_FRAGMENT:
+            case MY_GROUP_FRAGMENT:
+              break;
+            case GROUP_REQUEST_FRAGMENT:
               break;
             default:
               break;
@@ -231,10 +233,12 @@ public class MainActivity extends Activity {
         fragmentTypes = FragmentTypes.BOOKMARK_FRAGMENT;
         break;
       case 1:
-        // fragment = new GroupFragment();
-        fragmentTypes = FragmentTypes.GROUP_FRAGMENT;
+        fragment = new SubscribedGroupFragment();
+        fragmentTypes = FragmentTypes.MY_GROUP_FRAGMENT;
         break;
       case 2:
+        fragment = new RequestsGroupFragment();
+        fragmentTypes = FragmentTypes.GROUP_REQUEST_FRAGMENT;
         break;
       case 3:
         fragmentTypes = FragmentTypes.ADD_BOOKMARK_FRAGMENT;
