@@ -6,32 +6,36 @@
     <string-array name="links_options">
         <item>Home</item>
         <item>Groups</item>
-        <item>Settings</item>
+        <item>Group Invites</item>
         <item>Add Link</item>
-    </string-array>    
-    
+    </string-array>
+
     <string name="http">http://</string>
     <string name="loading">Loading&#8230;</string>
-	<string name="authorize_links">Authorize Links</string>
-	<string name="search">Search</string>
-	<string name="search_hint">#tags or bookmarks</string>
-	
+    <string name="share">Share</string>
+    <string name="delete">Delete</string>
+    <string name="authorize_links">Authorize Links</string>
+    <string name="search">Search</string>
+    <string name="search_hint">#tags or bookmarks</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_links_search">keyword or #tagname</string>
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
     <string name="bookmark_domain">domain</string>
     <string name="bookmark_more">More&#8230;</string>
-    
     <string name="bookmark_url">URL</string>
     <string name="bookmark_title">Title</string>
     <string name="bookmark_description">Description</string>
     <string name="bookmark_tags">Tags</string>
-    <string name="bookmark_updated_time">Time</string>      
-
+    <string name="bookmark_updated_time">Time</string>
     <string name="enter_bookmark_url">Enter URL</string>
     <string name="enter_bookmark_title">Enter title</string>
     <string name="enter_bookmark_description">Enter description</string>
-    <string name="enter_bookmark_tags">Enter tags separated by comma</string>       
-    
+    <string name="enter_bookmark_tags">Enter tags separated by comma</string>
+    <string name="unsubscribe_group">Unsubscribe</string>
+    <string name="accept_group_invite">Accept</string>
+    <string name="reject_group_invite">Reject</string>
+    <string name="group_name">Group Name</string>
+    <string name="group_description">Group Description</string>
+
 </resources>

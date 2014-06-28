@@ -28,11 +28,20 @@ Links::Application.routes.draw do
           post "/savebookmark"	=> "bookmarks#savebookmark", :as => 'api_savebookmark'			
           get "/timeline" => "bookmarks#timeline", :as => 'api_timeline'
           get "/loadmore/:time" => "bookmarks#loadmore", :as => 'api_loadmore'
+          delete "/deletebookmark/:id"  => "bookmarks#deletebookmark", :as => 'api_deletebookmark'      
 			end
 
       scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do          
-          get "searches/search_bookmark/:keyword" => "searches#search_bookmark", :as => 'api_search_bookmark'
-          get "searches/searchmore/:keyword/:time" => "searches#searchmore", :as => 'api_search_more'
+          get "/searches/search_bookmark/:keyword" => "searches#search_bookmark", :as => 'api_search_bookmark'
+          get "/searches/searchmore/:keyword/:time" => "searches#searchmore", :as => 'api_search_more'
+      end
+
+      scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do          
+          get "/groups/index" => "groups#index", :as => 'api_groups'
+          get "/groups/requests" => "groups#requests", :as => 'api_groups_requests'
+          put "/groups/accept/:group_id" => 'groups#accept_invite', :as => 'api_accept_invite_to_group'
+          delete "/groups/reject/:group_id" => 'groups#reject_invite', :as => 'api_reject_invite_to_group'
+          delete "/groups/unsubscribe/:group_id" => 'groups#unsubscribe', :as => 'api_unsubscribe_user_from_group'       
       end
 	end
 

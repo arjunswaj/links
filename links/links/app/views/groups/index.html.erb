@@ -18,7 +18,7 @@
 			</div>
 			<% else %>
 			<div class='action'>
-			<%= link_to 'Unsubscribe', unsubscribe_user_from_group_path(group), {:class => 'btn'} %>
+			<%= link_to 'Unsubscribe', unsubscribe_user_from_group_path(group), :method => :post, {:class => 'btn'} %>
 			</div>
 			<% end %>
 			

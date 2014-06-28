@@ -2,10 +2,12 @@ package org.iiitb.se.links.home.fragments;
 
 import java.io.IOException;
 
+import org.iiitb.se.links.MainActivity;
 import org.iiitb.se.links.R;
 import org.iiitb.se.links.home.ResourceLoader;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.AuthorizationClient;
+import org.iiitb.se.links.utils.FragmentTypes;
 import org.iiitb.se.links.utils.StringConstants;
 import org.iiitb.se.links.utils.URLConstants;
 import org.jsoup.Jsoup;
@@ -27,7 +29,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -94,7 +95,13 @@ public class AddBookmarkFragment extends Fragment implements ResourceLoader {
     String bookmarkUrl = getArguments().getString(StringConstants.URL);
     if (null != bookmarkUrl) {
       url.setText(bookmarkUrl);
-      fetchWebPageDetails();
+      String bookmarkTitle = getArguments().getString(StringConstants.TITLE);
+      if (null == bookmarkTitle) {
+        fetchWebPageDetails(false);
+      } else {
+        title.setText(bookmarkTitle);
+        fetchWebPageDetails(true);
+      }
     }
     mOauthService = new ServiceBuilder().provider(LinksApi.class)
         .apiKey(AppConstants.API_KEY).apiSecret(AppConstants.API_SECRET)
@@ -131,7 +138,7 @@ public class AddBookmarkFragment extends Fragment implements ResourceLoader {
 
   private void closeThisFragmentAndLoadHome() {
     getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-
+    ((MainActivity) getActivity()).fragmentTypes = FragmentTypes.BOOKMARK_FRAGMENT;
     Fragment fragment = new LinkFragment();
     Bundle args = new Bundle();
     args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 0);
@@ -228,7 +235,7 @@ public class AddBookmarkFragment extends Fragment implements ResourceLoader {
     }).execute();
   }
 
-  private void fetchWebPageDetails() {
+  private void fetchWebPageDetails(final boolean setOnlyTags) {
 
     (new AsyncTask<Void, Integer, Document>() {
       @Override
@@ -250,13 +257,16 @@ public class AddBookmarkFragment extends Fragment implements ResourceLoader {
       @Override
       protected void onPostExecute(Document doc) {
         if (null != doc) {
-          title.setText(doc.title());
+          if (!setOnlyTags) {
+            title.setText(doc.title());
+          }
           Elements metas = doc.select(StringConstants.META);
           for (Element meta : metas) {
             if (meta.attr(StringConstants.NAME).equals(
                 StringConstants.DESCRIPTION)) {
               description.setText(meta.attr(StringConstants.CONTENT));
             }
+
             if (meta.attr(StringConstants.NAME)
                 .equals(StringConstants.KEYWORDS)) {
               tags.setText(meta.attr(StringConstants.CONTENT));
