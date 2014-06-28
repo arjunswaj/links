@@ -9,7 +9,7 @@
 	<ul class='subgroups-nav'>
 		<% @members.each do |user| %>
 		<li>
-				<%= link_to user.name, group_path(user) %> 
+				<%= link_to user.name, show_user_path(user) %> 
 				<% if @group_owner && @group_owner != user %>
 				<div class='action'>
 					<%= link_to 'Remove', remove_user_from_group_path(@group, user), method: :delete, :class => 'btn', data: { confirm: 'Are you sure?' } %>

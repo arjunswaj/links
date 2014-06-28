@@ -98,6 +98,9 @@ div#content {
 div#details {
   //float: left;
   //width: 50%;
+  > div > a {
+    color: #777777;
+  }
 }
 
 div#add-users {
