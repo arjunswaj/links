@@ -61,7 +61,7 @@ public class SubscribedGroupCard extends AbstractGroupCard {
       @Override
       protected String doInBackground(Void... params) {
         String resourceURL = URLConstants.UNSUBSCRIBE_GROUP + "/" + id;
-        OAuthRequest request = new OAuthRequest(Verb.GET, resourceURL);
+        OAuthRequest request = new OAuthRequest(Verb.DELETE, resourceURL);
         mOauthService.signRequest(accessToken, request);
         response = request.send();
         status = response.getCode();

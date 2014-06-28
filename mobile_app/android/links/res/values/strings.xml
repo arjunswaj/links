@@ -6,7 +6,7 @@
     <string-array name="links_options">
         <item>Home</item>
         <item>Groups</item>
-        <item>Group Requests</item>
+        <item>Group Invites</item>
         <item>Add Link</item>
     </string-array>
 
@@ -33,8 +33,8 @@
     <string name="enter_bookmark_description">Enter description</string>
     <string name="enter_bookmark_tags">Enter tags separated by comma</string>
     <string name="unsubscribe_group">Unsubscribe</string>
-    <string name="accept_group">Accept</string>
-    <string name="reject_group">Reject</string>
+    <string name="accept_group_invite">Accept</string>
+    <string name="reject_group_invite">Reject</string>
     <string name="group_name">Group Name</string>
     <string name="group_description">Group Description</string>
 

@@ -63,13 +63,14 @@ public class RequestsGroupCard extends AbstractGroupCard {
       @Override
       protected String doInBackground(Void... params) {
         String resourceURL = null;
+        OAuthRequest request = null;
         if (0 == actionStatus) {
-          resourceURL = URLConstants.ACCEPT_SUBSCRIBE;
+          resourceURL = URLConstants.ACCEPT_SUBSCRIBE + "/" + id;
+          request = new OAuthRequest(Verb.PUT, resourceURL);
         } else if (1 == actionStatus) {
-          resourceURL = URLConstants.REJECT_SUBSCRIBE;
-        }
-        resourceURL += "/" + id;
-        OAuthRequest request = new OAuthRequest(Verb.GET, resourceURL);
+          resourceURL = URLConstants.REJECT_SUBSCRIBE + "/" + id;
+          request = new OAuthRequest(Verb.DELETE, resourceURL);
+        }                 
         mOauthService.signRequest(accessToken, request);
         response = request.send();
         status = response.getCode();
@@ -115,9 +116,9 @@ public class RequestsGroupCard extends AbstractGroupCard {
           @Override
           public boolean onPreparePopupMenu(BaseCard card, PopupMenu popupMenu) {
             accept = popupMenu.getMenu().add(
-                context.getString(R.string.accept_group));
+                context.getString(R.string.accept_group_invite));
             reject = popupMenu.getMenu().add(
-                context.getString(R.string.reject_group));
+                context.getString(R.string.reject_group_invite));
             return true;
           }
         });

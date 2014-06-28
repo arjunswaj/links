@@ -2,10 +2,12 @@ package org.iiitb.se.links.home.fragments;
 
 import java.io.IOException;
 
+import org.iiitb.se.links.MainActivity;
 import org.iiitb.se.links.R;
 import org.iiitb.se.links.home.ResourceLoader;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.AuthorizationClient;
+import org.iiitb.se.links.utils.FragmentTypes;
 import org.iiitb.se.links.utils.StringConstants;
 import org.iiitb.se.links.utils.URLConstants;
 import org.jsoup.Jsoup;
@@ -135,7 +137,7 @@ public class AddBookmarkFragment extends Fragment implements ResourceLoader {
 
   private void closeThisFragmentAndLoadHome() {
     getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-
+    ((MainActivity) getActivity()).fragmentTypes = FragmentTypes.BOOKMARK_FRAGMENT;
     Fragment fragment = new LinkFragment();
     Bundle args = new Bundle();
     args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 0);

@@ -42,9 +42,10 @@ public class MainActivity extends Activity {
   private CharSequence mTitle;
   private String[] mLinksOptions;
   private SearchView searchView;
-  private FragmentTypes fragmentTypes;
+  public FragmentTypes fragmentTypes;
   private static final String TAG = "MainActivity";
 
+  
   public SearchView getSearchView() {
     return searchView;
   }

@@ -1705,7 +1705,7 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f0a000b;
-        public static final int accept_group=0x7f0a0028;
+        public static final int accept_group_invite=0x7f0a0028;
         public static final int action_links_search=0x7f0a001a;
         public static final int app_name=0x7f0a000d;
         public static final int app_not_available=0x7f0a001b;
@@ -1736,7 +1736,7 @@ containing a value of this type.
          */
         public static final int list_card_undo_title=0x7f0a000e;
         public static final int loading=0x7f0a0012;
-        public static final int reject_group=0x7f0a0029;
+        public static final int reject_group_invite=0x7f0a0029;
         public static final int search=0x7f0a0016;
         public static final int search_hint=0x7f0a0017;
         public static final int share=0x7f0a0013;

@@ -107,6 +107,7 @@ public abstract class AbstractGroupCard extends Card implements ResourceLoader {
   }
   
   protected void reloadHome() {
+    ((MainActivity) context).fragmentTypes = FragmentTypes.BOOKMARK_FRAGMENT;
     Fragment fragment = new LinkFragment();
     Bundle args = new Bundle();
     args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER,
