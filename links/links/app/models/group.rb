@@ -4,4 +4,5 @@ class Group < ActiveRecord::Base
   has_many :users, :through => :memberships #members
   has_many :bookmarks
   validates :name, presence: true
+	validates :description, presence: true
 end

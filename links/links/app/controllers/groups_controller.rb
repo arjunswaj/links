@@ -247,14 +247,13 @@ class GroupsController < ApplicationController
     begin
       @group = Group.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      #render :file => "public/404.html", :status => :unauthorized, :layout => false
       redirect_to groups_path, alert: "Specified group, #{params[:id]}, does not exist"
     end
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def group_params
-    params.require(:group).permit(:name)
+    params.require(:group).permit(:name, :description)
   end
 
   def user_receiver_params

@@ -76,7 +76,7 @@ SimpleNavigation::Configuration.run do |navigation|
       #subnav.dom_attributes = {:class => 'subgroups-nav'}
     #end
     
-    primary.item :create_group, '+ Create group', new_group_path
+    primary.item :create_group, '+ Create group', new_group_path, {:class => 'btn'}
 
     # Add an item which has a sub navigation (same params, but with block)
     #primary.item :key_2, 'name', url, options do |sub_nav|
