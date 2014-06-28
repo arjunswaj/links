@@ -77,6 +77,26 @@ module Api
 				end
 			end	
 
+			def share_bookmark_to_groups
+			    bookmark_to_share = Bookmark.find(share_to_group_params['bookmark_id'])
+			    group_ids = share_to_group_params['group_ids']
+			    puts group_ids.to_s
+			    @bookmarks = Array.new
+			    group_ids.each do |group_id|
+			      bookmark_to_save = Bookmark.new({:title => bookmark_to_share.title,
+			        :description => bookmark_to_share.description,
+			        :url => bookmark_to_share.url,
+			        :user_id => doorkeeper_token.resource_owner_id,
+			        :group_id => group_id,
+			        :tags => bookmark_to_share.tags})
+			      if !bookmark_to_save.save
+			        format.html { redirect_to 'new', notice: 'Trouble saving the url.' }
+			      end
+			      @bookmarks << bookmark_to_save
+			    end	
+			    head :ok
+			end
+
 			private
 
 			def bookmarks_formatter
@@ -97,6 +117,10 @@ module Api
 			end
 			def save_bookmark_params
 			    params.permit(:url, :title, :description, :tags)
+			end
+
+			def share_to_group_params
+			    params.permit(:bookmark_id, :group_ids => [])
 			end
 
 			# Extract annotations from url
