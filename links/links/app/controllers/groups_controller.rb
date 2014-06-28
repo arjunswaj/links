@@ -205,7 +205,7 @@ class GroupsController < ApplicationController
       set_group
       current_user.groups.delete(@group)
       respond_to do |format|
-        format.html { redirect_to group_path(@group), notice: 'Unsubscribed successfully.' }
+        format.html { redirect_to groups_path, notice: 'Unsubscribed successfully.' }
         format.json { head :no_content }
       end
     else
