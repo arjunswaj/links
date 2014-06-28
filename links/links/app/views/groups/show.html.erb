@@ -9,7 +9,7 @@
 		<div id='details'>
 			<div>
 				<strong>Group Owner:</strong>
-				<%= link_to @group.user.name, show_user_path(@group.user)%>
+				<%= link_to @group.owner.name, show_user_path(@group.owner)%>
 			</div>
 
 			<div>

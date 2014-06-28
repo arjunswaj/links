@@ -9,7 +9,7 @@ class GroupsController < ApplicationController
   end
     
   def owned_groups
-    @owned_groups = Group.where("user_id = ?", current_user)
+    @owned_groups = Group.where("owner_id = ?", current_user)
   end
 
   def self.group_invites(user)
@@ -234,8 +234,8 @@ class GroupsController < ApplicationController
     end
   end
   
-  def self.group_owner?(user_id, group_id)
-    return !Group.where("user_id = ? and id = ?", user_id, group_id).empty?
+  def self.group_owner?(owner_id, group_id)
+    return !Group.where("owner_id = ? and id = ?", owner_id, group_id).empty?
   end
   
   def self.group_member?(user_id, group_id)
