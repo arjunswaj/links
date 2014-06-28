@@ -69,7 +69,7 @@ SimpleNavigation::Configuration.run do |navigation|
       #subnav.dom_attributes = {:class => 'subgroups-nav'}
     #end
     
-    primary.item :group_invites, 'Invites', group_invites_path if !@invites.nil? && !@invites.empty? #do |subnav|
+    primary.item :group_invites, 'Invites', group_invites_path if !GroupsController.group_invites(current_user).empty? #do |subnav|
       #@invites.each_with_index do |group, index|
        # subnav.item 'invite-' + index.to_s, group.name + ' - Accept invite', accept_invite_to_group_path(group, current_user), {:method => :put}
       #end unless @invites.nil?

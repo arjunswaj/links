@@ -59,7 +59,7 @@ SimpleNavigation::Configuration.run do |navigation|
     primary.item :members, 'Members', group_members_path(@group)
       #subnav.dom_attributes = {:class => 'subgroups-nav'}
     
-    primary.item :pending, 'Pending invitations', group_pending_members_path(@group) if !@pending_members.nil? && !@pending_members.empty?
+    primary.item :pending, 'Pending invitations', group_pending_members_path(@group) if !GroupsController.pending_members(@group.id, current_user.id).empty?
     
     primary.item :delete, 'Delete', group_path(@group), {:method => :delete, :class => 'btn'} if GroupsController.group_owner? current_user.id, @group.id
     

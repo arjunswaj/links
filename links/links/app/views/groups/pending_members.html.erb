@@ -11,7 +11,7 @@
 		<li>
 			<span>
 			<%= link_to user.name, show_user_path(user)%>
-			<% if @group_owner && @group_owner != user %>
+							<% if GroupsController.group_owner?(current_user.id, @group.id) && !GroupsController.group_owner?(user.id, @group.id) %>
 			<div class='right'>
 				<%= link_to 'Cancel', cancel_invite_to_user_from_group_path(@group, user), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn' %>
 			</div>
