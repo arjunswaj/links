@@ -10,6 +10,7 @@
         <item>Add Link</item>
     </string-array>
 
+	<string name="edit_link">Edit Link</string>
     <string name="http">http://</string>
     <string name="loading">Loading&#8230;</string>
     <string name="share_with_apps">Share with Apps</string>

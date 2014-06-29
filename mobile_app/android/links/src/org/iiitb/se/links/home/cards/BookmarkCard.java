@@ -15,6 +15,7 @@ import java.util.Locale;
 import org.iiitb.se.links.MainActivity;
 import org.iiitb.se.links.R;
 import org.iiitb.se.links.home.cards.expand.BookmarkCardExpand;
+import org.iiitb.se.links.home.fragments.EditBookmarkFragment;
 import org.iiitb.se.links.home.fragments.LinkFragment;
 import org.iiitb.se.links.home.fragments.adapter.ShareGroupsAdapter;
 import org.iiitb.se.links.utils.AppConstants;
@@ -24,11 +25,13 @@ import org.iiitb.se.links.utils.StringConstants;
 import org.iiitb.se.links.utils.network.bookmarks.BookmarkDeleter;
 import org.iiitb.se.links.utils.network.bookmarks.BookmarkSharer;
 import org.iiitb.se.links.utils.network.groups.subscribed.SubscribedGroupsLoader;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -77,7 +80,7 @@ public class BookmarkCard extends Card {
   private BookmarkDeleter bookmarkDeleter;
   private BookmarkSharer bookmarkSharer;
   private SubscribedGroupsLoader subscribedGroupsLoader;
-  
+
   public JSONObject getBookmark() {
     return bookmark;
   }
@@ -106,10 +109,9 @@ public class BookmarkCard extends Card {
     this.bookmark = bookmark;
     this.context = context;
     bookmarkDeleter = new BookmarkDeleter(context, this);
-    bookmarkSharer = new BookmarkSharer(context, this);    
+    bookmarkSharer = new BookmarkSharer(context, this);
     init();
   }
- 
 
   protected void shareBookmarkWithGroups() {
     LayoutInflater li = LayoutInflater.from(context);
@@ -117,8 +119,9 @@ public class BookmarkCard extends Card {
 
     mListView = (ListView) promptsView.findViewById(R.id.groups_card_listview);
     groupsAdapter = new ShareGroupsAdapter(context, groups);
-    subscribedGroupsLoader = new SubscribedGroupsLoader(context, groupsAdapter, groups); 
-    
+    subscribedGroupsLoader = new SubscribedGroupsLoader(context, groupsAdapter,
+        groups);
+
     mListView.setAdapter(groupsAdapter);
     subscribedGroupsLoader.authorizeOrLoadGroups();
 
@@ -187,7 +190,7 @@ public class BookmarkCard extends Card {
             if (item == shareWithGroups) {
               shareBookmarkWithGroups();
             } else if (item == edit) {
-              
+              editBookmark();
             } else if (item == delete) {
               bookmarkDeleter.deleteBookmark();
             } else if (item == shareWithApps) {
@@ -222,9 +225,39 @@ public class BookmarkCard extends Card {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         context.startActivity(browserIntent);
       }
-    });   
+    });
   }
 
+  protected void editBookmark() {
+    ((MainActivity) context).fragmentTypes = FragmentTypes.EDIT_BOOKMARK_FRAGMENT;
+    Fragment fragment = new EditBookmarkFragment();
+    Bundle args = new Bundle();
+    args.putString(StringConstants.BOOKMARK_ID, id);
+    args.putString(StringConstants.URL, url);
+    args.putString(StringConstants.TITLE, title);
+    args.putString(StringConstants.DESCRIPTION, description);
+
+    StringBuilder tags = new StringBuilder("");
+    try {
+      JSONArray tagsArr = bookmark.getJSONArray(StringConstants.TAGS);
+      String comma = "";
+      for (int index = 0; index < tagsArr.length(); index += 1) {
+        tags.append(comma).append(tagsArr.get(index));
+        comma = ", ";
+      }
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    args.putString(StringConstants.TAGS, tags.toString());
+
+    fragment.setArguments(args);
+
+    FragmentManager fragmentManager = ((MainActivity) context)
+        .getFragmentManager();
+    fragmentManager.beginTransaction().replace(R.id.content_frame, fragment)
+        .commit();
+
+  }
 
   private void initData() {
     try {
