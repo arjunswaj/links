@@ -63,9 +63,56 @@ module Api
   						format.json{ render :json => strip_bookmark_to_json(@bookmark).to_json }
 					end			        
 			    else
-			       render :status => 404
+			       format.json { render json: @bookmark.errors, status: :unprocessable_entity }
 			    end			    
 			end		
+
+			def updatebookmark
+				url_str = update_bookmark_params[:url]
+				annotations = get_annotations(url_str)
+				url = Url.find_by_url(url_str)		
+
+			    url = Url.find_by_url(update_bookmark_params[:url])
+			    if url.nil?
+			      url = Url.new({:url => update_bookmark_params[:url], :icon => annotations[:icon]})
+			      if !url.save
+			        format.json { render status: :unprocessable_entity }
+			      end
+			    else
+			        Url.update(url.id, :icon => annotations[:icon]) if url.icon.nil? && annotations[:icon] != ''
+			    end	
+
+			    @bookmark = Bookmark.find_by_id(update_bookmark_params[:bookmark_id])
+			    if @bookmark.nil?
+			      format.json { render status: :unprocessable_entity }
+			    end
+			    @bookmark.title = update_bookmark_params[:title]
+			    @bookmark.description = update_bookmark_params[:description]
+			    @bookmark.url = url
+			    @bookmark.user_id = doorkeeper_token.resource_owner_id
+
+			    @bookmark.tags.clear
+
+			    tags = update_bookmark_params[:tags].split(",")
+			    tags.each do |tag|
+			      if Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).size == 0
+			        @tag = Tag.new
+			        @tag.tagname = tag.strip.gsub(' ','-').downcase
+			      @bookmark.tags << @tag
+			      else
+			        @bookmark.tags << Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).first
+			      end
+			    end unless tags.nil?
+
+			    
+		      	if @bookmark.save
+		        	respond_to do |format|
+						format.json{ render :json => strip_bookmark_to_json(@bookmark).to_json }
+					end		     
+		       	else			        
+		        	 format.json { render json: @bookmark.errors, status: :unprocessable_entity }
+		       	end
+			end
 
 			def deletebookmark
 				bookmark = Bookmark.find_by_id(params[:id])
@@ -123,6 +170,10 @@ module Api
 			
 			def save_bookmark_params
 			    params.permit(:url, :title, :description, :tags)
+			end
+
+			def update_bookmark_params
+			    params.permit(:bookmark_id, :url, :title, :description, :tags)
 			end
 
 			def share_to_group_params
