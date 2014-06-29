@@ -678,6 +678,7 @@ int string enter_bookmark_url 0x7f0a0027
 int string group_description 0x7f0a002f
 int string group_name 0x7f0a002e
 int string http 0x7f0a0011
+int string internet_not_available 0x7f0a0030
 int string list_card_undo_title 0x7f0a000e
 int string loading 0x7f0a0012
 int string reject_group_invite 0x7f0a002d

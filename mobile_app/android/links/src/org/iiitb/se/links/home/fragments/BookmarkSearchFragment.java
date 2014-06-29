@@ -1,115 +1,103 @@
 package org.iiitb.se.links.home.fragments;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.iiitb.se.links.R;
+import org.iiitb.se.links.home.fragments.adapter.BookmarksAdapter;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.BookmarkLoadType;
-import org.iiitb.se.links.utils.StringConstants;
-import org.iiitb.se.links.utils.URLConstants;
-import org.json.JSONArray;
-import org.json.JSONException;
+import org.iiitb.se.links.utils.network.BookmarkSearchLoader;
 import org.json.JSONObject;
-import org.scribe.model.OAuthRequest;
-import org.scribe.model.Response;
-import org.scribe.model.Token;
-import org.scribe.model.Verb;
 
-import android.net.Uri;
-import android.os.AsyncTask;
+import android.app.Fragment;
+import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.ListView;
 
 /**
  * Fragment that appears in the "content_frame", shows Links after Search
  */
-public class BookmarkSearchFragment extends AbstractBookmarkFragment {
+public class BookmarkSearchFragment extends Fragment {
   private static final String TAG = "BookmarkSearchFragment";
+
+  private BookmarkSearchLoader bookmarkSearchLoader;
+  private int lastFirstVisible = 0;
+  private int lastVisibleItemCount = 0;
+  private int lastTotalItemCount = 0;
+
+  private ListView mListView;
+  private BookmarksAdapter bookmarksAdapter;
+  private List<JSONObject> bookmarks = new ArrayList<JSONObject>();
+  private String searchQuery;
 
   public BookmarkSearchFragment() {
     // Empty constructor required for fragment subclasses
   }
 
-  protected void fetchBookmarks(final Token accessToken,
-      final BookmarkLoadType bookmarkLoadType) {
-    (new AsyncTask<Void, Integer, String>() {
-      Response response;
-      int status;
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    View rootView = inflater.inflate(R.layout.fragment_links, container, false);
+    int i = getArguments().getInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER);
+    String linkOption = getResources().getStringArray(R.array.links_options)[i];
+    getActivity().setTitle(linkOption);
+
+    mListView = (ListView) rootView.findViewById(R.id.card_listview);
+    bookmarksAdapter = new BookmarksAdapter(getActivity(), bookmarks);
+    mListView.setAdapter(bookmarksAdapter);
+    searchQuery = getArguments().getString(AppConstants.SEARCH_QUERY);
+
+    mListView.setOnScrollListener(new OnScrollListener() {
 
       @Override
-      protected void onPreExecute() {
-        mProgressDialog.setProgress(0);
-        mProgressDialog.show();
+      public void onScrollStateChanged(AbsListView view, int scrollState) {
+
       }
 
       @Override
-      protected void onProgressUpdate(Integer... progress) {
-        mProgressDialog.setProgress(progress[0]);
-      }
+      public void onScroll(AbsListView view, int firstVisibleItem,
+          int visibleItemCount, int totalItemCount) {
+        boolean loadMore = /* maybe add a padding */
+        (firstVisibleItem + visibleItemCount >= totalItemCount)
+            && (totalItemCount != 0)
+            && !isLastRequestSame(firstVisibleItem, visibleItemCount,
+                totalItemCount);
 
-      @Override
-      protected String doInBackground(Void... params) {
-        String resourceURL = null;
-        String lastBookmarkUpdatedAt = sharedPreferences.getString(
-            AppConstants.LAST_SEARCH_BOOKMARK_UPDATED_AT, null);
-        String query = Uri.encode(getArguments().getString(
-            AppConstants.SEARCH_QUERY));
-        switch (bookmarkLoadType) {
-          case MORE_BOOKMARKS:
-            resourceURL = URLConstants.SEARCH_MORE_BOOKMARKS + "/" + query
-                + "/" + lastBookmarkUpdatedAt;
-            break;
-          case REFRESH_BOOKMARKS:
-            break;
-          case TIMELINE:
-            bookmarks.clear();
-            resourceURL = URLConstants.SEARCH + "/" + query;
-            break;
-          default:
-            break;
+        if (loadMore) {
+          lastFirstVisible = firstVisibleItem;
+          lastVisibleItemCount = visibleItemCount;
+          lastTotalItemCount = totalItemCount;
+          bookmarkSearchLoader.fetchBookmarks(BookmarkLoadType.MORE_BOOKMARKS);
 
-        }
-
-        OAuthRequest request = new OAuthRequest(Verb.GET, resourceURL);
-        mOauthService.signRequest(accessToken, request);
-        response = request.send();
-        status = response.getCode();
-        return response.getBody();
-      }
-
-      @Override
-      protected void onPostExecute(String responseBody) {
-        mProgressDialog.hide();
-        if (null == responseBody || 401 == status) {
-          startAuthorize();
-        } else {
-          try {
-            JSONArray resp = new JSONArray(responseBody);
-            for (int index = 0; index < resp.length(); index += 1) {
-              bookmarks.add(resp.getJSONObject(index));
-            }
-
-            if (0 < bookmarks.size()) {
-
-              JSONObject linkObj = bookmarks.get(0);
-              String updatedAt = linkObj.getString(StringConstants.UPDATED_AT);
-              sharedPreferencesEditor.putString(
-                  AppConstants.FIRST_SEARCH_BOOKMARK_UPDATED_AT, updatedAt);
-
-              linkObj = bookmarks.get(bookmarks.size() - 1);
-              updatedAt = linkObj.getString(StringConstants.UPDATED_AT);
-              sharedPreferencesEditor.putString(
-                  AppConstants.LAST_SEARCH_BOOKMARK_UPDATED_AT, updatedAt);
-
-              sharedPreferencesEditor.commit();
-              bookmarksAdapter.notifyDataSetChanged();
-              Log.i(TAG,
-                  "Saving the updated time of first and last received bookmark");
-            }
-          } catch (JSONException e) {
-            e.printStackTrace();
-          }
+          Log.i(TAG, "firstVisibleItem: " + firstVisibleItem
+              + ", visibleItemCount" + visibleItemCount + ", totalItemCount"
+              + totalItemCount);
         }
       }
 
-    }).execute();
+      private boolean isLastRequestSame(int firstVisibleItem,
+          int visibleItemCount, int totalItemCount) {
+        if (lastFirstVisible == firstVisibleItem
+            && lastVisibleItemCount == visibleItemCount
+            && lastTotalItemCount == totalItemCount) {
+          return true;
+        }
+        return false;
+      }
 
+    });
+
+    bookmarkSearchLoader = new BookmarkSearchLoader(getActivity(),
+        bookmarksAdapter, bookmarks, searchQuery);
+    bookmarkSearchLoader.authorizeOrLoadBookarks();
+
+    return rootView;
   }
 
 }

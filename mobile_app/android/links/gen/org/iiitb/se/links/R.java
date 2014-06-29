@@ -1736,6 +1736,7 @@ containing a value of this type.
         public static final int group_description=0x7f0a002f;
         public static final int group_name=0x7f0a002e;
         public static final int http=0x7f0a0011;
+        public static final int internet_not_available=0x7f0a0030;
         /**  Undo Controller
  Undo Controller
          */
