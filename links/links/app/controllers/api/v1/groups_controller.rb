@@ -84,7 +84,7 @@ module Api
 			end
 
 			def group_owner?(user_id, group_id)
-			    return !Group.where("user_id = ? and id = ?", user_id, group_id).empty?
+			    return !Group.where("owner_id = ? and id = ?", user_id, group_id).empty?
 			end
 
 			def set_group(group_id)
