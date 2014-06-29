@@ -6,11 +6,19 @@
 
     <TextView
         android:id="@+id/bookmark_domain"
+        style="@style/card.base_simple_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/bookmark_domain"
-        android:paddingLeft="5dp" 
-        style="@style/card.base_simple_title"/>
+        android:paddingLeft="5dp"
+        android:text="@string/bookmark_domain" />
+
+    <TextView
+        android:id="@+id/bookmark_shared_group"
+        style="@style/card.expand_simple_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:paddingRight="5dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,17 +27,19 @@
 
         <TextView
             android:id="@+id/bookmark_more"
+            style="@style/card.expand_simple_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/bookmark_more" 
-            android:paddingRight="5dp"/>
+            android:paddingRight="5dp"
+            android:text="@string/bookmark_more" />
 
         <TextView
             android:id="@+id/bookmark_updated_time"
+            style="@style/card.expand_simple_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/bookmark_updated_time" 
-            android:paddingLeft="5dp"/>
+            android:paddingLeft="5dp"
+            android:text="@string/bookmark_updated_time" />
     </LinearLayout>
 
 </LinearLayout>

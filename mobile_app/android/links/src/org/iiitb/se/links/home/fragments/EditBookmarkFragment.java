@@ -5,8 +5,7 @@ import org.iiitb.se.links.R;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.FragmentTypes;
 import org.iiitb.se.links.utils.StringConstants;
-import org.iiitb.se.links.utils.network.WebpageLoader;
-import org.iiitb.se.links.utils.network.bookmarks.BookmarkAdder;
+import org.iiitb.se.links.utils.network.bookmarks.BookmarkEditor;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -22,8 +21,8 @@ import android.widget.EditText;
 /**
  * Fragment that appears in the "content_frame", shows Links
  */
-public class AddBookmarkFragment extends Fragment {
-  private static final String TAG = "AddBookmarkFragment";
+public class EditBookmarkFragment extends Fragment {
+  private static final String TAG = "EditBookmarkFragment";
 
   private EditText url;
   private EditText title;
@@ -32,9 +31,14 @@ public class AddBookmarkFragment extends Fragment {
   private Button cancel;
   private Button ok;
 
-  private BookmarkAdder bookmarkAdder;
-  private WebpageLoader webpageLoader;
+  private BookmarkEditor bookmarkEditor;  
 
+  private String bookmarkId;
+  
+  public String getBookmarkId() {
+    return bookmarkId;
+  }
+  
   public EditText getUrl() {
     return url;
   }
@@ -63,26 +67,23 @@ public class AddBookmarkFragment extends Fragment {
     cancel = (Button) rootView.findViewById(R.id.cancel);
     ok = (Button) rootView.findViewById(R.id.ok);
 
-    bookmarkAdder = new BookmarkAdder(getActivity(), this);
-    webpageLoader = new WebpageLoader(getActivity(), this);
+    bookmarkEditor = new BookmarkEditor(getActivity(), this);    
 
-    int i = getArguments().getInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER);
-
-    String linkOption = getResources().getStringArray(R.array.links_options)[i];
+    String linkOption = getString(R.string.edit_link);
     getActivity().setTitle(linkOption);
 
+    bookmarkId = getArguments().getString(StringConstants.BOOKMARK_ID);
     String bookmarkUrl = getArguments().getString(StringConstants.URL);
-    if (null != bookmarkUrl) {
-      url.setText(bookmarkUrl);
-      String bookmarkTitle = getArguments().getString(StringConstants.TITLE);
-      if (null == bookmarkTitle) {
-        webpageLoader.fetchWebPageDetails(false);
-      } else {
-        title.setText(bookmarkTitle);
-        webpageLoader.fetchWebPageDetails(true);
-      }
-    }
+    String bookmarkTitle = getArguments().getString(StringConstants.TITLE);
+    String bookmarkDescription = getArguments().getString(StringConstants.DESCRIPTION);
+    String bookmarkTags = getArguments().getString(StringConstants.TAGS);
 
+    url.setText(bookmarkUrl);
+    title.setText(bookmarkTitle);
+    description.setText(bookmarkDescription);
+    tags.setText(bookmarkTags);
+    
+    
     cancel.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View arg0) {
@@ -93,7 +94,7 @@ public class AddBookmarkFragment extends Fragment {
     ok.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View arg0) {
-        bookmarkAdder.saveBookmark();
+        bookmarkEditor.editBookmark();
       }
     });
     return rootView;
@@ -121,7 +122,7 @@ public class AddBookmarkFragment extends Fragment {
 
   }
 
-  public AddBookmarkFragment() {
+  public EditBookmarkFragment() {
     // Empty constructor required for fragment subclasses
   }
 }
