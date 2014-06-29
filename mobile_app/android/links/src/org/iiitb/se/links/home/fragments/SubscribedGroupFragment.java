@@ -6,7 +6,7 @@ import java.util.List;
 import org.iiitb.se.links.R;
 import org.iiitb.se.links.home.fragments.adapter.SubscribedGroupsAdapter;
 import org.iiitb.se.links.utils.AppConstants;
-import org.iiitb.se.links.utils.network.SubscribedGroupsLoader;
+import org.iiitb.se.links.utils.network.groups.subscribed.SubscribedGroupsLoader;
 import org.json.JSONObject;
 
 import android.app.Fragment;

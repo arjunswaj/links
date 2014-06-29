@@ -1,4 +1,4 @@
-package org.iiitb.se.links.utils.network;
+package org.iiitb.se.links.utils.network.bookmarks.search;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.BookmarkLoadType;
 import org.iiitb.se.links.utils.StringConstants;
 import org.iiitb.se.links.utils.URLConstants;
+import org.iiitb.se.links.utils.network.AbstractResourceDownloader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,20 +18,24 @@ import org.scribe.model.Token;
 import org.scribe.model.Verb;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class TimelineLoader extends AbstractResourceDownloader {
+public class BookmarkSearchLoader extends AbstractResourceDownloader {
 
-  protected static final String TAG = "TimelineLoader";
+  protected static final String TAG = "BookmarkSearchLoader";
   private BookmarksAdapter bookmarksAdapter;
   private List<JSONObject> bookmarks;
+  private String searchQuery;
 
-  public TimelineLoader(Context context, BookmarksAdapter bookmarksAdapter,
-      List<JSONObject> bookmarks) {
+  public BookmarkSearchLoader(Context context,
+      BookmarksAdapter bookmarksAdapter, List<JSONObject> bookmarks,
+      String searchQuery) {
     super(context);
     this.bookmarksAdapter = bookmarksAdapter;
     this.bookmarks = bookmarks;
+    this.searchQuery = searchQuery;
   }
 
   @Override
@@ -64,7 +69,7 @@ public class TimelineLoader extends AbstractResourceDownloader {
     fetchBookmarks(accessToken, bookmarkLoadType);
   }
 
-  public void fetchBookmarks(final Token accessToken,
+  protected void fetchBookmarks(final Token accessToken,
       final BookmarkLoadType bookmarkLoadType) {
     if (netAvailable()) {
       (new AsyncTask<Void, Integer, String>() {
@@ -86,23 +91,24 @@ public class TimelineLoader extends AbstractResourceDownloader {
         protected String doInBackground(Void... params) {
           String resourceURL = null;
           String lastBookmarkUpdatedAt = sharedPreferences.getString(
-              AppConstants.LAST_BOOKMARK_UPDATED_AT, null);
-
+              AppConstants.LAST_SEARCH_BOOKMARK_UPDATED_AT, null);
+          String query = Uri.encode(searchQuery);
           switch (bookmarkLoadType) {
             case MORE_BOOKMARKS:
-              resourceURL = URLConstants.LOAD_MORE_BOOKMARKS + "/"
-                  + lastBookmarkUpdatedAt;
+              resourceURL = URLConstants.SEARCH_MORE_BOOKMARKS + "/" + query
+                  + "/" + lastBookmarkUpdatedAt;
               break;
             case REFRESH_BOOKMARKS:
               break;
             case TIMELINE:
               bookmarks.clear();
-              resourceURL = URLConstants.TIMELINE;
+              resourceURL = URLConstants.SEARCH + "/" + query;
               break;
             default:
               break;
 
           }
+
           OAuthRequest request = new OAuthRequest(Verb.GET, resourceURL);
           mOauthService.signRequest(accessToken, request);
           response = request.send();
@@ -112,12 +118,12 @@ public class TimelineLoader extends AbstractResourceDownloader {
 
         @Override
         protected void onPostExecute(String responseBody) {
+          // Log.i(TAG, responseBody);
           mProgressDialog.hide();
           if (null == responseBody || 401 == status) {
             startAuthorize();
           } else {
             try {
-              // Log.i(TAG, responseBody);
               JSONArray resp = new JSONArray(responseBody);
               for (int index = 0; index < resp.length(); index += 1) {
                 bookmarks.add(resp.getJSONObject(index));
@@ -129,12 +135,12 @@ public class TimelineLoader extends AbstractResourceDownloader {
                 String updatedAt = linkObj
                     .getString(StringConstants.UPDATED_AT);
                 sharedPreferencesEditor.putString(
-                    AppConstants.FIRST_BOOKMARK_UPDATED_AT, updatedAt);
+                    AppConstants.FIRST_SEARCH_BOOKMARK_UPDATED_AT, updatedAt);
 
                 linkObj = bookmarks.get(bookmarks.size() - 1);
                 updatedAt = linkObj.getString(StringConstants.UPDATED_AT);
                 sharedPreferencesEditor.putString(
-                    AppConstants.LAST_BOOKMARK_UPDATED_AT, updatedAt);
+                    AppConstants.LAST_SEARCH_BOOKMARK_UPDATED_AT, updatedAt);
 
                 sharedPreferencesEditor.commit();
                 bookmarksAdapter.notifyDataSetChanged();

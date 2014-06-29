@@ -6,7 +6,7 @@ import java.util.List;
 import org.iiitb.se.links.R;
 import org.iiitb.se.links.home.fragments.adapter.RequestsGroupsAdapter;
 import org.iiitb.se.links.utils.AppConstants;
-import org.iiitb.se.links.utils.network.RequestsGroupsLoader;
+import org.iiitb.se.links.utils.network.groups.requests.RequestsGroupsLoader;
 import org.json.JSONObject;
 
 import android.app.Fragment;

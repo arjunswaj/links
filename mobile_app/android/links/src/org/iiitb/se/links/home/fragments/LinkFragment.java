@@ -7,7 +7,7 @@ import org.iiitb.se.links.R;
 import org.iiitb.se.links.home.fragments.adapter.BookmarksAdapter;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.BookmarkLoadType;
-import org.iiitb.se.links.utils.network.TimelineLoader;
+import org.iiitb.se.links.utils.network.bookmarks.TimelineLoader;
 import org.json.JSONObject;
 
 import android.app.Fragment;

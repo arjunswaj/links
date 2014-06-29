@@ -1,4 +1,4 @@
-package org.iiitb.se.links.utils.network;
+package org.iiitb.se.links.utils.network.groups.subscribed;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import org.iiitb.se.links.R;
 import org.iiitb.se.links.home.fragments.adapter.SubscribedGroupsAdapter;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.URLConstants;
+import org.iiitb.se.links.utils.network.AbstractResourceDownloader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
