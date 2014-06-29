@@ -2,6 +2,9 @@ require 'api_constraints'
 
 Links::Application.routes.draw do
   
+  get "delicious/authorize" => 'delicious#authorize', :as => 'delicious_authorize'
+  get "delicious/import" => 'delicious#import', :as => 'delicious_import'
+
   resources :groups # TODO: Clean this up.
   get 'groups/members/:id' => 'groups#members', :as => 'group_members'
   get 'groups/pending_members/:id' => 'groups#pending_members', :as => 'group_pending_members'
@@ -56,6 +59,7 @@ Links::Application.routes.draw do
   post "/savebookmark" => "bookmarks#savebookmark", :as => 'savebookmark'
   post "/savebookmark/:id" => "bookmarks#savebookmark", :as => 'savebookmark_for_group_share'
   post "/updatebookmark" => "bookmarks#updatebookmark", :as => 'updatebookmark'
+  get 'bookmarklet' => 'bookmarks#bookmarklet', :as => 'bookmarklet'
 
 
 # share to groups

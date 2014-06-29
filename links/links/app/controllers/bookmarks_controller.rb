@@ -264,7 +264,12 @@ class BookmarksController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+  
+  def bookmarklet
+    respond_to do |format|
+      format.js
+    end
+  end
 
   private
 
@@ -303,9 +308,9 @@ class BookmarksController < ApplicationController
         Timeout::timeout(50) {
           doc = Nokogiri::HTML(open(process_uri(url)))
         }
-        title = doc.at_css('title').text if doc.at_css('title').text
         doc.css('meta').each do |meta|
-          desc = meta['content'] if meta['name'] && (meta['name'].match 'description')
+          title = meta['content'] if meta['name'] && (meta['name'].match 'og:title')
+          desc = meta['content'] if meta['name'] && ((meta['name'].match 'description') || (meta['name'].match 'og:description'))
           keywords = meta['content'].split(",") if meta['name'] && (meta['name'].match 'keywords')
 
           if meta['property'] && (meta['property'].match 'og:image')
@@ -316,6 +321,7 @@ class BookmarksController < ApplicationController
             end
           end
         end
+        title = doc.at_css('title').text if title == '' && doc.at_css('title').text
       rescue Timeout::Error => ex
         logger.debug ex
         flash[:notice] = "Taking too long to retrieve annotations... :-(. Fill them yourself"
