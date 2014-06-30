@@ -13,8 +13,10 @@ import org.iiitb.se.links.utils.StringConstants;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +38,7 @@ public abstract class AbstractGroupCard extends Card {
   public String getGroupId() {
     return id;
   }
-  
+
   public JSONObject getGroup() {
     return group;
   }
@@ -66,18 +68,7 @@ public abstract class AbstractGroupCard extends Card {
     init();
   }
 
-  protected abstract void init();
-
-  public void reloadHome() {
-    ((MainActivity) context).fragmentTypes = FragmentTypes.BOOKMARK_FRAGMENT;
-    Fragment fragment = new LinkFragment();
-    Bundle args = new Bundle();
-    args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER,
-        FragmentTypes.BOOKMARK_FRAGMENT.ordinal());
-    fragment.setArguments(args);
-    ((MainActivity) context).getFragmentManager().beginTransaction()
-        .replace(R.id.content_frame, fragment).commit();
-  }
+  protected abstract void init();  
 
   protected void initData() {
     try {

@@ -1,10 +1,10 @@
 package org.iiitb.se.links.utils.network;
 
-import org.iiitb.se.links.MainActivity;
 import org.iiitb.se.links.R;
 import org.iiitb.se.links.home.ResourceLoader;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.AuthorizationClient;
+import org.iiitb.se.links.utils.StringConstants;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.LinksApi;
 import org.scribe.model.Token;
@@ -12,8 +12,11 @@ import org.scribe.oauth.OAuthService;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -38,10 +41,10 @@ public abstract class AbstractResourceDownloader implements ResourceLoader {
 
   public AbstractResourceDownloader(Context context) {
     this.context = context;
-    sharedPreferences = ((MainActivity) context)
-        .getPreferences(MainActivity.MODE_PRIVATE);
-    sharedPreferencesEditor = ((MainActivity) context).getPreferences(
-        MainActivity.MODE_PRIVATE).edit();
+    sharedPreferences = ((Activity) context)
+        .getPreferences(Activity.MODE_PRIVATE);
+    sharedPreferencesEditor = ((Activity) context).getPreferences(
+        Activity.MODE_PRIVATE).edit();
 
     authDialog = new Dialog(context);
     authDialog.setContentView(R.layout.auth_dialog);
@@ -72,12 +75,20 @@ public abstract class AbstractResourceDownloader implements ResourceLoader {
     boolean isConnected = activeNetwork != null
         && activeNetwork.isConnectedOrConnecting();
     if (!isConnected) {
-      Toast.makeText(context,
-          context.getString(R.string.internet_not_available),
-          Toast.LENGTH_LONG).show();
+      Toast
+          .makeText(context,
+              context.getString(R.string.internet_not_available),
+              Toast.LENGTH_LONG).show();
     }
 
     return isConnected;
+  }
+
+  protected void reloadFragment() {
+    Intent intent = new Intent(context, ((Activity) context).getClass());
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+        | Intent.FLAG_ACTIVITY_NEW_TASK);     
+    context.startActivity(intent);
   }
 
   @Override

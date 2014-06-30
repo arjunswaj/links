@@ -29,7 +29,7 @@ public class BookmarkDeleter extends AbstractResourceDownloader {
     deleteBookmark(accessToken);
   }
 
-  public void deleteBookmark() {    
+  public void deleteBookmark() {
     String accessTokenKey = sharedPreferences.getString(
         AppConstants.ACCESS_TOKEN_KEY, null);
     String accessTokenSecret = sharedPreferences.getString(
@@ -75,7 +75,7 @@ public class BookmarkDeleter extends AbstractResourceDownloader {
           if (null == responseBody || 401 == status) {
             startAuthorize();
           } else {
-            bookmarkCard.reloadHome();
+            reloadFragment();
           }
         }
       }).execute();

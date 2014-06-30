@@ -29,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -154,18 +155,7 @@ public class BookmarkCard extends Card {
     // show it
     alertDialog.show();
 
-  }
-
-  public void reloadHome() {
-    ((MainActivity) context).fragmentTypes = FragmentTypes.BOOKMARK_FRAGMENT;
-    Fragment fragment = new LinkFragment();
-    Bundle args = new Bundle();
-    args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER,
-        FragmentTypes.BOOKMARK_FRAGMENT.ordinal());
-    fragment.setArguments(args);
-    ((MainActivity) context).getFragmentManager().beginTransaction()
-        .replace(R.id.content_frame, fragment).commit();
-  }
+  } 
 
   private void shareBookmarkWithApps() {
     Intent intent = new Intent(Intent.ACTION_SEND);
@@ -297,7 +287,7 @@ public class BookmarkCard extends Card {
     } else {
       mGroupInfo.setText("");
     }
-    
+
     setExpanded(false);
   }
 

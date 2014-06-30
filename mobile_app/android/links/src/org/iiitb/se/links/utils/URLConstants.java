@@ -32,4 +32,7 @@ public class URLConstants {
 
   public static final String ACCEPT_SUBSCRIBE = BASE_URL + "/api/groups/accept";
   public static final String REJECT_SUBSCRIBE = BASE_URL + "/api/groups/reject";
+  
+  public static final String GROUPS_TIMELINE = BASE_URL + "/api/groups/%s/timeline";
+  public static final String GROUPS_LOAD_MORE_BOOKMARKS = BASE_URL + "/api/groups/%s/loadmore/%s";
 }

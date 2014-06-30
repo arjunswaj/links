@@ -17,6 +17,7 @@ public final class R {
         public static final int abc_slide_out_top=0x7f040005;
     }
     public static final class array {
+        public static final int groups_links_options=0x7f0d0001;
         public static final int links_options=0x7f0d0000;
     }
     public static final class attr {
@@ -1463,10 +1464,11 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f050023;
         public static final int action_bar_title=0x7f050022;
         public static final int action_context_bar=0x7f05001d;
-        public static final int action_links_search=0x7f050072;
+        public static final int action_links_search=0x7f050073;
         public static final int action_menu_divider=0x7f050016;
         public static final int action_menu_presenter=0x7f050017;
         public static final int action_mode_close_button=0x7f050024;
+        public static final int action_settings=0x7f050072;
         public static final int activity_chooser_view_content=0x7f050025;
         public static final int always=0x7f05000b;
         public static final int beginning=0x7f050011;
@@ -1622,42 +1624,44 @@ containing a value of this type.
         public static final int abc_search_dropdown_item_icons_2line=0x7f030015;
         public static final int abc_search_view=0x7f030016;
         public static final int abc_simple_decor=0x7f030017;
-        public static final int activity_main=0x7f030018;
-        public static final int auth_dialog=0x7f030019;
-        public static final int base_header_layout=0x7f03001a;
-        public static final int base_list_expandable_children_layout=0x7f03001b;
-        public static final int base_shadow_layout=0x7f03001c;
-        public static final int base_thumbnail_layout=0x7f03001d;
-        public static final int base_withlist_empty=0x7f03001e;
-        public static final int base_withlist_progress=0x7f03001f;
-        public static final int bookmark_card=0x7f030020;
-        public static final int bookmark_card_expand=0x7f030021;
-        public static final int bookmark_tag=0x7f030022;
-        public static final int bookmark_url=0x7f030023;
-        public static final int card_base_layout=0x7f030024;
-        public static final int card_layout=0x7f030025;
-        public static final int card_overlay_layout=0x7f030026;
-        public static final int card_thumbnail_layout=0x7f030027;
-        public static final int card_thumbnail_overlay_layout=0x7f030028;
-        public static final int card_undo_layout=0x7f030029;
-        public static final int drawer_list_item=0x7f03002a;
-        public static final int edit_bookmark=0x7f03002b;
-        public static final int fragment_groups=0x7f03002c;
-        public static final int fragment_links=0x7f03002d;
-        public static final int group_card=0x7f03002e;
-        public static final int group_share_card=0x7f03002f;
-        public static final int inner_base_expand=0x7f030030;
-        public static final int inner_base_header=0x7f030031;
-        public static final int inner_base_main=0x7f030032;
-        public static final int inner_base_main_cardwithlist=0x7f030033;
-        public static final int list_card_layout=0x7f030034;
-        public static final int list_card_thumbnail_layout=0x7f030035;
-        public static final int list_card_undo_message=0x7f030036;
-        public static final int save_bookmark=0x7f030037;
-        public static final int support_simple_spinner_dropdown_item=0x7f030038;
+        public static final int activity_group=0x7f030018;
+        public static final int activity_main=0x7f030019;
+        public static final int auth_dialog=0x7f03001a;
+        public static final int base_header_layout=0x7f03001b;
+        public static final int base_list_expandable_children_layout=0x7f03001c;
+        public static final int base_shadow_layout=0x7f03001d;
+        public static final int base_thumbnail_layout=0x7f03001e;
+        public static final int base_withlist_empty=0x7f03001f;
+        public static final int base_withlist_progress=0x7f030020;
+        public static final int bookmark_card=0x7f030021;
+        public static final int bookmark_card_expand=0x7f030022;
+        public static final int bookmark_tag=0x7f030023;
+        public static final int bookmark_url=0x7f030024;
+        public static final int card_base_layout=0x7f030025;
+        public static final int card_layout=0x7f030026;
+        public static final int card_overlay_layout=0x7f030027;
+        public static final int card_thumbnail_layout=0x7f030028;
+        public static final int card_thumbnail_overlay_layout=0x7f030029;
+        public static final int card_undo_layout=0x7f03002a;
+        public static final int drawer_list_item=0x7f03002b;
+        public static final int edit_bookmark=0x7f03002c;
+        public static final int fragment_groups=0x7f03002d;
+        public static final int fragment_links=0x7f03002e;
+        public static final int group_card=0x7f03002f;
+        public static final int group_share_card=0x7f030030;
+        public static final int inner_base_expand=0x7f030031;
+        public static final int inner_base_header=0x7f030032;
+        public static final int inner_base_main=0x7f030033;
+        public static final int inner_base_main_cardwithlist=0x7f030034;
+        public static final int list_card_layout=0x7f030035;
+        public static final int list_card_thumbnail_layout=0x7f030036;
+        public static final int list_card_undo_message=0x7f030037;
+        public static final int save_bookmark=0x7f030038;
+        public static final int support_simple_spinner_dropdown_item=0x7f030039;
     }
     public static final class menu {
-        public static final int main=0x7f0e0000;
+        public static final int group=0x7f0e0000;
+        public static final int main=0x7f0e0001;
     }
     public static final class plurals {
         /**  Card selected item with CAB 
@@ -1712,6 +1716,7 @@ containing a value of this type.
         public static final int abc_shareactionprovider_share_with_application=0x7f0a000b;
         public static final int accept_group_invite=0x7f0a002f;
         public static final int action_links_search=0x7f0a001f;
+        public static final int action_settings=0x7f0a0036;
         public static final int app_name=0x7f0a000d;
         public static final int app_not_available=0x7f0a0020;
         public static final int authorize_links=0x7f0a001a;
@@ -1739,6 +1744,7 @@ containing a value of this type.
         public static final int enter_bookmark_url=0x7f0a002a;
         public static final int group_description=0x7f0a0032;
         public static final int group_name=0x7f0a0031;
+        public static final int hello_world=0x7f0a0035;
         public static final int http=0x7f0a0012;
         public static final int internet_not_available=0x7f0a0033;
         /**  Undo Controller
@@ -1753,6 +1759,7 @@ containing a value of this type.
         public static final int share=0x7f0a0017;
         public static final int share_with_apps=0x7f0a0014;
         public static final int share_with_groups=0x7f0a0018;
+        public static final int title_activity_group=0x7f0a0034;
         public static final int unsubscribe_group=0x7f0a002e;
     }
     public static final class style {

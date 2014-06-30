@@ -13,6 +13,7 @@ public class StringConstants {
 	public static final String LINK_GROUP_NAME = "groupname";
 	public static final String USER_NAME = "username";
 	
+	public static final String GROUP_ID = "group_id";
 	public static final String BOOKMARK_ID = "bookmark_id";
 	public static final String GROUP_ID_ARRAY = "group_ids[]";
 	

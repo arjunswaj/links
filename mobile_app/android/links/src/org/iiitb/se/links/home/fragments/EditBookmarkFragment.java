@@ -1,14 +1,12 @@
 package org.iiitb.se.links.home.fragments;
 
-import org.iiitb.se.links.MainActivity;
 import org.iiitb.se.links.R;
-import org.iiitb.se.links.utils.AppConstants;
-import org.iiitb.se.links.utils.FragmentTypes;
 import org.iiitb.se.links.utils.StringConstants;
 import org.iiitb.se.links.utils.network.bookmarks.BookmarkEditor;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,14 +100,10 @@ public class EditBookmarkFragment extends Fragment {
   }
 
   public void closeThisFragmentAndLoadHome() {
-    getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-    ((MainActivity) getActivity()).fragmentTypes = FragmentTypes.BOOKMARK_FRAGMENT;
-    Fragment fragment = new LinkFragment();
-    Bundle args = new Bundle();
-    args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 0);
-    fragment.setArguments(args);
-    getActivity().getFragmentManager().beginTransaction()
-        .replace(R.id.content_frame, fragment).commit();
+    Intent intent = new Intent(getActivity(), getActivity().getClass());
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+        | Intent.FLAG_ACTIVITY_NEW_TASK);     
+    getActivity().startActivity(intent);
   }
 
   public void hideKeyboard() {

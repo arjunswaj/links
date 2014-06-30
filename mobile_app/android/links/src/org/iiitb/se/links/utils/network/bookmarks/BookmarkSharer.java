@@ -82,7 +82,7 @@ public class BookmarkSharer extends AbstractResourceDownloader {
           if (null == responseBody || 401 == status) {
             startAuthorize();
           } else {
-            bookmarkCard.reloadHome();
+            reloadFragment();
           }
         }
       }).execute();

@@ -90,7 +90,7 @@ public class GroupRequestsDecider extends AbstractResourceDownloader {
           if (null == responseBody || 401 == status) {
             startAuthorize();
           } else {
-            requestsGroupCard.reloadHome();
+            reloadFragment();
           }
         }
       }).execute();

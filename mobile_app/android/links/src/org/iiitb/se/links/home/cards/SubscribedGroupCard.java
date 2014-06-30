@@ -4,11 +4,16 @@ import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.internal.base.BaseCard;
 
+import org.iiitb.se.links.GroupActivity;
 import org.iiitb.se.links.R;
+import org.iiitb.se.links.utils.StringConstants;
+import org.iiitb.se.links.utils.network.MyProperties;
 import org.iiitb.se.links.utils.network.groups.subscribed.GroupUnsubscriber;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
@@ -16,11 +21,12 @@ import android.widget.PopupMenu;
 public class SubscribedGroupCard extends AbstractGroupCard {
   private MenuItem unsubscribe = null;
   private GroupUnsubscriber groupUnsubscriber;
+
   public SubscribedGroupCard(Context context, JSONObject group) {
     super(context, group);
     groupUnsubscriber = new GroupUnsubscriber(context, this);
   }
-  
+
   /**
    * Init
    */
@@ -54,17 +60,24 @@ public class SubscribedGroupCard extends AbstractGroupCard {
     this.setOnClickListener(new OnCardClickListener() {
       @Override
       public void onClick(Card card, View view) {
-        loadGroupBookmarksFragment();
+        loadGroupBookmarksActivity();
       }
     });
   }
 
   /**
-   * Change the Intent
+   * Change the Activity
    */
-  protected void loadGroupBookmarksFragment() {
-    // TODO Auto-generated method stub
-
+  protected void loadGroupBookmarksActivity() {
+    String groupId = null;
+    try {
+      groupId = group.getString(StringConstants.ID);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    Intent intent = new Intent(context, GroupActivity.class);
+    MyProperties.getInstance().groupId = groupId;
+    context.startActivity(intent);
   }
 
 }
