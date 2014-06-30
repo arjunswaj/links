@@ -41,7 +41,8 @@ Links::Application.routes.draw do
           get "/searches/searchmore/:keyword/:time" => "searches#searchmore", :as => 'api_search_more'
       end
 
-      scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do          
+      scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do 
+          post "/groups/savebookmark"  => "groups#savebookmark", :as => 'api_groups_savebookmark'         
           get "/groups/index" => "groups#index", :as => 'api_groups'
           get "/groups/requests" => "groups#requests", :as => 'api_groups_requests'
           put "/groups/accept/:group_id" => 'groups#accept_invite', :as => 'api_accept_invite_to_group'

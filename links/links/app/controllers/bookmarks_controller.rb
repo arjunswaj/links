@@ -294,43 +294,5 @@ class BookmarksController < ApplicationController
   def share_to_group_params
     params.permit(:bookmark_id, :group_ids => [])
   end
-  
-   # Extract annotations from url
-    def get_annotations(url)
-      # TODO: handle exceptions from openuri(network related)
-      title = ''
-      desc = ''
-      keywords = []
-      icon = nil
-
-      begin
-          doc = nil
-        Timeout::timeout(50) {
-          doc = Nokogiri::HTML(open(process_uri(url)))
-        }
-        doc.css('meta').each do |meta|
-          title = meta['content'] if meta['name'] && (meta['name'].match 'og:title')
-          desc = meta['content'] if meta['name'] && ((meta['name'].match 'description') || (meta['name'].match 'og:description'))
-          keywords = meta['content'].split(",") if meta['name'] && (meta['name'].match 'keywords')
-
-          if meta['property'] && (meta['property'].match 'og:image')
-            image_url = meta['content']
-            image_url = meta['content'].insert(0, 'http:') if meta['content'].match('^http').nil?
-            open(image_url) do |f|
-              icon = f.read
-            end
-          end
-        end
-        title = doc.at_css('title').text if title == '' && doc.at_css('title').text
-      rescue Timeout::Error => ex
-        logger.debug ex
-        flash[:notice] = "Taking too long to retrieve annotations... :-(. Fill them yourself"
-      rescue OpenURI::HTTPError => ex
-        logger.debug ex
-        flash[:notice] = ex.to_s
-      ensure
-        return {:title => title, :desc => desc, :keywords => keywords, :icon => icon}
-      end
-    end
-  
+           
 end
