@@ -6,6 +6,17 @@ module Api
 			skip_before_action :verify_authenticity_token
 			respond_to :json
 
+			def timeline
+				group_bookmarks_loader(Time.now, params[:id]) 
+				bookmarks_formatter				
+			end
+
+			def loadmore
+				time = Time.at(params[:time].to_i).to_datetime
+				group_bookmarks_loader(time, params[:id]) 
+				bookmarks_formatter
+			end
+
 			def index
 			    all_groups = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , doorkeeper_token.resource_owner_id, true)
 			    groups_formatter(all_groups)
@@ -115,13 +126,29 @@ module Api
 			def bookmarks_formatter
 				formatted_bookmarks = []
 				@bookmarks.each do  |bookmark|
-				  formatted_tags = []
-				  bookmark.tags.each do |tag|
-				    formatted_tags << tag.tagname
-				  end			  
-				  formatted_bookmarks << {:id => bookmark.id, :url => bookmark.url.url, :title => bookmark.title, :description => bookmark.description, :updated_at => bookmark.updated_at.to_i, :tags => formatted_tags}
+					formatted_bookmarks << strip_bookmark_to_json(bookmark)
 				end
 				respond_with formatted_bookmarks
+			end
+
+			def strip_bookmark_to_json(bookmark)
+				formatted_tags = []
+				bookmark.tags.each do |tag|
+				   formatted_tags << tag.tagname
+				end			  				
+				bookmark_json = {:id => bookmark.id, :url => bookmark.url.url, :title => bookmark.title, :description => bookmark.description, :updated_at => bookmark.updated_at.to_i, :tags => formatted_tags}
+
+				if bookmark.group_id
+					bookmark_json[:username] = bookmark.user.name
+					bookmark_json[:groupname] = bookmark.group.name	
+				end
+				
+				if bookmark.user_id == doorkeeper_token.resource_owner_id
+					bookmark_json[:my_bookmark] = true
+				else
+					bookmark_json[:my_bookmark] = false
+				end			
+				bookmark_json
 			end
 
 			def group_owner?(user_id, group_id)

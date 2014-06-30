@@ -47,7 +47,10 @@ Links::Application.routes.draw do
           get "/groups/requests" => "groups#requests", :as => 'api_groups_requests'
           put "/groups/accept/:group_id" => 'groups#accept_invite', :as => 'api_accept_invite_to_group'
           delete "/groups/reject/:group_id" => 'groups#reject_invite', :as => 'api_reject_invite_to_group'
-          delete "/groups/unsubscribe/:group_id" => 'groups#unsubscribe', :as => 'api_unsubscribe_user_from_group'       
+          delete "/groups/unsubscribe/:group_id" => 'groups#unsubscribe', :as => 'api_unsubscribe_user_from_group'   
+
+          get "/groups/:id/timeline" => "groups#timeline", :as => 'api_groups_timeline'  
+          get "/groups/:id/loadmore/:time" => "groups#loadmore", :as => 'api_groups_loadmore'  
       end
 	end
 
