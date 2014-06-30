@@ -164,7 +164,13 @@ module Api
 				if bookmark.group_id
 					bookmark_json[:username] = bookmark.user.name
 					bookmark_json[:groupname] = bookmark.group.name	
-				end				
+				end
+				
+				if bookmark.user_id == doorkeeper_token.resource_owner_id
+					bookmark_json[:my_bookmark] = true
+				else
+					bookmark_json[:my_bookmark] = false
+				end			
 				bookmark_json
 			end
 			

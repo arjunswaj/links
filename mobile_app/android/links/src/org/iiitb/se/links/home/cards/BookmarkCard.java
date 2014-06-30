@@ -60,6 +60,7 @@ public class BookmarkCard extends Card {
   private String description = null;
   private String groupname = null;
   private String username = null;
+  private boolean myBookmark = false;
   private String formattedDate = null;
 
   private CardView cardView = null;
@@ -206,9 +207,11 @@ public class BookmarkCard extends Card {
           public boolean onPreparePopupMenu(BaseCard card, PopupMenu popupMenu) {
             shareWithGroups = popupMenu.getMenu().add(
                 context.getString(R.string.share));
-            edit = popupMenu.getMenu().add(context.getString(R.string.edit));
-            delete = popupMenu.getMenu()
-                .add(context.getString(R.string.delete));
+            if (myBookmark) {
+              edit = popupMenu.getMenu().add(context.getString(R.string.edit));
+              delete = popupMenu.getMenu().add(
+                  context.getString(R.string.delete));
+            }
             shareWithApps = popupMenu.getMenu().add(
                 context.getString(R.string.share_with_apps));
             return true;
@@ -267,6 +270,7 @@ public class BookmarkCard extends Card {
       description = bookmark.getString(StringConstants.DESCRIPTION);
       groupname = bookmark.optString(StringConstants.LINK_GROUP_NAME, null);
       username = bookmark.optString(StringConstants.USER_NAME, null);
+      myBookmark = bookmark.getBoolean(StringConstants.MY_BOOKMARK);
 
       long epoch = bookmark.getLong(StringConstants.UPDATED_AT);
 
@@ -281,6 +285,7 @@ public class BookmarkCard extends Card {
 
   private void setData() {
     // Set the header title
+    init();
     header.setTitle(title);
     bookmarkCardExpand.setBookmark(bookmark);
     mDomain.setText(DomainExtractor.getBaseDomain(url));
@@ -292,7 +297,7 @@ public class BookmarkCard extends Card {
     } else {
       mGroupInfo.setText("");
     }
-
+    
     setExpanded(false);
   }
 
