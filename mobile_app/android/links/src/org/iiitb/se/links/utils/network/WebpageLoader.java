@@ -2,7 +2,6 @@ package org.iiitb.se.links.utils.network;
 
 import java.io.IOException;
 
-import org.iiitb.se.links.home.fragments.AddBookmarkFragment;
 import org.iiitb.se.links.utils.StringConstants;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,15 +11,24 @@ import org.scribe.model.Token;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.EditText;
 
 public class WebpageLoader extends AbstractResourceDownloader {
 
   private static final String TAG = "WebpageLoader";
-  private AddBookmarkFragment addBookmarkFragment;
+  private AddBookmarkFormElements addBookmarkFormElements;
 
-  public WebpageLoader(Context context, AddBookmarkFragment addBookmarkFragment) {
+  public interface AddBookmarkFormElements {
+    public EditText getUrl();
+    public EditText getTitle();
+    public EditText getDescription();
+    public EditText getTags();  
+    public void hideKeyboard();
+  }
+  
+  public WebpageLoader(Context context, AddBookmarkFormElements addBookmarkFormElements) {
     super(context);
-    this.addBookmarkFragment = addBookmarkFragment;
+    this.addBookmarkFormElements = addBookmarkFormElements;
   }
 
   @Override
@@ -41,7 +49,7 @@ public class WebpageLoader extends AbstractResourceDownloader {
           Document doc = null;
           try {
             doc = Jsoup.connect(
-                addBookmarkFragment.getUrl().getText().toString()).get();
+                addBookmarkFormElements.getUrl().getText().toString()).get();
           } catch (IOException e) {
             e.printStackTrace();
           }
@@ -52,25 +60,25 @@ public class WebpageLoader extends AbstractResourceDownloader {
         protected void onPostExecute(Document doc) {
           if (null != doc) {
             if (!setOnlyTags) {
-              addBookmarkFragment.getTitle().setText(doc.title());
+              addBookmarkFormElements.getTitle().setText(doc.title());
             }
             Elements metas = doc.select(StringConstants.META);
             for (Element meta : metas) {
               if (meta.attr(StringConstants.NAME).equals(
                   StringConstants.DESCRIPTION)) {
-                addBookmarkFragment.getDescription().setText(
+                addBookmarkFormElements.getDescription().setText(
                     meta.attr(StringConstants.CONTENT));
               }
 
               if (meta.attr(StringConstants.NAME).equals(
                   StringConstants.KEYWORDS)) {
-                addBookmarkFragment.getTags().setText(
+                addBookmarkFormElements.getTags().setText(
                     meta.attr(StringConstants.CONTENT));
               }
             }
           }
           mProgressDialog.hide();
-          addBookmarkFragment.hideKeyboard();
+          addBookmarkFormElements.hideKeyboard();
         }
 
       }).execute();

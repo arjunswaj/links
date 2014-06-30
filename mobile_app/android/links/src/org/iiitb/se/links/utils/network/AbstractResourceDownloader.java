@@ -4,7 +4,6 @@ import org.iiitb.se.links.R;
 import org.iiitb.se.links.home.ResourceLoader;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.AuthorizationClient;
-import org.iiitb.se.links.utils.StringConstants;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.LinksApi;
 import org.scribe.model.Token;
@@ -12,8 +11,6 @@ import org.scribe.oauth.OAuthService;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;

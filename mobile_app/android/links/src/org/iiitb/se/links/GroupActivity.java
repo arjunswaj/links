@@ -1,5 +1,6 @@
 package org.iiitb.se.links;
 
+import org.iiitb.se.links.group.fragments.AddBookmarkInGroupFragment;
 import org.iiitb.se.links.group.fragments.GroupLinkFragment;
 import org.iiitb.se.links.home.fragments.BookmarkSearchFragment;
 import org.iiitb.se.links.utils.AppConstants;
@@ -7,20 +8,24 @@ import org.iiitb.se.links.utils.FragmentTypes;
 import org.iiitb.se.links.utils.StringConstants;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
@@ -87,7 +92,7 @@ public class GroupActivity extends Activity {
       }
     };
     mDrawerLayout.setDrawerListener(mDrawerToggle);
-    if(null == savedInstanceState) {
+    if (null == savedInstanceState) {
       selectItem(0);
     }
   }
@@ -129,6 +134,7 @@ public class GroupActivity extends Activity {
               fragment = new BookmarkSearchFragment();
               fragmentTypes = FragmentTypes.GROUP_BOOKMARKS_SEARCH_FRAGMENT;
               break;
+            case GROUP_ADD_BOOKMARK_FRAGMENT:
 
             default:
               break;
@@ -139,8 +145,7 @@ public class GroupActivity extends Activity {
             args.putString(AppConstants.SEARCH_QUERY, query);
             fragment.setArguments(args);
             getFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .commit();
+                .replace(R.id.content_frame, fragment).commit();
           }
           return true;
         }
@@ -193,16 +198,16 @@ public class GroupActivity extends Activity {
         break;
       case 1:
         fragmentTypes = FragmentTypes.GROUP_ADD_BOOKMARK_FRAGMENT;
+        openDialogToAddURL();
         break;
     }
     if (null != fragment) {
       Bundle args = new Bundle();
-      args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, position);      
+      args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, position);
       fragment.setArguments(args);
 
       getFragmentManager().beginTransaction()
-          .replace(R.id.content_frame, fragment)
-          .commit();
+          .replace(R.id.content_frame, fragment).commit();
     }
     // update selected item and title, then close the drawer
     mDrawerList.setItemChecked(position, true);
@@ -210,4 +215,58 @@ public class GroupActivity extends Activity {
     mDrawerLayout.closeDrawer(mDrawerList);
   }
 
+  private void openLinksSavePage(String urlFromIntent) {
+    Fragment fragment = new AddBookmarkInGroupFragment();
+    fragmentTypes = FragmentTypes.GROUP_ADD_BOOKMARK_FRAGMENT;
+    Bundle args = new Bundle();
+    args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 1);
+    args.putString(StringConstants.URL, urlFromIntent);
+
+    fragment.setArguments(args);
+
+    FragmentManager fragmentManager = getFragmentManager();
+    fragmentManager.beginTransaction().replace(R.id.content_frame, fragment)
+        .commit();
+
+  }
+
+  private void openDialogToAddURL() {
+    LayoutInflater li = LayoutInflater.from(this);
+    View promptsView = li.inflate(R.layout.bookmark_url, null);
+
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+    // set prompts.xml to alertdialog builder
+    alertDialogBuilder.setView(promptsView);
+
+    final EditText userInput = (EditText) promptsView
+        .findViewById(R.id.bookmark_url);
+
+    // set dialog message
+    alertDialogBuilder
+        .setCancelable(false)
+        .setPositiveButton(getString(android.R.string.ok),
+            new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                String url = userInput.getText().toString();
+                if (null != url && !url.isEmpty()) {
+                  url = url.trim();
+                  openLinksSavePage(url);
+                }
+              }
+            })
+        .setNegativeButton(getString(android.R.string.cancel),
+            new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+              }
+            });
+
+    // create alert dialog
+    AlertDialog alertDialog = alertDialogBuilder.create();
+
+    // show it
+    alertDialog.show();
+
+  }
 }

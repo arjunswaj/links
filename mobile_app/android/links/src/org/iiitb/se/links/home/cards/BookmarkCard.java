@@ -12,15 +12,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.iiitb.se.links.MainActivity;
 import org.iiitb.se.links.R;
 import org.iiitb.se.links.home.cards.expand.BookmarkCardExpand;
 import org.iiitb.se.links.home.fragments.EditBookmarkFragment;
-import org.iiitb.se.links.home.fragments.LinkFragment;
 import org.iiitb.se.links.home.fragments.adapter.ShareGroupsAdapter;
-import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.DomainExtractor;
-import org.iiitb.se.links.utils.FragmentTypes;
 import org.iiitb.se.links.utils.StringConstants;
 import org.iiitb.se.links.utils.network.bookmarks.BookmarkDeleter;
 import org.iiitb.se.links.utils.network.bookmarks.BookmarkSharer;
@@ -222,7 +218,6 @@ public class BookmarkCard extends Card {
   }
 
   protected void editBookmark() {
-    ((MainActivity) context).fragmentTypes = FragmentTypes.EDIT_BOOKMARK_FRAGMENT;
     Fragment fragment = new EditBookmarkFragment();
     Bundle args = new Bundle();
     args.putString(StringConstants.BOOKMARK_ID, id);
@@ -245,7 +240,7 @@ public class BookmarkCard extends Card {
 
     fragment.setArguments(args);
 
-    FragmentManager fragmentManager = ((MainActivity) context)
+    FragmentManager fragmentManager = ((Activity) context)
         .getFragmentManager();
     fragmentManager.beginTransaction().replace(R.id.content_frame, fragment)
         .commit();

@@ -1657,7 +1657,8 @@ containing a value of this type.
         public static final int list_card_thumbnail_layout=0x7f030036;
         public static final int list_card_undo_message=0x7f030037;
         public static final int save_bookmark=0x7f030038;
-        public static final int support_simple_spinner_dropdown_item=0x7f030039;
+        public static final int save_bookmark_in_group=0x7f030039;
+        public static final int support_simple_spinner_dropdown_item=0x7f03003a;
     }
     public static final class menu {
         public static final int group=0x7f0e0000;
