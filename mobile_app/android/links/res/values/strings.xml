@@ -18,6 +18,7 @@
     <string name="edit">Edit</string>
     <string name="share">Share</string>
     <string name="share_with_groups">Share with Groups&#8230;</string>
+    <string name="select_groups">Select Groups&#8230;</string>
     <string name="authorize_links">Authorize Links</string>
     <string name="search">Search</string>
     <string name="search_hint">#tags or bookmarks</string>
@@ -33,6 +34,7 @@
     <string name="bookmark_description">Description</string>
     <string name="bookmark_tags">Tags</string>
     <string name="bookmark_updated_time">Time</string>
+    <string name="bookmark_share_group">Share in Group</string>
     <string name="enter_bookmark_url">Enter URL</string>
     <string name="enter_bookmark_title">Enter title</string>
     <string name="enter_bookmark_description">Enter description</string>

@@ -58,7 +58,7 @@ public class EditBookmarkFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    View rootView = inflater.inflate(R.layout.save_bookmark, container, false);
+    View rootView = inflater.inflate(R.layout.edit_bookmark, container, false);
 
     url = (EditText) rootView.findViewById(R.id.bookmark_url);
     title = (EditText) rootView.findViewById(R.id.bookmark_title);
