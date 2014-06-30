@@ -34,13 +34,29 @@ module Api
 			def bookmarks_formatter
 				formatted_bookmarks = []
 				@bookmarks.each do  |bookmark|
-				  formatted_tags = []
-				  bookmark.tags.each do |tag|
-				    formatted_tags << tag.tagname
-				  end			  
-				  formatted_bookmarks << {:id => bookmark.id, :url => bookmark.url.url, :title => bookmark.title, :description => bookmark.description, :updated_at => bookmark.updated_at.to_i, :tags => formatted_tags}
+					formatted_bookmarks << strip_bookmark_to_json(bookmark)
 				end
 				respond_with formatted_bookmarks
+			end
+
+			def strip_bookmark_to_json(bookmark)
+				formatted_tags = []
+				bookmark.tags.each do |tag|
+				   formatted_tags << tag.tagname
+				end			  				
+				bookmark_json = {:id => bookmark.id, :url => bookmark.url.url, :title => bookmark.title, :description => bookmark.description, :updated_at => bookmark.updated_at.to_i, :tags => formatted_tags}
+
+				if bookmark.group_id
+					bookmark_json[:username] = bookmark.user.name
+					bookmark_json[:groupname] = bookmark.group.name	
+				end
+				
+				if bookmark.user_id == doorkeeper_token.resource_owner_id
+					bookmark_json[:my_bookmark] = true
+				else
+					bookmark_json[:my_bookmark] = false
+				end			
+				bookmark_json
 			end
 
 		end
