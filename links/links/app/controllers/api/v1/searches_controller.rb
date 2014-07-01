@@ -41,6 +41,7 @@ module Api
 
 			def searchmore_in_groups
 			    keyword = params[:keyword]
+			    group_id = params[:id]
 			    time = Time.at(params[:time].to_i).to_datetime
 
 			    if keyword.start_with?('#')
