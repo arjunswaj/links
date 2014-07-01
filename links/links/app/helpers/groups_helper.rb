@@ -5,6 +5,6 @@ module GroupsHelper
       	  .where("bookmarks.group_id = ?", group_id)	      
 	      .where("bookmarks.updated_at < :now", now: time)
 	      .order('bookmarks.updated_at DESC')
-	      .limit(10)
+	      .limit(20)
   	end
 end

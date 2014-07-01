@@ -7,7 +7,7 @@ module SearchesHelper
       .where("bookmarks.updated_at < :now", now: time)
       .where("LOWER(tags.tagname) = LOWER(:tag)", tag: "#{tagname}")
       .order('bookmarks.updated_at DESC')    
-      .limit(10) 
+      .limit(20) 
   end
 
   def bookmarks_searcher(time, keyword, user_id)
@@ -17,7 +17,7 @@ module SearchesHelper
       .where("bookmarks.updated_at < :now", now: time)
       .where("LOWER(bookmarks.title) LIKE LOWER(:query) OR LOWER(bookmarks.description) LIKE LOWER(:query)", query: "%#{keyword}%")      
       .order('bookmarks.updated_at DESC') 
-      .limit(10)
+      .limit(20)
   end
 
   def bookmarks_in_groups_tag_searcher(time, keyword, group_id)
@@ -28,7 +28,7 @@ module SearchesHelper
       .where("bookmarks.updated_at < :now", now: time)            
       .where("LOWER(tags.tagname) = LOWER(:tag)", tag: "#{tagname}")
       .order('bookmarks.updated_at DESC')    
-      .limit(10) 
+      .limit(20) 
   end
 
   def bookmarks_in_group_searcher(time, keyword, group_id)
@@ -38,6 +38,6 @@ module SearchesHelper
       .where("bookmarks.updated_at < :now", now: time)                  
       .where("LOWER(bookmarks.title) LIKE LOWER(:query) OR LOWER(bookmarks.description) LIKE LOWER(:query)", query: "%#{keyword}%")      
       .order('bookmarks.updated_at DESC') 
-      .limit(10)
+      .limit(20)
   end
 end
