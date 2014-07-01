@@ -101,7 +101,9 @@ public class MainActivity extends Activity {
       String urlFromIntent = intent.getStringExtra(Intent.EXTRA_TEXT);
       urlFromIntent = urlFromIntent.substring(urlFromIntent
           .indexOf(StringConstants.HTTP));
-      urlFromIntent = urlFromIntent.substring(0, urlFromIntent.indexOf(" ") - 1);
+      if (-1 != urlFromIntent.indexOf(" ")) {
+        urlFromIntent = urlFromIntent.substring(0, urlFromIntent.indexOf(" "));
+      }
       String subjectFromIntent = null;
       if (intent.hasExtra(Intent.EXTRA_SUBJECT)) {
         subjectFromIntent = intent.getStringExtra(Intent.EXTRA_SUBJECT);
