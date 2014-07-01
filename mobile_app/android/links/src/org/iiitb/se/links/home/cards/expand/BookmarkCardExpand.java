@@ -5,6 +5,7 @@ import it.gmariotti.cardslib.library.internal.CardExpand;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.iiitb.se.links.GroupActivity;
 import org.iiitb.se.links.MainActivity;
 import org.iiitb.se.links.R;
 import org.iiitb.se.links.custom.ExpandableHeightGridView;
@@ -18,9 +19,8 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 public class BookmarkCardExpand extends CardExpand {
 
@@ -93,7 +93,13 @@ public class BookmarkCardExpand extends CardExpand {
     bookmarkTags.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       public void onItemClick(AdapterView<?> parent, View v, int position,
           long id) {
-        SearchView searchView = ((MainActivity) context).getSearchView(); 
+        SearchView searchView = null;
+        // Ugly check
+        if (context instanceof MainActivity) {
+          searchView = ((MainActivity) context).getSearchView();
+        } else if (context instanceof GroupActivity) {
+          searchView = ((GroupActivity) context).getSearchView();
+        }
         searchView.setIconified(false);
         searchView.setQuery("#" + ((TextView) v).getText(), true);
       }

@@ -1,8 +1,8 @@
 package org.iiitb.se.links;
 
 import org.iiitb.se.links.group.fragments.AddBookmarkInGroupFragment;
+import org.iiitb.se.links.group.fragments.BookmarkSearchInGroupsFragment;
 import org.iiitb.se.links.group.fragments.GroupLinkFragment;
-import org.iiitb.se.links.home.fragments.BookmarkSearchFragment;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.FragmentTypes;
 import org.iiitb.se.links.utils.StringConstants;
@@ -131,7 +131,7 @@ public class GroupActivity extends Activity {
           switch (fragmentTypes) {
             case GROUP_BOOKMARKS_FRAGMENT:
             case GROUP_BOOKMARKS_SEARCH_FRAGMENT:
-              fragment = new BookmarkSearchFragment();
+              fragment = new BookmarkSearchInGroupsFragment();
               fragmentTypes = FragmentTypes.GROUP_BOOKMARKS_SEARCH_FRAGMENT;
               break;
             case GROUP_ADD_BOOKMARK_FRAGMENT:
