@@ -23,12 +23,20 @@ class DeliciousController < ApplicationController
 
     xml_doc = Nokogiri::XML(response)
     xml_doc.xpath('//post').each do |post|
-      url = Url.new({:url => post.xpath('@href').to_s, :icon => nil})
+      url_str = Url.new({:url => post.xpath('@href').to_s, :icon => nil})
       title = post.xpath('@description').to_s
       description = post.xpath('@extended').to_s
       tags = post.xpath('@tag').to_s.split(',')
       logger.debug tags
       
+      url = Url.find_by_url(post.xpath('@href').to_s)
+          if url.nil?
+            url = Url.new({:url => post.xpath('@href').to_s, :icon => nil})
+            if !url.save
+              render :status => 404
+            end                       
+          end 
+
       bookmark = Bookmark.new({:url => url, :title => title, :description => description, :user => current_user})
       tags.each do |t|
         if Tag.where(:tagname => t.strip.gsub(' ', '-').downcase).size == 0
@@ -46,7 +54,7 @@ class DeliciousController < ApplicationController
         logger.debug "Failed to save #{post}"
       end
     end
-    redirect_to timeline_path
+    redirect_to timeline_path, alert: 'Import from \'Delicious\' completed'
   end
 
   private
