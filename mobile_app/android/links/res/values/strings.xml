@@ -8,6 +8,7 @@
         <item>Groups</item>
         <item>Group Invites</item>
         <item>Add Link</item>
+        <item>Logout</item>
     </string-array>
 
     <string-array name="groups_links_options">

@@ -35,4 +35,6 @@ public class URLConstants {
   
   public static final String GROUPS_TIMELINE = BASE_URL + "/api/groups/%s/timeline";
   public static final String GROUPS_LOAD_MORE_BOOKMARKS = BASE_URL + "/api/groups/%s/loadmore/%s";
+  
+  public static final String LOGOUT = BASE_URL + "/oauth/authorize";
 }

@@ -8,6 +8,7 @@ import org.iiitb.se.links.home.fragments.SubscribedGroupFragment;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.FragmentTypes;
 import org.iiitb.se.links.utils.StringConstants;
+import org.iiitb.se.links.utils.network.bookmarks.Logout;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -100,6 +101,7 @@ public class MainActivity extends Activity {
       String urlFromIntent = intent.getStringExtra(Intent.EXTRA_TEXT);
       urlFromIntent = urlFromIntent.substring(urlFromIntent
           .indexOf(StringConstants.HTTP));
+      urlFromIntent = urlFromIntent.substring(0, urlFromIntent.indexOf(" ") - 1);
       String subjectFromIntent = null;
       if (intent.hasExtra(Intent.EXTRA_SUBJECT)) {
         subjectFromIntent = intent.getStringExtra(Intent.EXTRA_SUBJECT);
@@ -249,6 +251,9 @@ public class MainActivity extends Activity {
         fragmentTypes = FragmentTypes.ADD_BOOKMARK_FRAGMENT;
         openDialogToAddURL();
         break;
+      case 4:
+        logout();
+        break;
     }
     if (null != fragment) {
       Bundle args = new Bundle();
@@ -262,6 +267,11 @@ public class MainActivity extends Activity {
     mDrawerList.setItemChecked(position, true);
     setTitle(mLinksOptions[position]);
     mDrawerLayout.closeDrawer(mDrawerList);
+  }
+
+  private void logout() {
+    Logout logout = new Logout(this);
+    logout.performLogout();
   }
 
   private void openDialogToAddURL() {
