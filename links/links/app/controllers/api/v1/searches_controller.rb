@@ -28,6 +28,28 @@ module Api
 			    bookmarks_formatter 
 			end
 
+			def search_bookmark_in_groups
+			    keyword = params[:keyword]
+			    group_id = params[:id]
+			    if keyword.start_with?('#')
+			       bookmarks_in_groups_tag_searcher(Time.now, keyword, group_id)
+			    else
+			       bookmarks_in_group_searcher(Time.now, keyword, group_id)
+			    end            			    
+			    bookmarks_formatter 
+			end
+
+			def searchmore_in_groups
+			    keyword = params[:keyword]
+			    time = Time.at(params[:time].to_i).to_datetime
+
+			    if keyword.start_with?('#')
+			      bookmarks_in_groups_tag_searcher(time, keyword, group_id)
+			    else
+			      bookmarks_in_group_searcher(time, keyword, group_id)
+			    end            
+			    bookmarks_formatter 
+			end
 
 			private
 

@@ -39,6 +39,8 @@ Links::Application.routes.draw do
       scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do          
           get "/searches/search_bookmark/:keyword" => "searches#search_bookmark", :as => 'api_search_bookmark'
           get "/searches/searchmore/:keyword/:time" => "searches#searchmore", :as => 'api_search_more'
+          get "/searches/groups/:id/search_bookmark/:keyword" => "searches#search_bookmark_in_groups", :as => 'api_groups_search_bookmark'
+          get "/searches/groups/:id/searchmore/:keyword/:time" => "searches#searchmore_in_groups", :as => 'api_groups_search_more'
       end
 
       scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do 
