@@ -7,21 +7,19 @@
 		<%= csrf_meta_tags %>
 	</head>
 	<body>
-		<div id="overlay" class="overlay-invisible">
-		</div>
+		<div id="overlay" class="overlay-invisible"></div>
 		<% if current_user %>
 		<%= render "layouts/navbar" %>
 		<% end %>
+		<% flash.each do |name, msg| -%>
+		<%= content_tag :div, msg, class: name %>
+		<% end -%>
 
 		<div id='groups-layout'>
 			<div id="groups-layout-left">
 				&nbsp;
 			</div>
 			<div id='groups-layout-center'>
-				<% flash.each do |name, msg| -%>
-				<%= content_tag :div, msg, class: name %>
-				<% end -%>
-
 				<%= yield :center %>
 			</div>
 			<div id='groups-layout-right'>

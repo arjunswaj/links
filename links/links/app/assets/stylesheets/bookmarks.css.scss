@@ -67,6 +67,9 @@
 	width: 10%;
 	padding-left: 15px;
 	font-family: Arial Narrow, sans-serif;
+	> img {
+	  min-width: 100%
+	}
 }
  .left-user-info {
  	float: left;

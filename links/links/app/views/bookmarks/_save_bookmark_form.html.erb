@@ -1,11 +1,6 @@
 <div class="bookmark-form">
   <div class="bookmark-form-title">
   	<h3>Save Bookmark</h3>
-  	<p>
-	<% flash.each do |name, msg| -%>
-	<%= content_tag :div, msg, class: name %>
-	<% end -%>
-	</p>
   </div>
   <% if !share_with_group.nil? %>
   	<%= form_tag('/savebookmark/' + share_with_group.id.to_s , method: "post", remote: true) do %>

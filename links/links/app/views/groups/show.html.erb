@@ -7,14 +7,14 @@
 
 	<div id='content'>
 		<div id='details'>
-			<div>
+			<div id='group-owner'>
 				<strong>Group Owner:</strong>
 				<%= link_to @group.owner.name, show_user_path(@group.owner)%>
 			</div>
 			<div id='filler'>
 				&nbsp;
 			</div>
-			<div>
+			<div id='group-description'>
 				<%= @group.description %>
 			</div>
 		</div>

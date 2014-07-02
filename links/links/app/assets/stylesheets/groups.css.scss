@@ -101,9 +101,13 @@ div#details {
   > div > a {
     color: #777777;
   }
+  
+  > div#group-owner,  div#group-description  {
+    margin-left: 1em;
+  }
 }
 
-div#add-users {
+div#add-users{
   //float: right;
   //width: 50%;
   
