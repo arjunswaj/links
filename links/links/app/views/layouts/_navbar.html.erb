@@ -11,23 +11,20 @@
 				<ul class="nav">
 				    <li>
 				    	<%= link_to "Groups", groups_path %>
-			        </li>			        
+			        </li>
+   					<li>
+						<%= link_to "Tools", 'pages/tools'%>						
+					</li>			        
 					<li>
   						<%= link_to "Search", timeline_path %>
 				    </li>
 				</ul>
 				<ul class="nav pull-right">
-					<li>
-			        	<%= link_to "Import from delicious", delicious_authorize_path %>
-			        </li>
-			        <li>
-			        	<%= link_to "Me", show_user_path(current_user) %>
-			        </li>
-			        <li>
-			        	<%= link_to "Settings", "#"%>
-			        </li>
 			        <li>
 			        	<%= link_to "Log Out", destroy_user_session_path, :method => :delete %>	
+			        </li>
+   			        <li>
+			        	<%= link_to "Me", show_user_path(current_user) %>
 			        </li>
 				</ul>
 			</div>

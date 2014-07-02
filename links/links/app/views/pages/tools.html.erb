@@ -1,0 +1,64 @@
+<h1>Useful tools</h1>
+<ul>
+	<li>
+		<div class='btn btn-primary btn-lg'>
+			<a href="javascript:(function() {
+    var url = document.URL;
+    var title = '';
+    var description = '';
+    var tags = [];
+    title = document.title;
+    var metaTagElements = document.getElementsByTagName('meta');
+    for(i = 1; i < metaTagElements.length; i++) { 
+        if (metaTagElements[i].getAttribute('name') == 'description' || metaTagElements[i].getAttribute('name') == 'og:description')
+            description = metaTagElements[i].getAttribute('content');
+        if (metaTagElements[i].getAttribute('name') == 'og:title')
+            title = metaTagElements[i].getAttribute('content');
+        if (metaTagElements[i].getAttribute('name') == 'keywords')
+            tags = metaTagElements[i].getAttribute('content').split(',');
+    }
+    
+    var form = document.createElement('form');
+	form.setAttribute('method', 'post');
+	form.setAttribute('action', 'http://localhost:3000/bookmarklet.html');
+	form.setAttribute('target', 'newwin');
+
+	var urlInput = document.createElement('input'); 
+	urlInput.setAttribute('type', 'hidden');
+	urlInput.setAttribute('name', 'url');
+	urlInput.setAttribute('value', url);
+	form.appendChild(urlInput);
+
+	var titleInput = document.createElement('input');
+	titleInput.setAttribute('type', 'hidden');
+	titleInput.setAttribute('name', 'title');
+	titleInput.setAttribute('value', title);
+	form.appendChild(titleInput);
+
+	var descriptionInput = document.createElement('input'); 
+	descriptionInput.setAttribute('type', 'hidden');
+	descriptionInput.setAttribute('name', 'description');
+	descriptionInput.setAttribute('value', description);
+	form.appendChild(descriptionInput);
+
+	var tagsInput = document.createElement('input'); 
+	tagsInput.setAttribute('type', 'hidden');	
+	tagsInput.setAttribute('name', 'tags');
+	tagsInput.setAttribute('value', tags);
+	form.appendChild(tagsInput);
+	
+	document.body.appendChild(form);
+
+	window.open('', 'newwin');
+	form.submit();
+	
+}())">+ Add to Links</a>		
+		</div>
+	</li>
+	<li>
+		<div class='btn btn-primary btn-lg'>
+			<%= link_to "Import from delicious", delicious_authorize_path %>
+		</div>
+	</li>
+</ul>
+

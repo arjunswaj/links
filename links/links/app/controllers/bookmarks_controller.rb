@@ -4,10 +4,10 @@ require 'timeout'
 
 class BookmarksController < ApplicationController
   include BookmarksHelper
-  before_action  :authenticate_user!, only: [:show, :edit, :update, :destroy, :index, :timeline]
+  before_action  :authenticate_user!, only: [:show, :edit, :update, :destroy, :index, :timeline, :bookmarklet]
   before_action  :set_bookmark, only: [:show, :edit, :update, :destroy]
-  
   layout 'base'
+  skip_before_action :verify_authenticity_token, only: [:bookmarklet] # TODO: http://stackoverflow.com/a/3364673
   
   def timeline
     index
@@ -112,7 +112,7 @@ class BookmarksController < ApplicationController
 
     respond_to do |format|
       if @bookmark.save
-        format.html { redirect_to @bookmark, notice: 'Bookmark was successfully created.' }
+        format.html { redirect_to timeline_path, notice: 'Bookmark was successfully created.' }
         format.json { render action: 'show', status: :created, location: @bookmark }
         format.js
       else
@@ -266,9 +266,29 @@ class BookmarksController < ApplicationController
   end
   
   def bookmarklet
-    respond_to do |format|
-      format.js
+    url_str = params[:url]
+    url_str.insert(0, 'http://') if url_str.match('^http').nil?
+    
+    url = Url.find_by_url(url_str)
+    if url.nil?
+      url = Url.new({:url => params[:url], :icon => nil})
+      if !url.save
+        render :status => 404
+      end
     end
+
+    @bookmark = Bookmark.new({:url => url, :title => params[:title], :description => params[:description], :user => current_user})
+ 
+    params[:tags].split(',').each do |tag|
+      if Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).size == 0
+        @tag = Tag.new
+        @tag.tagname = tag.strip.gsub(' ','-').downcase
+        @bookmark.tags << @tag
+      else
+        @bookmark.tags << Tag.where(:tagname => tag.strip.gsub(' ', '-').downcase).first
+      end
+    end    
+    
   end
 
   private
@@ -311,7 +331,7 @@ class BookmarksController < ApplicationController
         doc.css('meta').each do |meta|
           title = meta['content'] if meta['name'] && (meta['name'].match 'og:title')
           desc = meta['content'] if meta['name'] && ((meta['name'].match 'description') || (meta['name'].match 'og:description'))
-          keywords = meta['content'].split(",") if meta['name'] && (meta['name'].match 'keywords')
+          keywords = meta['content'].split(',') if meta['name'] && (meta['name'].match 'keywords')
 
           if meta['property'] && (meta['property'].match 'og:image')
             image_url = meta['content']
@@ -331,6 +351,5 @@ class BookmarksController < ApplicationController
       ensure
         return {:title => title, :desc => desc, :keywords => keywords, :icon => icon}
       end
-    end
-  
+    end  
 end

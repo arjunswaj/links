@@ -1,0 +1,45 @@
+<div class="bookmark-form">
+	<div class="bookmark-form-title">
+		<h3>Save Bookmark</h3>
+	</div>
+	<%= form_tag(savebookmark_path, method: "post") do %>
+
+	<div class="form-group">
+		<label for="url">URL</label>
+		<%= text_field_tag(:url, @bookmark.url.url, {placeholder: "Paste the URL here..."}) %>
+	</div>
+	<div class="form-group">
+		<label for="title">Title</label>
+		<%= text_field_tag(:title, @bookmark.title, {placeholder: "Title"}) %>
+	</div>
+	<div class="form-group">
+		<label for="description">Description</label>
+		<%= text_area_tag(:description, @bookmark.description, {placeholder: "Description"}) %>
+	</div>
+	
+	<% tags_string_list = nil %>
+	<% @bookmark.tags.each do |tag| %>
+		<% if tags_string_list.nil? %>
+			<% tags_string_list = tag.tagname %>
+		<% else %>
+			<% tags_string_list << ', ' + tag.tagname %>
+		<% end %>
+	<% end %>
+	<%= hidden_field_tag(:tags_string_list, tags_string_list) %>
+	
+	<div class="form-group">
+		<label for="tags">Tags</label>
+		<div id="magicsuggest"></div>
+		<div>
+			<input type="text" name="tags[]" id="ms_tags" placeholder"Tags">
+			</input>
+		</div>
+	</div>
+
+	<div class="bookmark-form-actions">
+		<%= button_tag("Cancel", class:"btn", type:"button", id:"cancel_bookmark") %>
+		<%= submit_tag("Save", class:"btn") %>
+	</div>
+	<% end %>
+</div>
+<%= javascript_include_tag "bookmarklet", "data-turbolinks-track" => true %>
