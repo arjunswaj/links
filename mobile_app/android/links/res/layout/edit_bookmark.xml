@@ -49,12 +49,12 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="top|left"
-            android:hint="@string/enter_bookmark_description"
             android:inputType="textMultiLine"
             android:lines="3"
             android:maxLines="4"
             android:minLines="2"
-            android:scrollbars="vertical" >
+            android:scrollbars="vertical"
+            android:hint="@string/enter_bookmark_description" >
         </EditText>
 
         <TextView
@@ -72,28 +72,6 @@
 
             <requestFocus />
         </EditText>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center" >
-
-            <TextView
-                android:id="@+id/bookmark_share_group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:text="@string/bookmark_share_group" />
-
-            <CheckBox
-                android:id="@+id/group_check"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="10dp" >
-            </CheckBox>
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

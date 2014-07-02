@@ -1,5 +1,7 @@
 package org.iiitb.se.links.utils.network.bookmarks;
 
+import java.util.Set;
+
 import org.iiitb.se.links.R;
 import org.iiitb.se.links.home.fragments.AddBookmarkFragment;
 import org.iiitb.se.links.utils.AppConstants;
@@ -19,10 +21,13 @@ public class BookmarkAdder extends AbstractResourceDownloader {
 
   private static final String TAG = "BookmarkAdder";
   private AddBookmarkFragment addBookmarkFragment;
+  private Set<String> groupIds;
 
-  public BookmarkAdder(Context context, AddBookmarkFragment addBookmarkFragment) {
+  public BookmarkAdder(Context context,
+      AddBookmarkFragment addBookmarkFragment, Set<String> groupIds) {
     super(context);
     this.addBookmarkFragment = addBookmarkFragment;
+    this.groupIds = groupIds;
   }
 
   @Override
@@ -61,6 +66,10 @@ public class BookmarkAdder extends AbstractResourceDownloader {
         @Override
         protected String doInBackground(Void... params) {
           String resourceURL = URLConstants.SAVE_BOOKMARK;
+          if (!groupIds.isEmpty()) {
+            resourceURL = URLConstants.SAVE_BOOKMARK_IN_GROUPS;
+          }
+
           OAuthRequest request = new OAuthRequest(Verb.POST, resourceURL);
           request.addBodyParameter(StringConstants.URL, addBookmarkFragment
               .getUrl().getText().toString());
@@ -71,6 +80,11 @@ public class BookmarkAdder extends AbstractResourceDownloader {
           request.addBodyParameter(StringConstants.TAGS, addBookmarkFragment
               .getTags().getText().toString());
 
+          if (!groupIds.isEmpty()) {
+            for (String groupId : groupIds) {
+              request.addBodyParameter(StringConstants.GROUP_ID_ARRAY, groupId);
+            }
+          }
           mOauthService.signRequest(accessToken, request);
           response = request.send();
           status = response.getCode();

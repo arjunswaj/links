@@ -11,14 +11,22 @@ public class URLConstants {
   public static final String SEARCH_MORE_BOOKMARKS = BASE_URL
       + "/api/searches/searchmore";
 
+  public static final String SEARCH_IN_GROUP = BASE_URL
+      + "/api/searches/groups/%s/search_bookmark/%s";
+  public static final String SEARCH_MORE_BOOKMARKS_IN_GROUP = BASE_URL
+      + "/api/searches/groups/%s/searchmore/%s/%s";
+
   public static final String SAVE_BOOKMARK = BASE_URL + "/api/savebookmark";
-  
+
+  public static final String SAVE_BOOKMARK_IN_GROUPS = BASE_URL
+      + "/api/groups/savebookmark";
+
   public static final String UPDATE_BOOKMARK = BASE_URL + "/api/updatebookmark";
-  
+
   public static final String DELETE_BOOKMARK = BASE_URL + "/api/deletebookmark";
-  
+
   public static final String SHARE_BOOKMARK = BASE_URL + "/api/sharebookmark";
-  
+
   public static final String SUBSCRIBED_GROUPS_INDEX = BASE_URL
       + "/api/groups/index";
 
@@ -30,4 +38,11 @@ public class URLConstants {
 
   public static final String ACCEPT_SUBSCRIBE = BASE_URL + "/api/groups/accept";
   public static final String REJECT_SUBSCRIBE = BASE_URL + "/api/groups/reject";
+
+  public static final String GROUPS_TIMELINE = BASE_URL
+      + "/api/groups/%s/timeline";
+  public static final String GROUPS_LOAD_MORE_BOOKMARKS = BASE_URL
+      + "/api/groups/%s/loadmore/%s";
+
+  public static final String LOGOUT = BASE_URL + "/oauth/authorize";
 }

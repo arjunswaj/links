@@ -1,8 +1,15 @@
-package org.iiitb.se.links.home.fragments;
+package org.iiitb.se.links.group.fragments;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.iiitb.se.links.R;
+import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.StringConstants;
-import org.iiitb.se.links.utils.network.bookmarks.BookmarkEditor;
+import org.iiitb.se.links.utils.network.MyProperties;
+import org.iiitb.se.links.utils.network.WebpageLoader;
+import org.iiitb.se.links.utils.network.bookmarks.BookmarkGroupAdder;
+import org.json.JSONObject;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -19,8 +26,9 @@ import android.widget.EditText;
 /**
  * Fragment that appears in the "content_frame", shows Links
  */
-public class EditBookmarkFragment extends Fragment {
-  private static final String TAG = "EditBookmarkFragment";
+public class AddBookmarkInGroupFragment extends Fragment implements
+    WebpageLoader.AddBookmarkFormElements {
+  private static final String TAG = "AddBookmarkFragment";
 
   private EditText url;
   private EditText title;
@@ -29,14 +37,11 @@ public class EditBookmarkFragment extends Fragment {
   private Button cancel;
   private Button ok;
 
-  private BookmarkEditor bookmarkEditor;  
+  private BookmarkGroupAdder bookmarkGroupAdder;
+  private WebpageLoader webpageLoader;  
 
-  private String bookmarkId;
-  
-  public String getBookmarkId() {
-    return bookmarkId;
-  }
-  
+  private List<JSONObject> groups = new ArrayList<JSONObject>();
+
   public EditText getUrl() {
     return url;
   }
@@ -56,7 +61,8 @@ public class EditBookmarkFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    View rootView = inflater.inflate(R.layout.edit_bookmark, container, false);
+    View rootView = inflater.inflate(R.layout.save_bookmark_in_group,
+        container, false);
 
     url = (EditText) rootView.findViewById(R.id.bookmark_url);
     title = (EditText) rootView.findViewById(R.id.bookmark_title);
@@ -65,23 +71,28 @@ public class EditBookmarkFragment extends Fragment {
     cancel = (Button) rootView.findViewById(R.id.cancel);
     ok = (Button) rootView.findViewById(R.id.ok);
 
-    bookmarkEditor = new BookmarkEditor(getActivity(), this);    
+    bookmarkGroupAdder = new BookmarkGroupAdder(getActivity(), this,
+        MyProperties.getInstance().groupId);
 
-    String linkOption = getString(R.string.edit_link);
+    webpageLoader = new WebpageLoader(getActivity(), this);
+
+    int i = getArguments().getInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER);
+
+    String linkOption = getResources().getStringArray(R.array.links_options)[i];
     getActivity().setTitle(linkOption);
 
-    bookmarkId = getArguments().getString(StringConstants.BOOKMARK_ID);
     String bookmarkUrl = getArguments().getString(StringConstants.URL);
-    String bookmarkTitle = getArguments().getString(StringConstants.TITLE);
-    String bookmarkDescription = getArguments().getString(StringConstants.DESCRIPTION);
-    String bookmarkTags = getArguments().getString(StringConstants.TAGS);
+    if (null != bookmarkUrl) {
+      url.setText(bookmarkUrl);
+      String bookmarkTitle = getArguments().getString(StringConstants.TITLE);
+      if (null == bookmarkTitle) {
+        webpageLoader.fetchWebPageDetails(false);
+      } else {
+        title.setText(bookmarkTitle);
+        webpageLoader.fetchWebPageDetails(true);
+      }
+    }
 
-    url.setText(bookmarkUrl);
-    title.setText(bookmarkTitle);
-    description.setText(bookmarkDescription);
-    tags.setText(bookmarkTags);
-    
-    
     cancel.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View arg0) {
@@ -92,17 +103,18 @@ public class EditBookmarkFragment extends Fragment {
     ok.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View arg0) {
-        bookmarkEditor.editBookmark();
+        bookmarkGroupAdder.saveBookmark();
       }
     });
+    
     return rootView;
 
-  }
+  }  
 
   public void closeThisFragmentAndLoadHome() {
     Intent intent = new Intent(getActivity(), getActivity().getClass());
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-        | Intent.FLAG_ACTIVITY_NEW_TASK);     
+        | Intent.FLAG_ACTIVITY_NEW_TASK);
     getActivity().startActivity(intent);
   }
 
@@ -116,7 +128,7 @@ public class EditBookmarkFragment extends Fragment {
 
   }
 
-  public EditBookmarkFragment() {
+  public AddBookmarkInGroupFragment() {
     // Empty constructor required for fragment subclasses
   }
 }

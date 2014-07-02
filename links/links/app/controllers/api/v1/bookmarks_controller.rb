@@ -1,9 +1,5 @@
 module Api 
-	module V1	
-		require 'nokogiri'
-		require 'open-uri'
-		require 'timeout'
-	
+	module V1				
 		class BookmarksController < ApplicationController
 			include BookmarksHelper
 			doorkeeper_for :all
@@ -164,7 +160,13 @@ module Api
 				if bookmark.group_id
 					bookmark_json[:username] = bookmark.user.name
 					bookmark_json[:groupname] = bookmark.group.name	
-				end				
+				end
+				
+				if bookmark.user_id == doorkeeper_token.resource_owner_id
+					bookmark_json[:my_bookmark] = true
+				else
+					bookmark_json[:my_bookmark] = false
+				end			
 				bookmark_json
 			end
 			
@@ -178,44 +180,7 @@ module Api
 
 			def share_to_group_params
 			    params.permit(:bookmark_id, :group_ids => [])
-			end
-
-			# Extract annotations from url
-		    def get_annotations(url)
-		      # TODO: handle exceptions from openuri(network related)
-		      title = ''
-		      desc = ''
-		      keywords = []
-		      icon = nil
-
-		      begin
-		          doc = nil
-		        Timeout::timeout(50) {
-		          doc = Nokogiri::HTML(open(process_uri(url)))
-		        }
-		        title = doc.at_css('title').text if doc.at_css('title').text
-		        doc.css('meta').each do |meta|
-		          desc = meta['content'] if meta['name'] && (meta['name'].match 'description')
-		          keywords = meta['content'].split(",") if meta['name'] && (meta['name'].match 'keywords')
-
-		          if meta['property'] && (meta['property'].match 'og:image')
-		            image_url = meta['content']
-		            image_url = meta['content'].insert(0, 'http:') if meta['content'].match('^http').nil?
-		            open(image_url) do |f|
-		              icon = f.read
-		            end
-		          end
-		        end
-		      rescue Timeout::Error => ex
-		        logger.debug ex
-		        flash[:notice] = "Taking too long to retrieve annotations... :-(. Fill them yourself"
-		      rescue OpenURI::HTTPError => ex
-		        logger.debug ex
-		        flash[:notice] = ex.to_s
-		      ensure
-		        return {:title => title, :desc => desc, :keywords => keywords, :icon => icon}
-		      end
-		    end			
+			end					
 		end
 	end
 end

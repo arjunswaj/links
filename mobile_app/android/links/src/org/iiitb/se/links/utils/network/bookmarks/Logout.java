@@ -1,7 +1,6 @@
-package org.iiitb.se.links.utils.network.groups.requests;
+package org.iiitb.se.links.utils.network.bookmarks;
 
 import org.iiitb.se.links.R;
-import org.iiitb.se.links.home.cards.RequestsGroupCard;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.URLConstants;
 import org.iiitb.se.links.utils.network.AbstractResourceDownloader;
@@ -13,28 +12,23 @@ import org.scribe.model.Verb;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 
-public class GroupRequestsDecider extends AbstractResourceDownloader {
+public class Logout extends AbstractResourceDownloader {
 
-  private static final String TAG = "GroupRequestsDecider";
-  private RequestsGroupCard requestsGroupCard;
-  private int actionStatus = 0;
+  protected static final String TAG = "Logout";
 
-  public GroupRequestsDecider(Context context,
-      RequestsGroupCard requestsGroupCard) {
+  public Logout(Context context) {
     super(context);
-    this.requestsGroupCard = requestsGroupCard;
   }
 
-  public int getActionStatus() {
-    return actionStatus;
+  @Override
+  public void fetchProtectedResource(Token accessToken) {
+    performLogout(accessToken);
   }
 
-  public void setActionStatus(int actionStatus) {
-    this.actionStatus = actionStatus;
-  }
-
-  public void acceptOrRejectSubscriptionToGroup() {
+  public void performLogout() {
     String accessTokenKey = sharedPreferences.getString(
         AppConstants.ACCESS_TOKEN_KEY, null);
     String accessTokenSecret = sharedPreferences.getString(
@@ -45,16 +39,13 @@ public class GroupRequestsDecider extends AbstractResourceDownloader {
       authDialog.setTitle(context.getString(R.string.authorize_links));
       startAuthorize();
     } else {
-      Log.i(TAG, "Token Key found. We're gonna unsubscribe to the group.");
+      Log.i(TAG, "Token Key found. Will logout.");
       Token accessToken = new Token(accessTokenKey, accessTokenSecret);
-      accessProtectedResource(accessToken);
+      performLogout(accessToken);
     }
   }
 
-  /**
-   * Accept/Reject
-   */
-  protected void accessProtectedResource(final Token accessToken) {
+  public void performLogout(final Token accessToken) {
     if (netAvailable()) {
       (new AsyncTask<Void, Integer, String>() {
         Response response;
@@ -62,22 +53,19 @@ public class GroupRequestsDecider extends AbstractResourceDownloader {
 
         @Override
         protected void onPreExecute() {
+          mProgressDialog.setProgress(0);
           mProgressDialog.show();
         }
 
         @Override
+        protected void onProgressUpdate(Integer... progress) {
+          mProgressDialog.setProgress(progress[0]);
+        }
+
+        @Override
         protected String doInBackground(Void... params) {
-          String resourceURL = null;
-          OAuthRequest request = null;
-          if (0 == actionStatus) {
-            resourceURL = URLConstants.ACCEPT_SUBSCRIBE + "/"
-                + requestsGroupCard.getGroupId();
-            request = new OAuthRequest(Verb.PUT, resourceURL);
-          } else if (1 == actionStatus) {
-            resourceURL = URLConstants.REJECT_SUBSCRIBE + "/"
-                + requestsGroupCard.getGroupId();
-            request = new OAuthRequest(Verb.DELETE, resourceURL);
-          }
+          String resourceURL = URLConstants.LOGOUT;
+          OAuthRequest request = new OAuthRequest(Verb.DELETE, resourceURL);
           mOauthService.signRequest(accessToken, request);
           response = request.send();
           status = response.getCode();
@@ -89,16 +77,18 @@ public class GroupRequestsDecider extends AbstractResourceDownloader {
           mProgressDialog.hide();
           if (null == responseBody || 401 == status) {
             startAuthorize();
-          } else {
+          } else {        
+            CookieSyncManager.createInstance(context);
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.removeAllCookie();            
+            mWebView.clearCache(true);
+            sharedPreferencesEditor.clear();
+            sharedPreferencesEditor.commit();            
             reloadFragment();
           }
         }
+
       }).execute();
     }
-  }
-
-  @Override
-  public void fetchProtectedResource(Token accessToken) {
-    accessProtectedResource(accessToken);
-  }
+  }  
 }

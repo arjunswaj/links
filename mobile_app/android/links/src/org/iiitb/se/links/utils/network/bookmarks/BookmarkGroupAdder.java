@@ -1,9 +1,7 @@
 package org.iiitb.se.links.utils.network.bookmarks;
 
-import java.util.Set;
-
 import org.iiitb.se.links.R;
-import org.iiitb.se.links.home.cards.BookmarkCard;
+import org.iiitb.se.links.group.fragments.AddBookmarkInGroupFragment;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.StringConstants;
 import org.iiitb.se.links.utils.URLConstants;
@@ -17,22 +15,25 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class BookmarkSharer extends AbstractResourceDownloader {
+public class BookmarkGroupAdder extends AbstractResourceDownloader {
 
-  private static final String TAG = "RequestsGroupsLoader";
-  private BookmarkCard bookmarkCard;
-  
-  public BookmarkSharer(Context context, BookmarkCard bookmarkCard) {
+  private static final String TAG = "BookmarkGroupAdder";
+  private AddBookmarkInGroupFragment addBookmarkInGroupFragment;
+  private String groupId;
+
+  public BookmarkGroupAdder(Context context,
+      AddBookmarkInGroupFragment addBookmarkInGroupFragment, String groupId) {
     super(context);
-    this.bookmarkCard = bookmarkCard;
+    this.addBookmarkInGroupFragment = addBookmarkInGroupFragment;
+    this.groupId = groupId;
   }
 
   @Override
   public void fetchProtectedResource(Token accessToken) {
-    shareBookmark(accessToken);
+    saveBookmark(accessToken);
   }
 
-  public void shareBookmarkWithGroupsIamPartOf() {
+  public void saveBookmark() {
     String accessTokenKey = sharedPreferences.getString(
         AppConstants.ACCESS_TOKEN_KEY, null);
     String accessTokenSecret = sharedPreferences.getString(
@@ -43,13 +44,13 @@ public class BookmarkSharer extends AbstractResourceDownloader {
       authDialog.setTitle(context.getString(R.string.authorize_links));
       startAuthorize();
     } else {
-      Log.i(TAG, "Token Key found. We're gonna share the bookmark with groups.");
+      Log.i(TAG, "Token Key found. We're gonna save the bookmark in the group.");
       Token accessToken = new Token(accessTokenKey, accessTokenSecret);
-      shareBookmark(accessToken);
+      saveBookmark(accessToken);
     }
   }
 
-  private void shareBookmark(final Token accessToken) {
+  private void saveBookmark(final Token accessToken) {
     if (netAvailable()) {
       (new AsyncTask<Void, Integer, String>() {
         Response response;
@@ -62,14 +63,18 @@ public class BookmarkSharer extends AbstractResourceDownloader {
 
         @Override
         protected String doInBackground(Void... params) {
-          String resourceURL = URLConstants.SHARE_BOOKMARK;
+          String resourceURL = URLConstants.SAVE_BOOKMARK_IN_GROUPS;          
           OAuthRequest request = new OAuthRequest(Verb.POST, resourceURL);
-          request.addBodyParameter(StringConstants.BOOKMARK_ID, bookmarkCard.getBookmarkId());
-          Set<String> groupIds = bookmarkCard.getGroupsAdapter().getGroupIdsToShareWith();
-          for (String groupId : groupIds) {
-            Log.i(TAG, "Group ID: " + groupId);
-            request.addBodyParameter(StringConstants.GROUP_ID_ARRAY, groupId);
-          }
+          request.addBodyParameter(StringConstants.URL,
+              addBookmarkInGroupFragment.getUrl().getText().toString());
+          request.addBodyParameter(StringConstants.TITLE,
+              addBookmarkInGroupFragment.getTitle().getText().toString());
+          request.addBodyParameter(StringConstants.DESCRIPTION,
+              addBookmarkInGroupFragment.getDescription().getText().toString());
+          request.addBodyParameter(StringConstants.TAGS,
+              addBookmarkInGroupFragment.getTags().getText().toString());
+
+          request.addBodyParameter(StringConstants.GROUP_ID_ARRAY, groupId);
           mOauthService.signRequest(accessToken, request);
           response = request.send();
           status = response.getCode();
@@ -82,7 +87,9 @@ public class BookmarkSharer extends AbstractResourceDownloader {
           if (null == responseBody || 401 == status) {
             startAuthorize();
           } else {
-            reloadFragment();
+            addBookmarkInGroupFragment.hideKeyboard();
+            addBookmarkInGroupFragment.closeThisFragmentAndLoadHome();
+            Log.i(TAG, "Successfully saved the bookmark in the group.");
           }
         }
       }).execute();

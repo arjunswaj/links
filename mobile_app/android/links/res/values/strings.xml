@@ -8,9 +8,15 @@
         <item>Groups</item>
         <item>Group Invites</item>
         <item>Add Link</item>
+        <item>Logout</item>
     </string-array>
 
-	<string name="edit_link">Edit Link</string>
+    <string-array name="groups_links_options">
+        <item>Links</item>
+        <item>Add Link to Group</item>       
+    </string-array>
+    
+    <string name="edit_link">Edit Link</string>
     <string name="http">http://</string>
     <string name="loading">Loading&#8230;</string>
     <string name="share_with_apps">Share with Apps</string>
@@ -18,6 +24,7 @@
     <string name="edit">Edit</string>
     <string name="share">Share</string>
     <string name="share_with_groups">Share with Groups&#8230;</string>
+    <string name="select_groups">Select Groups&#8230;</string>
     <string name="authorize_links">Authorize Links</string>
     <string name="search">Search</string>
     <string name="search_hint">#tags or bookmarks</string>
@@ -27,12 +34,13 @@
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
     <string name="bookmark_domain">domain</string>
     <string name="bookmark_more">More&#8230;</string>
-    <string name="bookmark_sharer">%1$s in %2$s</string>    
+    <string name="bookmark_sharer">%1$s in %2$s</string>
     <string name="bookmark_url">URL</string>
     <string name="bookmark_title">Title</string>
     <string name="bookmark_description">Description</string>
     <string name="bookmark_tags">Tags</string>
     <string name="bookmark_updated_time">Time</string>
+    <string name="bookmark_share_group">Share in Group</string>
     <string name="enter_bookmark_url">Enter URL</string>
     <string name="enter_bookmark_title">Enter title</string>
     <string name="enter_bookmark_description">Enter description</string>
@@ -42,6 +50,9 @@
     <string name="reject_group_invite">Reject</string>
     <string name="group_name">Group Name</string>
     <string name="group_description">Group Description</string>
-
     <string name="internet_not_available">Please enable Wi-Fi or Data to use this app.</string>
+    <string name="title_activity_group">Groups</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
 </resources>

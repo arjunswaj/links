@@ -1,14 +1,11 @@
 package org.iiitb.se.links;
 
-import org.iiitb.se.links.home.fragments.AddBookmarkFragment;
-import org.iiitb.se.links.home.fragments.LinkFragment;
-import org.iiitb.se.links.home.fragments.BookmarkSearchFragment;
-import org.iiitb.se.links.home.fragments.RequestsGroupFragment;
-import org.iiitb.se.links.home.fragments.SubscribedGroupFragment;
+import org.iiitb.se.links.group.fragments.AddBookmarkInGroupFragment;
+import org.iiitb.se.links.group.fragments.BookmarkSearchInGroupsFragment;
+import org.iiitb.se.links.group.fragments.GroupLinkFragment;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.FragmentTypes;
 import org.iiitb.se.links.utils.StringConstants;
-import org.iiitb.se.links.utils.network.bookmarks.Logout;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,7 +14,6 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -34,7 +30,8 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 
-public class MainActivity extends Activity {
+public class GroupActivity extends Activity {
+
   private DrawerLayout mDrawerLayout;
   private ListView mDrawerList;
   private ActionBarDrawerToggle mDrawerToggle;
@@ -44,7 +41,7 @@ public class MainActivity extends Activity {
   private String[] mLinksOptions;
   private SearchView searchView;
   public FragmentTypes fragmentTypes;
-  private static final String TAG = "MainActivity";
+  private static final String TAG = "GroupActivity";
 
   public SearchView getSearchView() {
     return searchView;
@@ -53,12 +50,12 @@ public class MainActivity extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    setContentView(R.layout.activity_group);
     Intent intent = this.getIntent();
     String action = intent.getAction();
 
     mTitle = mDrawerTitle = getTitle();
-    mLinksOptions = getResources().getStringArray(R.array.links_options);
+    mLinksOptions = getResources().getStringArray(R.array.groups_links_options);
     mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -95,44 +92,9 @@ public class MainActivity extends Activity {
       }
     };
     mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-    if (null != action && action.equalsIgnoreCase(Intent.ACTION_SEND)
-        && intent.hasExtra(Intent.EXTRA_TEXT)) {
-      String urlFromIntent = intent.getStringExtra(Intent.EXTRA_TEXT);
-      urlFromIntent = urlFromIntent.substring(urlFromIntent
-          .indexOf(StringConstants.HTTP));
-      if (-1 != urlFromIntent.indexOf(" ")) {
-        urlFromIntent = urlFromIntent.substring(0, urlFromIntent.indexOf(" "));
-      }
-      String subjectFromIntent = null;
-      if (intent.hasExtra(Intent.EXTRA_SUBJECT)) {
-        subjectFromIntent = intent.getStringExtra(Intent.EXTRA_SUBJECT);
-      }
-      openLinksSavePage(urlFromIntent, subjectFromIntent);
-    } else {
-      if (savedInstanceState == null) {
-        selectItem(0);
-      }
+    if (null == savedInstanceState) {
+      selectItem(0);
     }
-  }
-
-  private void openLinksSavePage(String urlFromIntent, String subjectFromIntent) {
-    Fragment fragment = new AddBookmarkFragment();
-    fragmentTypes = FragmentTypes.ADD_BOOKMARK_FRAGMENT;
-    Bundle args = new Bundle();
-    args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 3);
-
-    args.putString(StringConstants.URL, urlFromIntent);
-    if (null != subjectFromIntent) {
-      args.putString(StringConstants.TITLE, subjectFromIntent);
-    }
-
-    fragment.setArguments(args);
-
-    FragmentManager fragmentManager = getFragmentManager();
-    fragmentManager.beginTransaction().replace(R.id.content_frame, fragment)
-        .commit();
-
   }
 
   @Override
@@ -167,20 +129,13 @@ public class MainActivity extends Activity {
           // Based on the fragment type loaded, go to the respective search
           // screen
           switch (fragmentTypes) {
-            case BOOKMARK_FRAGMENT:
-            case BOOKMARK_SEARCH_FRAGMENT:
-
-              fragment = new BookmarkSearchFragment();
-              fragmentTypes = FragmentTypes.BOOKMARK_SEARCH_FRAGMENT;
+            case GROUP_BOOKMARKS_FRAGMENT:
+            case GROUP_BOOKMARKS_SEARCH_FRAGMENT:
+              fragment = new BookmarkSearchInGroupsFragment();
+              fragmentTypes = FragmentTypes.GROUP_BOOKMARKS_SEARCH_FRAGMENT;
               break;
+            case GROUP_ADD_BOOKMARK_FRAGMENT:
 
-            case MY_GROUP_FRAGMENT:
-            case MY_GROUP_SEARCH_FRAGMENT:
-
-              fragmentTypes = FragmentTypes.MY_GROUP_SEARCH_FRAGMENT;
-              break;
-            case GROUP_REQUEST_FRAGMENT:
-              break;
             default:
               break;
 
@@ -238,23 +193,12 @@ public class MainActivity extends Activity {
     Fragment fragment = null;
     switch (position) {
       case 0:
-        fragment = new LinkFragment();
-        fragmentTypes = FragmentTypes.BOOKMARK_FRAGMENT;
+        fragment = new GroupLinkFragment();
+        fragmentTypes = FragmentTypes.GROUP_BOOKMARKS_FRAGMENT;
         break;
       case 1:
-        fragment = new SubscribedGroupFragment();
-        fragmentTypes = FragmentTypes.MY_GROUP_FRAGMENT;
-        break;
-      case 2:
-        fragment = new RequestsGroupFragment();
-        fragmentTypes = FragmentTypes.GROUP_REQUEST_FRAGMENT;
-        break;
-      case 3:
-        fragmentTypes = FragmentTypes.ADD_BOOKMARK_FRAGMENT;
+        fragmentTypes = FragmentTypes.GROUP_ADD_BOOKMARK_FRAGMENT;
         openDialogToAddURL();
-        break;
-      case 4:
-        logout();
         break;
     }
     if (null != fragment) {
@@ -271,9 +215,19 @@ public class MainActivity extends Activity {
     mDrawerLayout.closeDrawer(mDrawerList);
   }
 
-  private void logout() {
-    Logout logout = new Logout(this);
-    logout.performLogout();
+  private void openLinksSavePage(String urlFromIntent) {
+    Fragment fragment = new AddBookmarkInGroupFragment();
+    fragmentTypes = FragmentTypes.GROUP_ADD_BOOKMARK_FRAGMENT;
+    Bundle args = new Bundle();
+    args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER, 1);
+    args.putString(StringConstants.URL, urlFromIntent);
+
+    fragment.setArguments(args);
+
+    FragmentManager fragmentManager = getFragmentManager();
+    fragmentManager.beginTransaction().replace(R.id.content_frame, fragment)
+        .commit();
+
   }
 
   private void openDialogToAddURL() {
@@ -297,7 +251,7 @@ public class MainActivity extends Activity {
                 String url = userInput.getText().toString();
                 if (null != url && !url.isEmpty()) {
                   url = url.trim();
-                  openLinksSavePage(url, null);
+                  openLinksSavePage(url);
                 }
               }
             })
@@ -314,30 +268,5 @@ public class MainActivity extends Activity {
     // show it
     alertDialog.show();
 
-  }
-
-  @Override
-  public void setTitle(CharSequence title) {
-    mTitle = title;
-    getActionBar().setTitle(mTitle);
-  }
-
-  /**
-   * When using the ActionBarDrawerToggle, you must call it during
-   * onPostCreate() and onConfigurationChanged()...
-   */
-
-  @Override
-  protected void onPostCreate(Bundle savedInstanceState) {
-    super.onPostCreate(savedInstanceState);
-    // Sync the toggle state after onRestoreInstanceState has occurred.
-    mDrawerToggle.syncState();
-  }
-
-  @Override
-  public void onConfigurationChanged(Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-    // Pass any configuration change to the drawer toggls
-    mDrawerToggle.onConfigurationChanged(newConfig);
   }
 }

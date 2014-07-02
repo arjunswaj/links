@@ -12,15 +12,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.iiitb.se.links.MainActivity;
 import org.iiitb.se.links.R;
 import org.iiitb.se.links.home.cards.expand.BookmarkCardExpand;
 import org.iiitb.se.links.home.fragments.EditBookmarkFragment;
-import org.iiitb.se.links.home.fragments.LinkFragment;
 import org.iiitb.se.links.home.fragments.adapter.ShareGroupsAdapter;
-import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.DomainExtractor;
-import org.iiitb.se.links.utils.FragmentTypes;
 import org.iiitb.se.links.utils.StringConstants;
 import org.iiitb.se.links.utils.network.bookmarks.BookmarkDeleter;
 import org.iiitb.se.links.utils.network.bookmarks.BookmarkSharer;
@@ -29,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -60,6 +57,7 @@ public class BookmarkCard extends Card {
   private String description = null;
   private String groupname = null;
   private String username = null;
+  private boolean myBookmark = false;
   private String formattedDate = null;
 
   private CardView cardView = null;
@@ -153,18 +151,7 @@ public class BookmarkCard extends Card {
     // show it
     alertDialog.show();
 
-  }
-
-  public void reloadHome() {
-    ((MainActivity) context).fragmentTypes = FragmentTypes.BOOKMARK_FRAGMENT;
-    Fragment fragment = new LinkFragment();
-    Bundle args = new Bundle();
-    args.putInt(AppConstants.LINK_FRAGMENT_OPTION_NUMBER,
-        FragmentTypes.BOOKMARK_FRAGMENT.ordinal());
-    fragment.setArguments(args);
-    ((MainActivity) context).getFragmentManager().beginTransaction()
-        .replace(R.id.content_frame, fragment).commit();
-  }
+  } 
 
   private void shareBookmarkWithApps() {
     Intent intent = new Intent(Intent.ACTION_SEND);
@@ -206,9 +193,11 @@ public class BookmarkCard extends Card {
           public boolean onPreparePopupMenu(BaseCard card, PopupMenu popupMenu) {
             shareWithGroups = popupMenu.getMenu().add(
                 context.getString(R.string.share));
-            edit = popupMenu.getMenu().add(context.getString(R.string.edit));
-            delete = popupMenu.getMenu()
-                .add(context.getString(R.string.delete));
+            if (myBookmark) {
+              edit = popupMenu.getMenu().add(context.getString(R.string.edit));
+              delete = popupMenu.getMenu().add(
+                  context.getString(R.string.delete));
+            }
             shareWithApps = popupMenu.getMenu().add(
                 context.getString(R.string.share_with_apps));
             return true;
@@ -229,7 +218,6 @@ public class BookmarkCard extends Card {
   }
 
   protected void editBookmark() {
-    ((MainActivity) context).fragmentTypes = FragmentTypes.EDIT_BOOKMARK_FRAGMENT;
     Fragment fragment = new EditBookmarkFragment();
     Bundle args = new Bundle();
     args.putString(StringConstants.BOOKMARK_ID, id);
@@ -252,7 +240,7 @@ public class BookmarkCard extends Card {
 
     fragment.setArguments(args);
 
-    FragmentManager fragmentManager = ((MainActivity) context)
+    FragmentManager fragmentManager = ((Activity) context)
         .getFragmentManager();
     fragmentManager.beginTransaction().replace(R.id.content_frame, fragment)
         .commit();
@@ -267,6 +255,7 @@ public class BookmarkCard extends Card {
       description = bookmark.getString(StringConstants.DESCRIPTION);
       groupname = bookmark.optString(StringConstants.LINK_GROUP_NAME, null);
       username = bookmark.optString(StringConstants.USER_NAME, null);
+      myBookmark = bookmark.getBoolean(StringConstants.MY_BOOKMARK);
 
       long epoch = bookmark.getLong(StringConstants.UPDATED_AT);
 
@@ -281,6 +270,7 @@ public class BookmarkCard extends Card {
 
   private void setData() {
     // Set the header title
+    init();
     header.setTitle(title);
     bookmarkCardExpand.setBookmark(bookmark);
     mDomain.setText(DomainExtractor.getBaseDomain(url));

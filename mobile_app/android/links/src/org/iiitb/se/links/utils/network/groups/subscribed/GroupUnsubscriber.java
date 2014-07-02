@@ -74,7 +74,7 @@ public class GroupUnsubscriber extends AbstractResourceDownloader {
           if (null == responseBody || 401 == status) {
             startAuthorize();
           } else {
-            subscribedGroupCard.reloadHome();
+            reloadFragment();
           }
         }
       }).execute();
