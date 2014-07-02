@@ -53,11 +53,13 @@ gem 'devise'
 
 #rest client
 gem 'rest-client'
+
 # doorkeeper for oauth
 gem 'doorkeeper'
 
 # nokogiri for automatically retrieving annotations
 gem 'nokogiri'
+
 # for redirections
 gem 'open_uri_redirections'
 
