@@ -32,14 +32,18 @@ class ApplicationController < ActionController::Base
     require 'nokogiri'
     require 'open-uri'
     require 'timeout'
+    require 'uri'
     # TODO: handle exceptions from openuri(network related)
     title = ''
     desc = ''
     keywords = []
     icon = nil
+    image_url = ''
+    favicon_url = ''
+    parsedURL = URI.parse(url)
 
     begin
-        doc = nil
+      doc = nil
       Timeout::timeout(50) {
         doc = Nokogiri::HTML(open(process_uri(url)))
       }
@@ -51,19 +55,36 @@ class ApplicationController < ActionController::Base
         if meta['property'] && (meta['property'].match 'og:image')
           image_url = meta['content']
           image_url = meta['content'].insert(0, 'http:') if meta['content'].match('^http').nil?
-          open(image_url) do |f|
-            icon = f.read
-          end
         end
       end
+      
       title = doc.at_css('title').text if title == '' && doc.at_css('title').text
+      
+      doc.css('link').each do |link|
+        if link['rel'] && (link['rel'].match 'icon')
+          favicon_url = parsedURL.scheme + '://' + parsedURL.host + '/' + link['href']
+          break; 
+        end
+      end if favicon_url == ''
     rescue Timeout::Error => ex
       logger.debug ex
       flash[:notice] = "Taking too long to retrieve annotations... :-(. Fill them yourself"
     rescue OpenURI::HTTPError => ex
       logger.debug ex
       flash[:notice] = ex.to_s
+    rescue Exception => ex
+      logger.debug ex
     ensure
+      title = parsedURL.host if title == ''
+      image_url = favicon_url if image_url == ''
+      begin
+        open(image_url) do |f|
+          icon = f.read
+        end if image_url != ''
+      rescue Exception => ex
+        logger.debug ex.to_s + " : Unable to get icon"
+      end
+      logger.debug image_url
       return {:title => title, :desc => desc, :keywords => keywords, :icon => icon}
     end
   end
