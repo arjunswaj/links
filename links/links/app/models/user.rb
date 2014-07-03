@@ -10,5 +10,7 @@ class User < ActiveRecord::Base
 	has_many :groups # owner relationship
 	has_many :memberships
 	has_many :groups, :through => :memberships # membership relationship
+	
+	mount_uploader :image, ImageUploader
 
 end
