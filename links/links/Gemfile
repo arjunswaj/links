@@ -5,7 +5,7 @@ gem 'rails', '4.0.5'
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
-#gem 'mysql', '2.9.1'
+gem 'mysql', '2.9.1'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.2'
@@ -72,5 +72,5 @@ gem "less-rails"
 gem "twitter-bootstrap-rails"
 
 # photo upload
-#gem 'carrierwave'
+gem 'carrierwave'
 gem 'rmagick', "~>2.13.2", :require => 'RMagick'
