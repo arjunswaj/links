@@ -118,7 +118,7 @@ module Api
 			def groups_formatter(groups)
 				formatted_groups = []
 				groups.each do  |group|				  				  
-				  formatted_groups << {:id => group.id, :name => group.name}
+				  formatted_groups << {:id => group.id, :name => group.name, :description => (group.description != nil) ? group.description : ""}
 				end
 				respond_with formatted_groups
 			end			
