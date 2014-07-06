@@ -15,6 +15,7 @@
         <item>Links</item>
         <item>Add Link to Group</item>       
     </string-array>
+    <string name="add_to_links">Add to Links</string>
     
     <string name="edit_link">Edit Link</string>
     <string name="http">http://</string>
