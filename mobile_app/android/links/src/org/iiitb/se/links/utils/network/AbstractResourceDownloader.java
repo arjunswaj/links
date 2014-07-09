@@ -45,7 +45,9 @@ public abstract class AbstractResourceDownloader implements ResourceLoader {
 
     authDialog = new Dialog(context);
     authDialog.setContentView(R.layout.auth_dialog);
-
+    authDialog.setCanceledOnTouchOutside(false);
+    authDialog.setCancelable(false);
+    
     mOauthService = new ServiceBuilder().provider(LinksApi.class)
         .apiKey(AppConstants.API_KEY).apiSecret(AppConstants.API_SECRET)
         .callback(AppConstants.URN_IETF_WG_OAUTH_2_0_OOB).build();
@@ -55,7 +57,9 @@ public abstract class AbstractResourceDownloader implements ResourceLoader {
     mProgressDialog.setMessage(context.getString(R.string.loading));
     mProgressDialog.setIndeterminate(true);
     mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-
+    mProgressDialog.setCanceledOnTouchOutside(false);
+    mProgressDialog.setCancelable(false);
+    
     mWebView = (WebView) authDialog.findViewById(R.id.webView);
     mWebView.clearCache(true);
     mWebView.getSettings().setJavaScriptEnabled(true);

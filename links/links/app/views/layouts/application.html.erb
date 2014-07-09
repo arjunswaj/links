@@ -14,6 +14,9 @@
 	<div class="container">
 		<div class="row">
 			<div class="span6">
+				<%= yield %>
+			</div>
+			<div class="span6">
 				<h1>Links</h1>
 				<h4>A free, open-sourced online bookmarking service.</h4>
 				Traditional bookmarking services do not allow storing information on private servers. The application should allow deploying a local server which is capable of the following for every user/client:
@@ -21,14 +24,10 @@
 					<li>Bookmarking URLs</li>
 					<li>Tagging the URLs</li>
 					<li>Searching among the links</li>
-					<li>Annotations for a given URL</li>
-					<li>Multi-user</li>
-					<li>Expose an API</li>
+					<li>Annotations for a given URL</li>					
+					<li>Exposes REST APIs</li>
 				</ul>
-			</div>
-			<div class="span6">
-				<%= yield %>
-			</div>			
+			</div>						
 		</div>
 		<!--
 		<div class="row">

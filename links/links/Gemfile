@@ -52,7 +52,7 @@ gem 'ad', path: "../ad"
 gem 'devise'
 
 #rest client
-#gem 'rest-client'
+gem 'rest-client'
 
 # doorkeeper for oauth
 gem 'doorkeeper'
