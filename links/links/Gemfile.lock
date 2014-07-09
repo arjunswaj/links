@@ -176,7 +176,7 @@ DEPENDENCIES
   open_uri_redirections
   rails (= 4.0.5)
   rest-client
-  rmagick (~> 2.13.2)
+  rmagick
   sass-rails (~> 4.0.2)
   sdoc
   share!
