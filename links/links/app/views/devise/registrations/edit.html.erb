@@ -3,32 +3,38 @@
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, multipart: :true }) do |f| %>
   <%= devise_error_messages! %>
 
-  <div><%= f.label :email %><br />
+  <div><%= f.label :email %>
   <%= f.email_field :email, autofocus: true %></div>
+  <br/>
   
-  <div><%= f.label :name %><br />
+  <div><%= f.label :name %>
   <%= f.text_field :name %></div>
+  <br/>
 
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
     <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+    <br/>
   <% end %>
 
-  <div><%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+  <div><%= f.label :password %> <i>(leave blank if you don't want to change it)</i></br>
     <%= f.password_field :password, autocomplete: "off" %></div>
+  <br/>
 
-  <div><%= f.label :password_confirmation %><br />
+  <div><%= f.label :password_confirmation %>
     <%= f.password_field :password_confirmation, autocomplete: "off" %></div>
+  <br/>
 
-  <div><%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+  <div><%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i>
     <%= f.password_field :current_password, autocomplete: "off" %></div>
+  <br/>
     
     <div>
     <%= f.label :image %>
     <%= f.file_field :image %>
     <%= f.hidden_field :image_cache %>
     </div>
-
     <br/>
+
   <div><%= f.submit "Update" %></div>
 <% end %>
 
