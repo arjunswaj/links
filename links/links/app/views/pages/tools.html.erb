@@ -1,6 +1,13 @@
 <h3>Useful tools</h3>
 <ul>
 	<li>
+	<div>
+		<span><h4>Bookmarklet</h4></span>
+		<span>Drag the below button to your toolbar to enable a one click bookmarking tool. You can then click on this button when you want to bookmark a url you are currents browsing through links</span>
+	</div>
+	<div>
+		<p></p>
+	</div>
 		<div class='btn btn-primary btn-lg'>
 			<a href="javascript:(function() {
     var url = document.URL;
@@ -54,11 +61,14 @@
 	
 }())">+ Add to Links</a>		
 		</div>
+		<hr>
 	</li>
 	<li>
-		<div class='btn btn-primary btn-lg'>
-			<%= link_to "Import from delicious", delicious_authorize_path %>
+		<div>
+			<span><h4>Import from delicious</h4></span>
+			<span>Already have bookmarks in Delicious? No problem. <strong><%= link_to "Click here", delicious_authorize_path %></strong> to import it to Links</span>
 		</div>
+		<hr>
 	</li>
 </ul>
 
