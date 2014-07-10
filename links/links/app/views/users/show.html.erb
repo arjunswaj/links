@@ -1,4 +1,7 @@
-<%= render "users/user_photo" %>
+<div class='left'>
+	<%= render "users/user_photo" %>
+</div>
+<div class='right'>
 <p>
 <strong>Name: </strong> <%= @user.name %>
 </p>
@@ -10,3 +13,4 @@
 	<%= link_to "Edit Profile", edit_user_registration_path, :class => 'btn'%>
 </p>
 <% end %>
+</div>

@@ -16,8 +16,12 @@
   <div><%= f.label :password_confirmation %><br />
     <%= f.password_field :password_confirmation, autocomplete: "off" %></div>
     
-  <div><%= f.file_field :image %></div>
-  <div><%= f.hidden_field :image_cache %></div>
+  <div>
+    <%= f.label :image %>
+    <%= f.file_field :image %>
+    <%= f.hidden_field :image_cache %>
+   </div>
+   <br/>
 
 
   <div><%= f.submit "Sign up" %></div>
