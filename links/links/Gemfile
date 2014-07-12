@@ -73,4 +73,7 @@ gem "twitter-bootstrap-rails"
 
 # photo upload
 gem 'carrierwave'
-gem 'rmagick'
+gem 'rmagick', require: false
+
+#documentation 
+gem 'railroady'
