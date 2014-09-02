@@ -1,26 +1,36 @@
+# This controller contains actions to import bookmarks from delicious.com
 # https://github.com/SciDevs/delicious-api/blob/master/api/oauth.md
 # https://github.com/SciDevs/delicious-api/blob/master/api/posts.md
 
 # TODO: error handling
 class DeliciousController < ApplicationController
+  # Authorize user through 'devise' and set client id and client key before every action
   before_action :authenticate_user!, :set_client_details
 
+  # GET /delicious/authorize
+  # Obtain delicious user authorization 
   def authorize
     redirect_to 'https://delicious.com/auth/authorize?client_id=' + @client_id.to_s + '&redirect_uri=' + delicious_import_url
   end
 
+  # GET /delicious/import
+  # Import bookmark from delicious. This is the action invoked when delicious calls the supplied callback url
   def import
+    # Get request token
     request_token = request.original_url.split('code=')[1]
     logger.debug request_token # TODO: remove this and the other logger.debug statements
 
+    # Get access token
     access_token_url = 'https://avosapi.delicious.com/api/v1/oauth/token?client_id=' + @client_id.to_s + '&client_secret=' + @client_secret.to_s + '&grant_type=code&code=' + request_token
     response = RestClient.post access_token_url, nil
     access_token = JSON.parse(response)['access_token']
     logger.debug access_token
 
+    # Get all bookmarks stored in delicious
     response = RestClient.get 'https://delicious.com/v1/posts/all?&tag_separator=comma', :Authorization => 'Bearer ' + access_token
     logger.debug response
 
+    # Parse response and push bookmarks to 'links'
     xml_doc = Nokogiri::XML(response)
     xml_doc.xpath('//post').each do |post|
       url_str = Url.new({:url => post.xpath('@href').to_s, :icon => nil})

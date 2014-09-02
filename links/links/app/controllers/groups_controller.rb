@@ -1,21 +1,29 @@
+# This controller contains all group related actions
 class GroupsController < ApplicationController
+  # Authorization through 'devise'
   before_action :authenticate_user!
   
   #TODO: json response
   
   # GET /groups
+  # All groups of which the authenticated user is a member of
   def index
     @all_groups = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , current_user, true)
   end
     
+  # GET /owned_groups
+  # All groups which the authenticated user owns
   def owned_groups
     @owned_groups = Group.where("owner_id = ?", current_user)
   end
 
+  # Groups to which the specified user has been invited
   def self.group_invites(user)
     Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , user, false)
   end
   
+  # GET /group_invites
+  # Groups to which the the authenticated user has been invited
   def group_invites
     @invites = GroupsController.group_invites current_user
   end
@@ -31,7 +39,7 @@ class GroupsController < ApplicationController
 
   # GET /groups/1
   # GET /groups/1.json
-  # if an invite comes, a user must be able to visit the group and check it out in general  
+  # Details of the specified group
   def show
     set_group
 
@@ -44,28 +52,35 @@ class GroupsController < ApplicationController
       .order('bookmarks.updated_at DESC')
   end
   
+  # GET /groups/1
+  # Members of the specified group
   def members
     set_group    
     @members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", params[:id], true) if GroupsController.group_member? current_user.id, params[:id]
   end
 
+  # Members who still haven't responded to invites to the specfied group
   def self.pending_members(group_id, owner_id)
     pending_members = []
     pending_members = User.joins(:groups).where("group_id = ? and acceptance_status = ?", group_id, false) if GroupsController.group_owner? owner_id, group_id
     return pending_members
   end
-  
+ 
+  # GET /pending_members/1
+  # Members who still haven't responded to invites to the specified group
   def pending_members
     set_group    
     @pending_members = GroupsController.pending_members(params[:id], current_user.id)
   end
 
   # GET /groups/new
+  # New group
   def new
     @group = Group.new
   end
 
   # GET /groups/1/edit
+  # Edit specified group details
   def edit
     if GroupsController.group_owner? current_user.id, params[:id]
       set_group
@@ -79,6 +94,7 @@ class GroupsController < ApplicationController
 
   # POST /groups
   # POST /groups.json
+  # Create a new group with the specified details
   def create
     @group = Group.new(group_params)
     @group.owner = current_user
@@ -100,6 +116,7 @@ class GroupsController < ApplicationController
 
   # PATCH/PUT /groups/1
   # PATCH/PUT /groups/1.json
+  # Update the specified group with the given details
   def update
     if GroupsController.group_owner? current_user.id, params[:id]
       set_group
@@ -122,6 +139,7 @@ class GroupsController < ApplicationController
 
   # DELETE /groups/1
   # DELETE /groups/1.json
+  # Delete the specified group
   def destroy
     if GroupsController.group_owner? current_user.id, params[:id]
       set_group
@@ -140,6 +158,7 @@ class GroupsController < ApplicationController
 
   # POST /groups/1/invite_users
   # POST /groups/1/invite_users.json
+  # Mark specified user as invited
   def invite_users
     if GroupsController.group_owner? current_user.id, params[:id]
       set_group
@@ -161,6 +180,7 @@ class GroupsController < ApplicationController
 
   # PUT /groups/1/add_user/1
   # PUT /groups/1/add_user/1.json
+  # Mark that the specified user is now a member of the specified group
   def accept_invite
     group = Group.find(params[:group_id])
     user = User.find(params[:user_id])
@@ -181,6 +201,7 @@ class GroupsController < ApplicationController
 
   # DELETE /groups/1/users/2
   # DELETE /groups/1/users/2.json
+  # Remove the specified user from the membership of the specified group owned by the authenticated user
   def remove_user
     group = Group.find(params[:group_id])
     user = User.find(params[:user_id])
@@ -200,6 +221,7 @@ class GroupsController < ApplicationController
 
   # POST /groups/1/unsubscribe
   # POST /groups/1/unsubscribe.json
+  # The authenticated user is no longer the member of the specified group
   def unsubscribe
     if (!GroupsController.group_owner? current_user.id, params[:id]) && (GroupsController.group_member? current_user.id, params[:id])
       set_group
@@ -218,6 +240,7 @@ class GroupsController < ApplicationController
 
   # DELETE /groups/1/users/2/cancel
   # DELETE /groups/1/users/2/cancel.json
+  # Authenticated user cancels invite of the specified user to the specified group
   def cancel_invite
     if (GroupsController.group_owner? current_user.id, params[:group_id])
       membership = Membership.find_by_user_id_and_group_id_and_acceptance_status(params[:user_id], params[:group_id], false)
