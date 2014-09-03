@@ -1,11 +1,14 @@
 module Api 
 	module V1		
+		# Controller for handling all operations related to Searches via REST API
 		class SearchesController < ApplicationController
 			include SearchesHelper
 			doorkeeper_for :all
 			skip_before_action :verify_authenticity_token
 			respond_to :json
 
+			# Searches bookmark based on bookmark contents
+  			# This is paginated
 			def search_bookmark
 			    keyword = params[:keyword]
 			    if keyword.start_with?('#')
@@ -16,6 +19,8 @@ module Api
 			    bookmarks_formatter 
 			end
 
+			# Searches more bookmarks based on bookmark contents
+  			# This is paginated
 			def searchmore
 			    keyword = params[:keyword]
 			    time = Time.at(params[:time].to_i).to_datetime
@@ -27,7 +32,9 @@ module Api
 			    end            
 			    bookmarks_formatter 
 			end
-
+			
+			# Searches bookmarks in a group based on bookmark contents
+  			# This is paginated
 			def search_bookmark_in_groups
 			    keyword = params[:keyword]
 			    group_id = params[:id]
@@ -39,6 +46,8 @@ module Api
 			    bookmarks_formatter 
 			end
 
+			# Searches more bookmarks in a group based on bookmark contents
+  			# This is paginated
 			def searchmore_in_groups
 			    keyword = params[:keyword]
 			    group_id = params[:id]
@@ -53,7 +62,8 @@ module Api
 			end
 
 			private
-
+			
+			# Formats the bookmarks to a JSON
 			def bookmarks_formatter
 				formatted_bookmarks = []
 				@bookmarks.each do  |bookmark|
@@ -62,6 +72,9 @@ module Api
 				respond_with formatted_bookmarks
 			end
 
+			# Strips the unwanted data off the bookmarks object
+			# Params:
+			# +bookmark+:: The bookmark object from ActiveModel
 			def strip_bookmark_to_json(bookmark)
 				formatted_tags = []
 				bookmark.tags.each do |tag|

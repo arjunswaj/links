@@ -1,21 +1,31 @@
 module Api 
 	module V1				
+		# Controller for handling all operations related to Bookmarks via REST API
 		class BookmarksController < ApplicationController
 			include BookmarksHelper
 			doorkeeper_for :all
 			skip_before_action :verify_authenticity_token
 			respond_to :json
+			# Loads the bookmarks for the timeline
+			# Formats the bookmarks into a JSON
+			# This is paginated
 			def timeline
 				bookmarks_loader(Time.now, doorkeeper_token.resource_owner_id) 
 				bookmarks_formatter				
 			end
 
+			# Loads more bookmarks for the timeline
+			# Formats the bookmarks into a JSON
+			# This is paginated
 			def loadmore
 				time = Time.at(params[:time].to_i).to_datetime
 				bookmarks_loader(time, doorkeeper_token.resource_owner_id) 
 				bookmarks_formatter
 			end
 
+			# Loads all the bookmarks for the timeline
+			# Formats the bookmarks into a JSON
+			# This is NOT paginated, Use paginated versions only
 			def index
 				bookmarks = Bookmark.where("user_id == ?", doorkeeper_token.resource_owner_id)
 				formatted_bookmarks = []
@@ -29,6 +39,13 @@ module Api
 				respond_with formatted_bookmarks
 			end
 
+			
+			# Persists the Bookmark as follows:
+			# * Saves the URL if not present
+			# * Saves the bookmark object
+			# * Finds the Tags, if not present, will save the object
+			# * If Group id is set, will associate the bookmark with the Group and saves it
+			# Handles Async requsts
 			def savebookmark
 				url_str = save_bookmark_params[:url]
 				annotations = get_annotations(url_str)
@@ -63,6 +80,12 @@ module Api
 			    end			    
 			end		
 
+			# Updates the Bookmark as follows:
+			# * Saves the new URL if not present
+			# * Updates the bookmark object
+			# * Finds the Tags, if not present, will save/update the object
+			# * If Group id is set, will associate the bookmark with the Group and updates it
+			# Handles Async requsts
 			def updatebookmark
 				url_str = update_bookmark_params[:url]
 				annotations = get_annotations(url_str)
@@ -110,6 +133,7 @@ module Api
 		       	end
 			end
 
+			# Deletes the bookmarks based on the bookmark id
 			def deletebookmark
 				bookmark = Bookmark.find_by_id(params[:id])
 				if bookmark.user_id == doorkeeper_token.resource_owner_id
@@ -120,6 +144,10 @@ module Api
 				end
 			end	
 
+			# Shares the bookmarks to set of groups
+			# Params to be passed:
+			# * bookmark id of the bookmark
+			# * array of group ids to which it has to be shared
 			def share_bookmark_to_groups
 			    bookmark_to_share = Bookmark.find(share_to_group_params['bookmark_id'])
 			    group_ids = share_to_group_params['group_ids']
@@ -142,6 +170,7 @@ module Api
 
 			private
 
+			# Formats the bookmarks to a JSON
 			def bookmarks_formatter
 				formatted_bookmarks = []
 				@bookmarks.each do  |bookmark|
@@ -150,6 +179,9 @@ module Api
 				respond_with formatted_bookmarks
 			end
 
+			# Strips the unwanted data off the bookmarks object
+			# Params:
+			# +bookmark+:: The bookmark object from ActiveModel
 			def strip_bookmark_to_json(bookmark)
 				formatted_tags = []
 				bookmark.tags.each do |tag|
@@ -170,14 +202,17 @@ module Api
 				bookmark_json
 			end
 			
+			# Util to get bookmark params while saving
 			def save_bookmark_params
 			    params.permit(:url, :title, :description, :tags)
 			end
-
+			
+			# Util to get bookmark params while updating
 			def update_bookmark_params
 			    params.permit(:bookmark_id, :url, :title, :description, :tags)
 			end
-
+			
+			# Util to get bookmark params while sharing to groups
 			def share_to_group_params
 			    params.permit(:bookmark_id, :group_ids => [])
 			end					
