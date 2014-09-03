@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class GroupsController - App Documentation</title>
+
+<link href="./fonts.css" rel="stylesheet">
+<link href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/navigation.js"></script>
+<script src="./js/search_index.js"></script>
+<script src="./js/search.js"></script>
+<script src="./js/searcher.js"></script>
+<script src="./js/darkfish.js"></script>
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link"><a href="ApplicationController.html">ApplicationController</a>
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-c-group_invites">::group_invites</a>
+    
+    <li ><a href="#method-c-group_member-3F">::group_member?</a>
+    
+    <li ><a href="#method-c-group_owner-3F">::group_owner?</a>
+    
+    <li ><a href="#method-c-pending_members">::pending_members</a>
+    
+    <li ><a href="#method-i-accept_invite">#accept_invite</a>
+    
+    <li ><a href="#method-i-cancel_invite">#cancel_invite</a>
+    
+    <li ><a href="#method-i-create">#create</a>
+    
+    <li ><a href="#method-i-destroy">#destroy</a>
+    
+    <li ><a href="#method-i-edit">#edit</a>
+    
+    <li ><a href="#method-i-group_invites">#group_invites</a>
+    
+    <li ><a href="#method-i-group_params">#group_params</a>
+    
+    <li ><a href="#method-i-index">#index</a>
+    
+    <li ><a href="#method-i-invite_users">#invite_users</a>
+    
+    <li ><a href="#method-i-members">#members</a>
+    
+    <li ><a href="#method-i-new">#new</a>
+    
+    <li ><a href="#method-i-owned_groups">#owned_groups</a>
+    
+    <li ><a href="#method-i-pending_members">#pending_members</a>
+    
+    <li ><a href="#method-i-remove_user">#remove_user</a>
+    
+    <li ><a href="#method-i-set_group">#set_group</a>
+    
+    <li ><a href="#method-i-share_params">#share_params</a>
+    
+    <li ><a href="#method-i-shareable_groups">#shareable_groups</a>
+    
+    <li ><a href="#method-i-show">#show</a>
+    
+    <li ><a href="#method-i-unsubscribe">#unsubscribe</a>
+    
+    <li ><a href="#method-i-update">#update</a>
+    
+    <li ><a href="#method-i-user_receiver_params">#user_receiver_params</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-GroupsController">
+  <h1 id="class-GroupsController" class="class">
+    class GroupsController
+  </h1>
+
+  <section class="description">
+    
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-group_invites" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">group_invites</span><span
+            class="method-args">(user)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="group_invites-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 15</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">group_invites</span>(<span class="ruby-identifier">user</span>)
+  <span class="ruby-constant">Group</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-value">:users</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;memberships.user_id = ? and memberships.acceptance_status = ?&quot;</span> , <span class="ruby-identifier">user</span>, <span class="ruby-keyword">false</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-group_member-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">group_member?</span><span
+            class="method-args">(user_id, group_id)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="group_member-3F-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 241</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">group_member?</span>(<span class="ruby-identifier">user_id</span>, <span class="ruby-identifier">group_id</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-operator">!</span><span class="ruby-constant">Membership</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;user_id = ? and group_id = ? and acceptance_status = ?&quot;</span>, <span class="ruby-identifier">user_id</span>, <span class="ruby-identifier">group_id</span>, <span class="ruby-keyword">true</span>).<span class="ruby-identifier">empty?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-group_owner-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">group_owner?</span><span
+            class="method-args">(owner_id, group_id)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="group_owner-3F-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 237</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">group_owner?</span>(<span class="ruby-identifier">owner_id</span>, <span class="ruby-identifier">group_id</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-operator">!</span><span class="ruby-constant">Group</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;owner_id = ? and id = ?&quot;</span>, <span class="ruby-identifier">owner_id</span>, <span class="ruby-identifier">group_id</span>).<span class="ruby-identifier">empty?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-pending_members" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">pending_members</span><span
+            class="method-args">(group_id, owner_id)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="pending_members-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 52</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pending_members</span>(<span class="ruby-identifier">group_id</span>, <span class="ruby-identifier">owner_id</span>)
+  <span class="ruby-identifier">pending_members</span> = []
+  <span class="ruby-identifier">pending_members</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-value">:groups</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;group_id = ? and acceptance_status = ?&quot;</span>, <span class="ruby-identifier">group_id</span>, <span class="ruby-keyword">false</span>) <span class="ruby-keyword">if</span> <span class="ruby-constant">GroupsController</span>.<span class="ruby-identifier">group_owner?</span> <span class="ruby-identifier">owner_id</span>, <span class="ruby-identifier">group_id</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">pending_members</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-accept_invite" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">accept_invite</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>PUT /groups/1/add_user/1 PUT /groups/1/add_user/1.json</p>
+          
+          
+
+          
+          <div class="method-source-code" id="accept_invite-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 164</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">accept_invite</span>
+  <span class="ruby-identifier">group</span> = <span class="ruby-constant">Group</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:group_id</span>])
+  <span class="ruby-identifier">user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>])
+  <span class="ruby-identifier">membership</span> = <span class="ruby-constant">Membership</span>.<span class="ruby-identifier">find_by_group_id_and_user_id</span>(<span class="ruby-identifier">group</span>, <span class="ruby-identifier">user</span>)
+  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">membership</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">membership</span>.<span class="ruby-identifier">update_attributes</span> <span class="ruby-value">:acceptance_status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">group_path</span>(<span class="ruby-identifier">group</span>), <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-node">&quot;Now member of #{group.name}&quot;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">head</span> <span class="ruby-value">:no_content</span> }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">groups_path</span>, <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;Not accepted. You have not been invited to the group&quot;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">json</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;You have not been invited to the group&quot;</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">:</span> <span class="ruby-value">:forbidden</span>}
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-cancel_invite" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">cancel_invite</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>DELETE /groups/1/users/2/cancel DELETE /groups/1/users/2/cancel.json</p>
+          
+          
+
+          
+          <div class="method-source-code" id="cancel_invite-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 221</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">cancel_invite</span>
+  <span class="ruby-keyword">if</span> (<span class="ruby-constant">GroupsController</span>.<span class="ruby-identifier">group_owner?</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:group_id</span>])
+    <span class="ruby-identifier">membership</span> = <span class="ruby-constant">Membership</span>.<span class="ruby-identifier">find_by_user_id_and_group_id_and_acceptance_status</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:group_id</span>], <span class="ruby-keyword">false</span>)
+    <span class="ruby-constant">Membership</span>.<span class="ruby-identifier">delete</span> <span class="ruby-identifier">membership</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">membership</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">group_path</span>(<span class="ruby-constant">Group</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:group_id</span>])), <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Cancelled invitation successfully.&#39;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">head</span> <span class="ruby-value">:no_content</span> }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">group_path</span>(<span class="ruby-constant">Group</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:group_id</span>])), <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;Nothing to cancel. The user has not at all been invited.&quot;</span>}
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">json</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;Only invited members may be cancelled.&quot;</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">:</span> <span class="ruby-value">:method_not_allowed</span> }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-create" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>POST /groups POST /groups.json</p>
+          
+          
+
+          
+          <div class="method-source-code" id="create-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 82</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
+  <span class="ruby-ivar">@group</span> = <span class="ruby-constant">Group</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">group_params</span>)
+  <span class="ruby-ivar">@group</span>.<span class="ruby-identifier">owner</span> = <span class="ruby-identifier">current_user</span>
+  <span class="ruby-ivar">@group</span>.<span class="ruby-identifier">users</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">current_user</span>
+
+  <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-ivar">@group</span>.<span class="ruby-identifier">save</span>
+      <span class="ruby-identifier">membership</span> = <span class="ruby-constant">Membership</span>.<span class="ruby-identifier">find_by_group_id_and_user_id</span>(<span class="ruby-ivar">@group</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">current_user</span>)
+      <span class="ruby-identifier">membership</span>.<span class="ruby-identifier">update_attributes</span> <span class="ruby-value">:acceptance_status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>
+
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">group_path</span>(<span class="ruby-ivar">@group</span>), <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Group was successfully created.&#39;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">action</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;show&#39;</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">:</span> <span class="ruby-value">:created</span>, <span class="ruby-identifier">location</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@group</span> }
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">action</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;new&#39;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">json</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@group</span>.<span class="ruby-identifier">errors</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">:</span> <span class="ruby-value">:unprocessable_entity</span> }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-destroy" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">destroy</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>DELETE /groups/1 DELETE /groups/1.json</p>
+          
+          
+
+          
+          <div class="method-source-code" id="destroy-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 125</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-constant">GroupsController</span>.<span class="ruby-identifier">group_owner?</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]
+    <span class="ruby-identifier">set_group</span>
+    <span class="ruby-ivar">@group</span>.<span class="ruby-identifier">destroy</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">groups_path</span>, <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Delete group successfully.&#39;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">head</span> <span class="ruby-value">:no_content</span> }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">groups_path</span>, <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;Not deleted. You are not the group owner&quot;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">json</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;Only owners can delete the respective group&quot;</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">:</span> <span class="ruby-value">:unauthorized</span> }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-edit" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">edit</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>GET /groups/1/edit</p>
+          
+          
+
+          
+          <div class="method-source-code" id="edit-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 69</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-constant">GroupsController</span>.<span class="ruby-identifier">group_owner?</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]
+    <span class="ruby-identifier">set_group</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">groups_path</span>, <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;Can&#39;t Edit. You are not the group owner&quot;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">json</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;Only owners can edit the respective group page&quot;</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">:</span> <span class="ruby-value">:unauthorized</span> }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-group_invites" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">group_invites</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="group_invites-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 19</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">group_invites</span>
+  <span class="ruby-ivar">@invites</span> = <span class="ruby-constant">GroupsController</span>.<span class="ruby-identifier">group_invites</span> <span class="ruby-identifier">current_user</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-index" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">index</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>GET /groups</p>
+          
+          
+
+          
+          <div class="method-source-code" id="index-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 7</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
+  <span class="ruby-ivar">@all_groups</span> = <span class="ruby-constant">Group</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-value">:users</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;memberships.user_id = ? and memberships.acceptance_status = ?&quot;</span> , <span class="ruby-identifier">current_user</span>, <span class="ruby-keyword">true</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-invite_users" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">invite_users</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>POST /groups/1/invite_users POST /groups/1/invite_users.json</p>
+          
+          
+
+          
+          <div class="method-source-code" id="invite_users-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 143</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">invite_users</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-constant">GroupsController</span>.<span class="ruby-identifier">group_owner?</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]
+    <span class="ruby-identifier">set_group</span>
+    <span class="ruby-identifier">params</span>[<span class="ruby-value">:users</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">email</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_email</span>(<span class="ruby-identifier">email</span>) <span class="ruby-comment"># TODO: only possible because email is unique. Should make magic assist to return user id&#39;s</span>
+      <span class="ruby-ivar">@group</span>.<span class="ruby-identifier">users</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">user</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@group</span>.<span class="ruby-identifier">users</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">user</span> <span class="ruby-keyword">or</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-keyword">end</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:users</span>].<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">group_path</span>(<span class="ruby-ivar">@group</span>), <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Invited users successfully.&#39;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">head</span> <span class="ruby-value">:no_content</span> }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">groups_path</span>, <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;Not invited. You are not the group owner&quot;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">json</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;Only owners can add users to the respective group&quot;</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">:</span> <span class="ruby-value">:unauthorized</span>}
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-members" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">members</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="members-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 47</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">members</span>
+  <span class="ruby-identifier">set_group</span>    
+  <span class="ruby-ivar">@members</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-value">:groups</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;group_id = ? and acceptance_status = ?&quot;</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>], <span class="ruby-keyword">true</span>) <span class="ruby-keyword">if</span> <span class="ruby-constant">GroupsController</span>.<span class="ruby-identifier">group_member?</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>GET /groups/new</p>
+          
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 64</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
+  <span class="ruby-ivar">@group</span> = <span class="ruby-constant">Group</span>.<span class="ruby-identifier">new</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-owned_groups" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">owned_groups</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="owned_groups-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 11</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">owned_groups</span>
+  <span class="ruby-ivar">@owned_groups</span> = <span class="ruby-constant">Group</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;owner_id = ?&quot;</span>, <span class="ruby-identifier">current_user</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-pending_members" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">pending_members</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="pending_members-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 58</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">pending_members</span>
+  <span class="ruby-identifier">set_group</span>    
+  <span class="ruby-ivar">@pending_members</span> = <span class="ruby-constant">GroupsController</span>.<span class="ruby-identifier">pending_members</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>], <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-remove_user" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">remove_user</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>DELETE /groups/1/users/2 DELETE /groups/1/users/2.json</p>
+          
+          
+
+          
+          <div class="method-source-code" id="remove_user-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 184</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">remove_user</span>
+  <span class="ruby-identifier">group</span> = <span class="ruby-constant">Group</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:group_id</span>])
+  <span class="ruby-identifier">user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>])
+  <span class="ruby-keyword">if</span> (<span class="ruby-constant">GroupsController</span>.<span class="ruby-identifier">group_owner?</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">group</span>.<span class="ruby-identifier">id</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">user</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">current_user</span>)
+    <span class="ruby-identifier">group</span>.<span class="ruby-identifier">users</span>.<span class="ruby-identifier">delete</span> <span class="ruby-identifier">user</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">group_path</span>(<span class="ruby-identifier">group</span>), <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Removed user successfully.&#39;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">head</span> <span class="ruby-value">:no_content</span> }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">group_path</span>(<span class="ruby-identifier">group</span>), <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;Not removed. You are not the owner of the group or you are attempting to remove the owner from the group&quot;</span>}
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">json</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;Only owners can remove users from the group and owners themselves cannot be removed from the group&quot;</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">:</span> <span class="ruby-value">:unauthorized</span>}
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-shareable_groups" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">shareable_groups</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="shareable_groups-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">shareable_groups</span>
+  <span class="ruby-identifier">index</span>
+  <span class="ruby-identifier">owned_groups</span>
+  <span class="ruby-ivar">@bookmark_id</span> = <span class="ruby-identifier">share_params</span>[<span class="ruby-string">&#39;bookmark_id&#39;</span>]
+  <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-show" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">show</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>GET /groups/1 GET /groups/1.json if an invite comes, a user must be able to
+visit the group and check it out in general</p>
+          
+          
+
+          
+          <div class="method-source-code" id="show-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 35</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
+  <span class="ruby-identifier">set_group</span>
+
+  <span class="ruby-comment"># For groups timeline</span>
+  <span class="ruby-ivar">@bookmark_plugins</span> = <span class="ruby-constant">PLUGIN_CONFIG</span>[<span class="ruby-string">&#39;bookmark&#39;</span>]    
+  <span class="ruby-ivar">@bookmarks</span> = <span class="ruby-constant">Bookmark</span>.<span class="ruby-identifier">eager_load</span>(<span class="ruby-value">:tags</span>, <span class="ruby-value">:user</span>, <span class="ruby-value">:url</span>)
+    .<span class="ruby-identifier">eager_load</span>(<span class="ruby-identifier">group</span><span class="ruby-operator">:</span> <span class="ruby-value">:memberships</span>)
+    .<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;bookmarks.group_id IS NOT NULL&quot;</span>)
+    .<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;bookmarks.group_id = ?&quot;</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+    .<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;bookmarks.updated_at DESC&#39;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-unsubscribe" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">unsubscribe</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>POST /groups/1/unsubscribe POST /groups/1/unsubscribe.json</p>
+          
+          
+
+          
+          <div class="method-source-code" id="unsubscribe-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 203</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">unsubscribe</span>
+  <span class="ruby-keyword">if</span> (<span class="ruby-operator">!</span><span class="ruby-constant">GroupsController</span>.<span class="ruby-identifier">group_owner?</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-constant">GroupsController</span>.<span class="ruby-identifier">group_member?</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+    <span class="ruby-identifier">set_group</span>
+    <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">groups</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-ivar">@group</span>)
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">groups_path</span>, <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Unsubscribed successfully.&#39;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">head</span> <span class="ruby-value">:no_content</span> }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">groups_path</span>, <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;Not Unsubscribed. You are not a member of the group or you are the owner of the group&quot;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">json</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;Only members of a group can unsubscribe from the group. The group owner cannot subscribe from the group&quot;</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">:</span> <span class="ruby-value">:method_not_allowed</span> }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-update" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>PATCH/PUT /groups/1 PATCH/PUT /groups/1.json</p>
+          
+          
+
+          
+          <div class="method-source-code" id="update-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 103</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-constant">GroupsController</span>.<span class="ruby-identifier">group_owner?</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]
+    <span class="ruby-identifier">set_group</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-ivar">@group</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">group_params</span>)
+        <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">group_path</span>(<span class="ruby-ivar">@group</span>), <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Group was successfully updated.&#39;</span> }
+        <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">head</span> <span class="ruby-value">:no_content</span> }
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">action</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;edit&#39;</span> }
+        <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">json</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@group</span>.<span class="ruby-identifier">errors</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">:</span> <span class="ruby-value">:unprocessable_entity</span> }
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">groups_path</span>, <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;Not updated. You are not the group owner&quot;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">json</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;Only owners can edit the respective group page&quot;</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">:</span> <span class="ruby-value">:unauthorized</span> }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="private-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Private Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-group_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">group_params</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Never trust parameters from the scary internet, only allow the white list
+through.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="group_params-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 256</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">group_params</span>
+  <span class="ruby-identifier">params</span>.<span class="ruby-identifier">require</span>(<span class="ruby-value">:group</span>).<span class="ruby-identifier">permit</span>(<span class="ruby-value">:name</span>, <span class="ruby-value">:description</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-set_group" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_group</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_group-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 247</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_group</span>
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-ivar">@group</span> = <span class="ruby-constant">Group</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">groups_path</span>, <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-node">&quot;Specified group, #{params[:id]}, does not exist&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-share_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">share_params</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="share_params-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 264</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">share_params</span>
+  <span class="ruby-identifier">params</span>.<span class="ruby-identifier">permit</span>(<span class="ruby-value">:bookmark_id</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-user_receiver_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">user_receiver_params</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="user_receiver_params-source">
+            <pre><span class="ruby-comment"># File app/controllers/groups_controller.rb, line 260</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">user_receiver_params</span>
+  <span class="ruby-identifier">params</span>.<span class="ruby-identifier">permit</span>(<span class="ruby-value">:users</span> =<span class="ruby-operator">&gt;</span> [])
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
