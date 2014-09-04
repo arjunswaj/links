@@ -1,4 +1,8 @@
 module BookmarksHelper	
+	# Loads the bookmarks
+	# Params:
+	# +time+:: Time instant below which the bookmarks has to be loaded
+	# +user_id+:: User Id of the logged in user
 	def bookmarks_loader(time, user_id)		
 	    @bookmark_plugins = PLUGIN_CONFIG['bookmark']
 	    @bookmarks = Bookmark.eager_load(:tags, :user, :url)

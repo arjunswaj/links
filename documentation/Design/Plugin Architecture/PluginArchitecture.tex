@@ -21,6 +21,13 @@
 % \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
 
 %%% PACKAGES
+\usepackage{listings}
+\usepackage{lipsum}
+\usepackage{courier}
+
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
+\lstset{framextopmargin=50pt}
+
 \usepackage{booktabs} % for much better looking tables
 \usepackage{array} % for better arrays (eg matrices) in maths
 \usepackage{paralist} % very flexible & customisable lists (eg. itemize/itemize, etc.)
@@ -52,7 +59,7 @@
 
 %%% The "real" document content comes below...
 
-\title{Software Engineering Project - Links \\Plugin Architecture}
+\title{Software Engineering Project - Links \\Plugin Architecture and Plugin Creation Guide}
 \author{Abhijith Madhav, Arjun S Bharadwaj}
 %\date{} % Activate to display a given date or no date (if empty),
          % otherwise the current date is printed 
@@ -79,4 +86,39 @@ These are the components of the Plugin Architecture.
 \item
 	Share Plugin: This plugin will help to share the links on various platforms like Email, Twitter and Facebook.
 \end{enumerate}
+
+\section*{Plugin creation guide in Rails}
+A plugin is a fully functional rails app. It can be made mountable so that it could be used only with the main app.
+
+\begin{enumerate}
+	\item
+	Create a new rails project in Rails. 
+	\begin{lstlisting}
+Ex: rails new links
+	\end{lstlisting}
+	Here, a project called links is created.
+
+	\item
+	Create a plugin project and make it mountable.
+	\begin{lstlisting}
+Ex: rails plugin new share --mountable
+	\end{lstlisting}
+	Here, a plugin called share is created.
+
+	\item
+	Add the dependency gem in the main project in ``Gemfile''.
+	\begin{lstlisting}
+gem 'share', path: "../share"
+	\end{lstlisting}
+	Here, a gem called ``/share'' is added as dependency in the main project and ``bundle install'' is executed in the main project. The path is relative here. If the Engine is published as Gem, the gem location can be given too.
+		
+	\item
+	Add a mount point in the main project in ``routes.rb'' file.
+	\begin{lstlisting}
+mount Share::Engine, :at => "/share"
+	\end{lstlisting}
+	Here, a mount point at ``/share'' is created. So all the controllers of share plugin can be access via ``/share'' path.
+	
+\end{enumerate}
+
 \end{document}

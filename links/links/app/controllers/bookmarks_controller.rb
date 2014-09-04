@@ -2,6 +2,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'timeout'
 
+# Controller for handling all operations related to Bookmarks
 class BookmarksController < ApplicationController
   include BookmarksHelper
   before_action  :authenticate_user!, only: [:show, :edit, :update, :destroy, :index, :timeline, :bookmarklet]
@@ -9,11 +10,14 @@ class BookmarksController < ApplicationController
   layout 'base'
   skip_before_action :verify_authenticity_token, only: [:bookmarklet] # TODO: http://stackoverflow.com/a/3364673
   
+  # Initializes the bookmarks for the timeline page
   def timeline
     index
     new
   end
 
+  # Handles the editing of bookmarks
+  # This is an async call
   def editbookmark
     set_bookmark
     respond_to do |format|
@@ -21,11 +25,19 @@ class BookmarksController < ApplicationController
     end
   end
 
+  # Shows the image
   def show_image
     set_bookmark
     send_data @bookmark.url.icon, :type => 'image',:disposition => 'inline'
   end
   
+  # Persists the URL as follows:
+  # * Saves the URL if not present
+  # * Adds the http:// if not present
+  # * Creates the bookmark object
+  # * Finds the Tags, if not present, will create the object
+  # * If Group id is set, will associate the bookmark with the Group
+  # Handles Async requsts
   def saveurl
     url_str = link_params[:url]
     url_str.insert(0, 'http://') if url_str.match('^http').nil?
@@ -62,6 +74,9 @@ class BookmarksController < ApplicationController
     end
   end
 
+  # Shares Bookmarks to Groups as follows:
+  # * Copies the bookmark
+  # * Save the copy to a group
   def share_bookmark_to_groups
     bookmark_to_share = Bookmark.find(share_to_group_params['bookmark_id'])
     group_ids = share_to_group_params['group_ids']
@@ -82,7 +97,14 @@ class BookmarksController < ApplicationController
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
   end
 
-  #TODO: Do a check whether the URL and Bookmark actually belongs to user or not
+  # TODO: Do a check whether the URL and Bookmark actually belongs to user or not
+  # Sets the plugin info
+  # Persists the Bookmark as follows:
+  # * Saves the URL if not present
+  # * Saves the bookmark object
+  # * Finds the Tags, if not present, will save the object
+  # * If Group id is set, will associate the bookmark with the Group and saves it
+  # Handles Async requsts
   def savebookmark
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
     url = Url.find_by_url(timeline_bookmark_params[:url])
@@ -122,6 +144,13 @@ class BookmarksController < ApplicationController
     end
   end
 
+  # Sets the plugin info
+  # Updates the Bookmark as follows:
+  # * Saves the new URL if not present
+  # * Updates the bookmark object
+  # * Finds the Tags, if not present, will save/update the object
+  # * If Group id is set, will associate the bookmark with the Group and updates it
+  # Handles Async requsts
   def updatebookmark
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
     url = Url.find_by_url(timeline_bookmark_params[:url])
@@ -167,6 +196,8 @@ class BookmarksController < ApplicationController
 
   # GET /bookmarks
   # GET /bookmarks.json
+  # Loads the bookmarks
+  # This is paginated
   def index
     bookmarks_loader(Time.now, current_user.id)    
     bookmark = @bookmarks.first
@@ -179,6 +210,8 @@ class BookmarksController < ApplicationController
     end    
   end
 
+  # Loads more bookmarks
+  # This is paginated
   def loadmore
     bookmarks_loader(session[:last_link_time], current_user.id)
     bookmark = @bookmarks.last
@@ -265,6 +298,7 @@ class BookmarksController < ApplicationController
     end
   end
   
+  # This is used to save bookmarks from the bookmarklet
   def bookmarklet
     url_str = params[:url]
     url_str.insert(0, 'http://') if url_str.match('^http').nil?
@@ -303,14 +337,17 @@ class BookmarksController < ApplicationController
     params.require(:bookmark).permit(:title, :description, :url_attributes => :url)
   end
 
+  # Util to get link params
   def link_params
     params.permit(:url)
   end
 
+  # Util to get bookmark params in timeline
   def timeline_bookmark_params
     params.permit(:url, :url_id, :title, :description, :bookmark_id, :tags => [])
   end
 
+  # Util to get params when shared to groups
   def share_to_group_params
     params.permit(:bookmark_id, :group_ids => [])
   end

@@ -1,8 +1,10 @@
+# Controller for handling all operations related to Searches
 class SearchesController < ApplicationController
-  include SearchesHelper
+  include SearchesHelper  
   def index
   end
 
+  # Searches user based on email id
   def search_user
   	email = user_search_params['query']  	
   	@users = User.where("email LIKE :prefix", prefix: "#{email}%")
@@ -12,6 +14,8 @@ class SearchesController < ApplicationController
   	end  	
   end
 
+  # Searches bookmark based on bookmark contents
+  # This is paginated
   def search_bookmark
     keyword = link_search_params['keyword']      
     @bookmark_plugins = PLUGIN_CONFIG['bookmark']
@@ -30,6 +34,8 @@ class SearchesController < ApplicationController
     end   
   end
 
+  # Searches more bookmarks based on bookmark contents
+  # This is paginated
   def searchmore
     keyword = session[:search_criteria]
 
@@ -51,7 +57,7 @@ class SearchesController < ApplicationController
     end 
   end
   
-
+  # Utility to fetch email id
   def receiver  	
   	@user_email = user_receiver_params['users']  	
   end
@@ -59,14 +65,17 @@ class SearchesController < ApplicationController
 
   private
 
+  # Utility to fetch user params
   def user_receiver_params
 	params.permit(:users => [])
   end
 
+  # Utility to fetch user search params
   def user_search_params
     params.permit(:query)
   end
 
+  # Utility to fetch link params
   def link_search_params
     params.permit(:keyword)
   end

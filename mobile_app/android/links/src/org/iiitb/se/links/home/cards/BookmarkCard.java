@@ -38,6 +38,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -48,6 +49,7 @@ public class BookmarkCard extends Card {
   protected TextView mUpdatedTime;
   protected TextView mMore;
   protected TextView mGroupInfo;
+  protected LinearLayout expandLayout;
   private JSONObject bookmark;
   private Context context;
 
@@ -293,11 +295,11 @@ public class BookmarkCard extends Card {
     mUpdatedTime = (TextView) parent.findViewById(R.id.bookmark_updated_time);
     mMore = (TextView) parent.findViewById(R.id.bookmark_more);
     mGroupInfo = (TextView) parent.findViewById(R.id.bookmark_shared_group);
-
+    expandLayout = (LinearLayout) parent.findViewById(R.id.bookmark_expand);
     initData();
     setData();
     ViewToClickToExpand viewToClickToExpand = ViewToClickToExpand.builder()
-        .setupView(mMore);
+        .setupView(expandLayout);
     setViewToClickToExpand(viewToClickToExpand);
   }
 }

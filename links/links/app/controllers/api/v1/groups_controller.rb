@@ -1,32 +1,39 @@
 module Api 
 	module V1		
+		# Controller for handling all operations related to Groups via REST API
 		class GroupsController < ApplicationController
 			include GroupsHelper
 			doorkeeper_for :all
 			skip_before_action :verify_authenticity_token
 			respond_to :json
 
+			# Loads the groups
+			# This is paginated
 			def timeline
 				group_bookmarks_loader(Time.now, params[:id]) 
 				bookmarks_formatter				
 			end
-
+			
+			# Loads more groups
+			# This is paginated
 			def loadmore
 				time = Time.at(params[:time].to_i).to_datetime
 				group_bookmarks_loader(time, params[:id]) 
 				bookmarks_formatter
 			end
 
+			# Loads all the groups
 			def index
 			    all_groups = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , doorkeeper_token.resource_owner_id, true)
 			    groups_formatter(all_groups)
 			end		
-
+			# Loads all the group requests
 			def requests
 			    invites = Group.joins(:users).where("memberships.user_id = ? and memberships.acceptance_status = ?" , doorkeeper_token.resource_owner_id, false) 
 			    groups_formatter(invites)
 			end
 
+			# Accepts the invite to a group
 			def accept_invite			    			    
 			    membership = Membership.find_by_group_id_and_user_id(params[:group_id], doorkeeper_token.resource_owner_id)
 			    unless membership.nil?
@@ -40,7 +47,8 @@ module Api
 			      end
 			    end
 			end
-
+			
+			# Rejects the invite to a group
 			def reject_invite						    			   
 			    membership = Membership.find_by_group_id_and_user_id(params[:group_id], doorkeeper_token.resource_owner_id)
 			    unless membership.nil?
@@ -55,6 +63,7 @@ module Api
 			    end				
 			end
 
+			# Unsubscribe the subscription to a group
 			def unsubscribe
 				group_id = params[:group_id]
 			    if ((!group_owner? doorkeeper_token.resource_owner_id, group_id) && (group_member? doorkeeper_token.resource_owner_id, group_id))
@@ -71,6 +80,12 @@ module Api
 			    end
    		    end
 
+			# Saves a bookmark in a group as follows:
+			# * Saves the URL if not present
+			# * Saves the bookmark object
+			# * Finds the Tags, if not present, will save the object
+			# * Will associate the bookmark with the Group and saves it
+			# Handles Async requsts
    		    def savebookmark
 			    url_str = save_bookmark_params[:url]
 				annotations = get_annotations(url_str)
@@ -111,10 +126,12 @@ module Api
 
 			private
 
+			# Util to get bookmark params
 			def save_bookmark_params
 			    params.permit(:url, :title, :description, :tags, :group_ids => [])
 			end
 
+			# Converts Groups to JSON
 			def groups_formatter(groups)
 				formatted_groups = []
 				groups.each do  |group|				  				  
@@ -123,6 +140,7 @@ module Api
 				respond_with formatted_groups
 			end			
 
+			# Formats the bookmarks into a JSON
 			def bookmarks_formatter
 				formatted_bookmarks = []
 				@bookmarks.each do  |bookmark|
@@ -131,6 +149,9 @@ module Api
 				respond_with formatted_bookmarks
 			end
 
+			# Strips the unwanted data off the bookmarks object
+			# Params:
+			# +bookmark+:: The bookmark object from ActiveModel
 			def strip_bookmark_to_json(bookmark)
 				formatted_tags = []
 				bookmark.tags.each do |tag|
@@ -151,10 +172,17 @@ module Api
 				bookmark_json
 			end
 
+			# Identifies if the user is group owner or not
+			# Params:
+			# +user_id+:: User id to be checked
+			# +group_id+:: Group id to be checked
 			def group_owner?(user_id, group_id)
 			    return !Group.where("owner_id = ? and id = ?", user_id, group_id).empty?
 			end
 
+			# Loads group object based on group id
+			# Params:
+			# +group_id+:: ID of group that has to be loaded
 			def set_group(group_id)
 			    begin
 			      @group = Group.find(group_id)
@@ -164,6 +192,10 @@ module Api
 			    end
 			end
 
+			# Identifies if the user is group member or not
+			# Params:
+			# +user_id+:: User id to be checked
+			# +group_id+:: Group id to be checked
 			def group_member?(user_id, group_id)
 			    return !Membership.where("user_id = ? and group_id = ? and acceptance_status = ?", user_id, group_id, true).empty?
 			end
