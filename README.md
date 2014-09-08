@@ -16,7 +16,7 @@ A free, open-sourced online bookmarking service which has the following features
 ####[To do](https://bitbucket.org/linkiiitb/links/issues?status=new&status=open)####
 
 ----------
-### Installation(https://bitbucket.org/linkiiitb/links/issue/24/setup-process)
+## Installation(https://bitbucket.org/linkiiitb/links/issue/24/setup-process)
 
   * Clone the Links application application directory from this git repository. Navigate to the same.
   * Install `mysql`. Modify the links/links/links/config/database.yml with the database details(name, username, and password) where you wish for Links to store its data.
