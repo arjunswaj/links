@@ -1,0 +1,18 @@
+\BOOKMARK [0][-]{chapter.1}{Introduction}{}% 1
+\BOOKMARK [0][-]{chapter.2}{Requirements Specification}{}% 2
+\BOOKMARK [1][-]{section.2.1}{Functional Requirements}{chapter.2}% 3
+\BOOKMARK [1][-]{section.2.2}{Non-functional Requirements}{chapter.2}% 4
+\BOOKMARK [2][-]{subsection.2.2.1}{Security Requirements}{section.2.2}% 5
+\BOOKMARK [2][-]{subsection.2.2.2}{User Experience}{section.2.2}% 6
+\BOOKMARK [0][-]{chapter.3}{Architecture and Design}{}% 7
+\BOOKMARK [1][-]{section.3.1}{Architechture}{chapter.3}% 8
+\BOOKMARK [2][-]{subsection.3.1.1}{Core Module}{section.3.1}% 9
+\BOOKMARK [2][-]{subsection.3.1.2}{Plugin Module}{section.3.1}% 10
+\BOOKMARK [1][-]{section.3.2}{Database Design}{chapter.3}% 11
+\BOOKMARK [0][-]{chapter.4}{Implementation}{}% 12
+\BOOKMARK [1][-]{section.4.1}{Technology used}{chapter.4}% 13
+\BOOKMARK [1][-]{section.4.2}{Controllers}{chapter.4}% 14
+\BOOKMARK [1][-]{section.4.3}{Authentication and User Management}{chapter.4}% 15
+\BOOKMARK [1][-]{section.4.4}{Authorization and REST API's}{chapter.4}% 16
+\BOOKMARK [1][-]{section.4.5}{Import from Delicious}{chapter.4}% 17
+\BOOKMARK [0][-]{chapter.5}{Future work}{}% 18
