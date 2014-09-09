@@ -72,15 +72,17 @@
 \chapter{Introduction}
 
 A bookmarking service is a centralized online service which enables users to add, annotate, edit and share bookmarks of web document.,The most popular bookmarking service currently is \emph{Delicious}. \emph{Scuttle} is one of the other well known open source alternative. 
+ \\
 
-
+\noindent
 \emph {Links} is envisioned as a similer online bookmarking service with the specific requirement that it should be deployable on a private server within an organization. The purpose is to enable people in an organization to share bookmarks with each other.
+ \\
 
-
-
+\noindent
 \emph {Links} is intended to be an extensible, modular system with an exposed API. Third parties must be able to write plugins and applications using this API.
+ \\
 
-
+\noindent
 It is envisioned to seemlessly fit into the share motto of the net community, be it through simple email or through popular social platforms like facebook and twitter.
 
 
@@ -321,7 +323,9 @@ Where possible, portions of any "Links" webpage must be updated without having t
 \includegraphics[scale=0.5]{architecture_diagram.jpg}
 \section{Architechture}
 The architechture of 'Links' consists mainly of a core module providing the basic functionality of storing, retrieving and sharing of bookmarks. The proposed architecture also has an analytics engine as a part of the core which is yet to be implemented.
-
+ \\
+ 
+\noindent
 The plugin module is intended to help extend a 'Links' installation by 'plugging in' useful functionalities. It consists of a plugin manager which loads at launch time all the small self contained plugins into 'Links'.
 
 \subsection{Core Module}
@@ -346,7 +350,7 @@ The core of Links access the database for data persistance. The class diagram de
 \includegraphics[scale=0.3]{Datamodel.png}
 
 \chapter{Implementation}
-
+The source code for the same can be found at \href{https://bitbucket.org/linkiiitb/links}{https://bitbucket.org/linkiiitb/links}
 \section{Technology used}
 \begin{itemize}
 \item
@@ -380,11 +384,20 @@ Authentication into Links for a user is implemented using the Devise gem. Devise
 
 \section{Authorization and REST API's}
 API's to perform CRUD operations on bookmark and group objects are exposed in a RESTFUL way. Controllers for same can be found in /links/links/app/controllers/api/v1.
-
+ \\
+ 
+\noindent
 Authorization for third party clients is through OAuth2 protocol. Doorkeeper gem is used to implement a OAuth provider inside of Links.
-
-Documentation for obtaining authorization and usage of the RESTful API's can be found  \href{https://bitbucket.org/linkiiitb/links/wiki/Links\%20API\%20documentation}{here}.
-
+ \\
+ 
+\noindent
+Documentation for obtaining authorization and usage of the RESTful API's can be found in \href{https://bitbucket.org/linkiiitb/links/wiki/Links\%20API\%20documentation}{https://bitbucket.org/linkiiitb/links/wiki/Links\%20API\%20documentation}.
+ \\
+ 
+\noindent
+An implementation of an android mobile client which uses these API's can be found in the mobile\textunderscore app directory in the source folder.
+ \\
+ 
 \section{Import from Delicious}
 This is a feature which helps in migration of bookmarks from Delicious. delicious\textunderscore controller.rb implements an OAuth client which pulls a users bookmarks from his Delicious account and integrates the same with his Links account. It is intended to make this as a plugin rather than as a core feature in future.
 
@@ -392,11 +405,11 @@ This is a feature which helps in migration of bookmarks from Delicious. deliciou
 The following are the features that need to be worked on
 \begin{itemize}
 \item
-Analytics Engine and tags suggestions.
+Tags suggestions.
 \item
 A more sophisticated installation script.
 \item
-Admin UI specifically to administer plugins.
+Admin UI, specifically to administer plugins.
 \item
 Make the import feature as a plugin.
 \end{itemize}
