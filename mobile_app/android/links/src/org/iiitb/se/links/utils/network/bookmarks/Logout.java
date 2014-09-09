@@ -64,7 +64,8 @@ public class Logout extends AbstractResourceDownloader {
 
         @Override
         protected String doInBackground(Void... params) {
-          String resourceURL = URLConstants.LOGOUT;
+          String BASE_URL = sharedPreferences.getString(AppConstants.BASE_URL, null);
+          String resourceURL = BASE_URL + URLConstants.LOGOUT;
           OAuthRequest request = new OAuthRequest(Verb.DELETE, resourceURL);
           mOauthService.signRequest(accessToken, request);
           response = request.send();

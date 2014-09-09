@@ -4,7 +4,8 @@ public class MyProperties {
   private static MyProperties mInstance= null;
 
   public String groupId;
-
+  public String BASE_URL;
+  
   protected MyProperties(){}
 
   public static synchronized MyProperties getInstance(){

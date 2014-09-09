@@ -62,7 +62,8 @@ public class BookmarkSharer extends AbstractResourceDownloader {
 
         @Override
         protected String doInBackground(Void... params) {
-          String resourceURL = URLConstants.SHARE_BOOKMARK;
+          String BASE_URL = sharedPreferences.getString(AppConstants.BASE_URL, null);
+          String resourceURL = BASE_URL + URLConstants.SHARE_BOOKMARK;
           OAuthRequest request = new OAuthRequest(Verb.POST, resourceURL);
           request.addBodyParameter(StringConstants.BOOKMARK_ID, bookmarkCard.getBookmarkId());
           Set<String> groupIds = bookmarkCard.getGroupsAdapter().getGroupIdsToShareWith();

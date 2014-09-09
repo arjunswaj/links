@@ -91,10 +91,10 @@ public class GroupTimelineLoader extends AbstractResourceDownloader {
           String resourceURL = null;
           String lastBookmarkUpdatedAt = sharedPreferences.getString(
               AppConstants.GROUPS_LAST_BOOKMARK_UPDATED_AT, null);
-
+          String BASE_URL = sharedPreferences.getString(AppConstants.BASE_URL, null);
           switch (bookmarkLoadType) {
             case MORE_BOOKMARKS:
-              resourceURL = String.format(URLConstants.GROUPS_LOAD_MORE_BOOKMARKS,
+              resourceURL = String.format(BASE_URL + URLConstants.GROUPS_LOAD_MORE_BOOKMARKS,
                   groupId, lastBookmarkUpdatedAt);
               break;
             case REFRESH_BOOKMARKS:
@@ -102,7 +102,7 @@ public class GroupTimelineLoader extends AbstractResourceDownloader {
             case TIMELINE:
               bookmarks.clear();
               resourceURL = String
-                  .format(URLConstants.GROUPS_TIMELINE, groupId);
+                  .format(BASE_URL + URLConstants.GROUPS_TIMELINE, groupId);
               break;
             default:
               break;

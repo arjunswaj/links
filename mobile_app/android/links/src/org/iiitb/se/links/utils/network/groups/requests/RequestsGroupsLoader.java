@@ -74,7 +74,8 @@ public class RequestsGroupsLoader extends AbstractResourceDownloader {
 
         @Override
         protected String doInBackground(Void... params) {
-          String resourceURL = URLConstants.REQUESTS_GROUPS_INDEX;
+          String BASE_URL = sharedPreferences.getString(AppConstants.BASE_URL, null);
+          String resourceURL = BASE_URL + URLConstants.REQUESTS_GROUPS_INDEX;
           OAuthRequest request = new OAuthRequest(Verb.GET, resourceURL);
           mOauthService.signRequest(accessToken, request);
           response = request.send();

@@ -25,7 +25,8 @@ public class AuthorizationClient extends WebViewClient {
   private Token mRequestToken;
   private static final String TAG = "AuthorizationClient";
   private ProgressDialog mProgressDialog;
-  
+  protected SharedPreferences sharedPreferences;
+
   public AuthorizationClient(Activity activity, Dialog authDialog,
       OAuthService mOauthService, ResourceLoader resourceLoader,
       Token mRequestToken) {
@@ -35,28 +36,33 @@ public class AuthorizationClient extends WebViewClient {
     this.mOauthService = mOauthService;
     this.resourceLoader = resourceLoader;
     this.mRequestToken = mRequestToken;
-    
+
     mProgressDialog = new ProgressDialog(activity);
     mProgressDialog.setMessage(activity.getString(R.string.loading));
     mProgressDialog.setIndeterminate(true);
     mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-    
+    sharedPreferences = (activity)
+        .getPreferences(Activity.MODE_PRIVATE);
   }
 
   @Override
   public void onPageStarted(WebView view, String url, Bitmap favicon) {
+    
+    String BASE_URL = sharedPreferences.getString(AppConstants.BASE_URL, null);
     if (null != url) {
-      if (url.equals(URLConstants.BASE_URL)
-          || url.equals(URLConstants.BASE_URL + "/")) {
+      if (url.equals(BASE_URL)
+          || url.equals(BASE_URL + "/")) {
         authDialog.dismiss();
         resourceLoader.startAuthorize();
-      } else if (url.startsWith(URLConstants.CALLBACK_URL)) {
+      } else if (url.startsWith(BASE_URL
+          + URLConstants.CALLBACK_URL)) {
         // Override webview when user came back to CALLBACK_URL
         view.stopLoading();
         view.setVisibility(View.INVISIBLE); // Hide webview if
         // necessary
-        String authorizationCode = url.substring(URLConstants.CALLBACK_URL
-            .length());
+        String authorizationCode = url
+            .substring((BASE_URL + URLConstants.CALLBACK_URL)
+                .length());
         final Verifier verifier = new Verifier(authorizationCode);
         (new AsyncTask<Void, Integer, Token>() {
           @Override
@@ -64,12 +70,12 @@ public class AuthorizationClient extends WebViewClient {
             mProgressDialog.setProgress(0);
             mProgressDialog.show();
           }
-          
+
           @Override
           protected void onProgressUpdate(Integer... progress) {
             mProgressDialog.setProgress(progress[0]);
           }
-          
+
           @Override
           protected Token doInBackground(Void... params) {
             Token token = mOauthService.getAccessToken(mRequestToken, verifier);

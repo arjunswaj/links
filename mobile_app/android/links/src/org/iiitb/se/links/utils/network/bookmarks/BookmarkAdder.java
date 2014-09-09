@@ -65,9 +65,10 @@ public class BookmarkAdder extends AbstractResourceDownloader {
 
         @Override
         protected String doInBackground(Void... params) {
-          String resourceURL = URLConstants.SAVE_BOOKMARK;
+          String BASE_URL = sharedPreferences.getString(AppConstants.BASE_URL, null);
+          String resourceURL = BASE_URL + URLConstants.SAVE_BOOKMARK;
           if (!groupIds.isEmpty()) {
-            resourceURL = URLConstants.SAVE_BOOKMARK_IN_GROUPS;
+            resourceURL = BASE_URL + URLConstants.SAVE_BOOKMARK_IN_GROUPS;
           }
 
           OAuthRequest request = new OAuthRequest(Verb.POST, resourceURL);
