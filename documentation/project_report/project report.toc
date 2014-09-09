@@ -12,7 +12,7 @@
 \contentsline {chapter}{\numberline {4}Implementation}{9}{chapter.4}
 \contentsline {section}{\numberline {4.1}Technology used}{9}{section.4.1}
 \contentsline {section}{\numberline {4.2}Controllers}{9}{section.4.2}
-\contentsline {section}{\numberline {4.3}Authentication and User Management}{9}{section.4.3}
+\contentsline {section}{\numberline {4.3}Authentication and User Management}{10}{section.4.3}
 \contentsline {section}{\numberline {4.4}Authorization and REST API's}{10}{section.4.4}
 \contentsline {section}{\numberline {4.5}Import from Delicious}{10}{section.4.5}
 \contentsline {chapter}{\numberline {5}Future work}{11}{chapter.5}
