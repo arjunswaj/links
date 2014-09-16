@@ -1,18 +1,14 @@
 package org.iiitb.se.links;
 
 import org.iiitb.se.links.home.fragments.AddBookmarkFragment;
-import org.iiitb.se.links.home.fragments.BookmarkSearchFragment;
 import org.iiitb.se.links.home.fragments.LinkFragment;
+import org.iiitb.se.links.home.fragments.BookmarkSearchFragment;
 import org.iiitb.se.links.home.fragments.RequestsGroupFragment;
-import org.iiitb.se.links.home.fragments.SaveBaseURLFragment;
 import org.iiitb.se.links.home.fragments.SubscribedGroupFragment;
 import org.iiitb.se.links.utils.AppConstants;
 import org.iiitb.se.links.utils.FragmentTypes;
 import org.iiitb.se.links.utils.StringConstants;
-import org.iiitb.se.links.utils.URLConstants;
-import org.iiitb.se.links.utils.network.MyProperties;
 import org.iiitb.se.links.utils.network.bookmarks.Logout;
-import org.scribe.builder.api.LinksApi;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -21,13 +17,11 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,8 +44,6 @@ public class MainActivity extends Activity {
   private String[] mLinksOptions;
   private SearchView searchView;
   public FragmentTypes fragmentTypes;
-  protected SharedPreferences sharedPreferences;  
-
   private static final String TAG = "MainActivity";
 
   public SearchView getSearchView() {
@@ -69,11 +61,6 @@ public class MainActivity extends Activity {
     mLinksOptions = getResources().getStringArray(R.array.links_options);
     mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
-    sharedPreferences = getPreferences(Activity.MODE_PRIVATE);
-    
-
-    String baseURL = sharedPreferences.getString(AppConstants.BASE_URL, null);
 
     // set a custom shadow that overlays the main content when the drawer opens
     mDrawerLayout
@@ -109,45 +96,26 @@ public class MainActivity extends Activity {
     };
     mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-    if (null == baseURL) {
-      Log.i(TAG, "Base URL is not saved. Will fetch it from user.");
-      openSaveURLFragement();
+    if (null != action && action.equalsIgnoreCase(Intent.ACTION_SEND)
+        && intent.hasExtra(Intent.EXTRA_TEXT)) {
+      String urlFromIntent = intent.getStringExtra(Intent.EXTRA_TEXT);
+      urlFromIntent = urlFromIntent.substring(urlFromIntent
+          .indexOf(StringConstants.HTTP));
+      if (-1 != urlFromIntent.indexOf(" ")) {
+        urlFromIntent = urlFromIntent.substring(0, urlFromIntent.indexOf(" "));
+      }
+      String subjectFromIntent = null;
+      if (intent.hasExtra(Intent.EXTRA_SUBJECT)) {
+        subjectFromIntent = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+      }
+      openLinksSavePage(urlFromIntent, subjectFromIntent);
     } else {
-      
-      
-      MyProperties.getInstance().BASE_URL = baseURL;
-      LinksApi.BASE_URL = baseURL;
-      
-      if (null != action && action.equalsIgnoreCase(Intent.ACTION_SEND)
-          && intent.hasExtra(Intent.EXTRA_TEXT)) {
-        String urlFromIntent = intent.getStringExtra(Intent.EXTRA_TEXT);
-        urlFromIntent = urlFromIntent.substring(urlFromIntent
-            .indexOf(StringConstants.HTTP));
-        if (-1 != urlFromIntent.indexOf(" ")) {
-          urlFromIntent = urlFromIntent
-              .substring(0, urlFromIntent.indexOf(" "));
-        }
-        String subjectFromIntent = null;
-        if (intent.hasExtra(Intent.EXTRA_SUBJECT)) {
-          subjectFromIntent = intent.getStringExtra(Intent.EXTRA_SUBJECT);
-        }
-        openLinksSavePage(urlFromIntent, subjectFromIntent);
-      } else {
-        if (savedInstanceState == null) {
-          selectItem(0);
-        }
+      if (savedInstanceState == null) {
+        selectItem(0);
       }
     }
   }
 
-  private void openSaveURLFragement() {
-    Fragment fragment = new SaveBaseURLFragment();
-    fragmentTypes = FragmentTypes.SAVE_URL_FRAGMENT;       
-    FragmentManager fragmentManager = getFragmentManager();
-    fragmentManager.beginTransaction().replace(R.id.content_frame, fragment)
-        .commit();
-  }
-  
   private void openLinksSavePage(String urlFromIntent, String subjectFromIntent) {
     Fragment fragment = new AddBookmarkFragment();
     fragmentTypes = FragmentTypes.ADD_BOOKMARK_FRAGMENT;
@@ -286,12 +254,8 @@ public class MainActivity extends Activity {
         openDialogToAddURL();
         break;
       case 4:
-        fragment = new SaveBaseURLFragment();
-        fragmentTypes = FragmentTypes.SAVE_URL_FRAGMENT;        
-        break;
-      case 5:
         logout();
-        break;      
+        break;
     }
     if (null != fragment) {
       Bundle args = new Bundle();

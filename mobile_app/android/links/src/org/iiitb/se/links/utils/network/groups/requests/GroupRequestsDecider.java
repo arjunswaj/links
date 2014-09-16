@@ -69,13 +69,12 @@ public class GroupRequestsDecider extends AbstractResourceDownloader {
         protected String doInBackground(Void... params) {
           String resourceURL = null;
           OAuthRequest request = null;
-          String BASE_URL = sharedPreferences.getString(AppConstants.BASE_URL, null);
           if (0 == actionStatus) {
-            resourceURL = BASE_URL + URLConstants.ACCEPT_SUBSCRIBE + "/"
+            resourceURL = URLConstants.ACCEPT_SUBSCRIBE + "/"
                 + requestsGroupCard.getGroupId();
             request = new OAuthRequest(Verb.PUT, resourceURL);
           } else if (1 == actionStatus) {
-            resourceURL = BASE_URL + URLConstants.REJECT_SUBSCRIBE + "/"
+            resourceURL = URLConstants.REJECT_SUBSCRIBE + "/"
                 + requestsGroupCard.getGroupId();
             request = new OAuthRequest(Verb.DELETE, resourceURL);
           }

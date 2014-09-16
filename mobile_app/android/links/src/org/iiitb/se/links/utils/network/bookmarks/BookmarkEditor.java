@@ -60,8 +60,7 @@ public class BookmarkEditor extends AbstractResourceDownloader {
 
         @Override
         protected String doInBackground(Void... params) {
-          String BASE_URL = sharedPreferences.getString(AppConstants.BASE_URL, null);
-          String resourceURL = BASE_URL + URLConstants.UPDATE_BOOKMARK;
+          String resourceURL = URLConstants.UPDATE_BOOKMARK;
           OAuthRequest request = new OAuthRequest(Verb.POST, resourceURL);
           request.addBodyParameter(StringConstants.BOOKMARK_ID, editBookmarkFragment
               .getBookmarkId());

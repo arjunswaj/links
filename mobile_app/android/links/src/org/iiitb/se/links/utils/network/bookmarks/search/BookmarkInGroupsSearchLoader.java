@@ -94,19 +94,18 @@ public class BookmarkInGroupsSearchLoader extends AbstractResourceDownloader {
           String resourceURL = null;
           String lastBookmarkUpdatedAt = sharedPreferences.getString(
               AppConstants.LAST_SEARCH_BOOKMARK_UPDATED_AT, null);
-          String BASE_URL = sharedPreferences.getString(AppConstants.BASE_URL, null);
           String query = Uri.encode(searchQuery);
           switch (bookmarkLoadType) {
             case MORE_BOOKMARKS:
               resourceURL = String.format(
-                  BASE_URL + URLConstants.SEARCH_MORE_BOOKMARKS_IN_GROUP, groupId, query,
+                  URLConstants.SEARCH_MORE_BOOKMARKS_IN_GROUP, groupId, query,
                   lastBookmarkUpdatedAt);
               break;
             case REFRESH_BOOKMARKS:
               break;
             case TIMELINE:
               bookmarks.clear();
-              resourceURL = String.format(BASE_URL + URLConstants.SEARCH_IN_GROUP,
+              resourceURL = String.format(URLConstants.SEARCH_IN_GROUP,
                   groupId, query);
               break;
             default:

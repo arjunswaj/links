@@ -88,18 +88,17 @@ public class TimelineLoader extends AbstractResourceDownloader {
           String resourceURL = null;
           String lastBookmarkUpdatedAt = sharedPreferences.getString(
               AppConstants.LAST_BOOKMARK_UPDATED_AT, null);
-          String BASE_URL = sharedPreferences.getString(AppConstants.BASE_URL, null);
 
           switch (bookmarkLoadType) {
             case MORE_BOOKMARKS:
-              resourceURL = BASE_URL + URLConstants.LOAD_MORE_BOOKMARKS + "/"
+              resourceURL = URLConstants.LOAD_MORE_BOOKMARKS + "/"
                   + lastBookmarkUpdatedAt;
               break;
             case REFRESH_BOOKMARKS:
               break;
             case TIMELINE:
               bookmarks.clear();
-              resourceURL = BASE_URL + URLConstants.TIMELINE;
+              resourceURL = URLConstants.TIMELINE;
               break;
             default:
               break;

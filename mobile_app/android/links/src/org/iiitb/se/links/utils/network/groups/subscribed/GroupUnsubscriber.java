@@ -59,8 +59,7 @@ public class GroupUnsubscriber extends AbstractResourceDownloader {
 
         @Override
         protected String doInBackground(Void... params) {
-          String BASE_URL = sharedPreferences.getString(AppConstants.BASE_URL, null);
-          String resourceURL = BASE_URL + URLConstants.UNSUBSCRIBE_GROUP + "/"
+          String resourceURL = URLConstants.UNSUBSCRIBE_GROUP + "/"
               + subscribedGroupCard.getGroupId();
           OAuthRequest request = new OAuthRequest(Verb.DELETE, resourceURL);
           mOauthService.signRequest(accessToken, request);

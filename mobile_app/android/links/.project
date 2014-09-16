@@ -3,16 +3,6 @@
 	<name>Links</name>
 	<comment></comment>
 	<projects>
-		<project>android-support-v7-appcompat</project>
-		<project>Card Demo</project>
-		<project>Card Demo Extra</project>
-		<project>card-lib</project>
-		<project>card-lib-extra</project>
-		<project>jsoup</project>
-		<project>Library-ListViewAnimations</project>
-		<project>main</project>
-		<project>ORMLibrary</project>
-		<project>scribe</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -60,8 +60,7 @@ public class BookmarkDeleter extends AbstractResourceDownloader {
 
         @Override
         protected String doInBackground(Void... params) {
-          String BASE_URL = sharedPreferences.getString(AppConstants.BASE_URL, null);
-          String resourceURL = BASE_URL + URLConstants.DELETE_BOOKMARK + "/"
+          String resourceURL = URLConstants.DELETE_BOOKMARK + "/"
               + bookmarkCard.getBookmarkId();
           OAuthRequest request = new OAuthRequest(Verb.DELETE, resourceURL);
           mOauthService.signRequest(accessToken, request);

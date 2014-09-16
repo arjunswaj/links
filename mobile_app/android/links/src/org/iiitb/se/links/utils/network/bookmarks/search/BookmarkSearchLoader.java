@@ -92,18 +92,17 @@ public class BookmarkSearchLoader extends AbstractResourceDownloader {
           String resourceURL = null;
           String lastBookmarkUpdatedAt = sharedPreferences.getString(
               AppConstants.LAST_SEARCH_BOOKMARK_UPDATED_AT, null);
-          String BASE_URL = sharedPreferences.getString(AppConstants.BASE_URL, null);
           String query = Uri.encode(searchQuery);
           switch (bookmarkLoadType) {
             case MORE_BOOKMARKS:
-              resourceURL = BASE_URL + URLConstants.SEARCH_MORE_BOOKMARKS + "/" + query
+              resourceURL = URLConstants.SEARCH_MORE_BOOKMARKS + "/" + query
                   + "/" + lastBookmarkUpdatedAt;
               break;
             case REFRESH_BOOKMARKS:
               break;
             case TIMELINE:
               bookmarks.clear();
-              resourceURL = BASE_URL + URLConstants.SEARCH + "/" + query;
+              resourceURL = URLConstants.SEARCH + "/" + query;
               break;
             default:
               break;

@@ -73,8 +73,7 @@ public class SubscribedGroupsLoader extends AbstractResourceDownloader {
 
         @Override
         protected String doInBackground(Void... params) {
-          String BASE_URL = sharedPreferences.getString(AppConstants.BASE_URL, null);
-          String resourceURL = BASE_URL + URLConstants.SUBSCRIBED_GROUPS_INDEX;
+          String resourceURL = URLConstants.SUBSCRIBED_GROUPS_INDEX;
           OAuthRequest request = new OAuthRequest(Verb.GET, resourceURL);
           mOauthService.signRequest(accessToken, request);
           response = request.send();
