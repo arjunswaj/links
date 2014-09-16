@@ -17,3 +17,4 @@
 /prototype_0_1/tmp
 mobile_app/android_key/links.keystore
 links/links/config/database.yml
+mobile_app/android/links/src/org/iiitb/se/links/utils/AppConstants.java
